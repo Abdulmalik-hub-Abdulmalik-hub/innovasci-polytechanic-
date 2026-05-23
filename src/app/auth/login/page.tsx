@@ -34,7 +34,7 @@ export default function LoginPage() {
     const demoUsers = {
       "student@innovasci.edu": { id: "1", email: "student@innovasci.edu", fullName: "Aisha Mohammed", role: "student" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
       "lecturer@innovasci.edu": { id: "2", email: "lecturer@innovasci.edu", fullName: "Dr. Emmanuel Obi", role: "lecturer" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "admin@innovasci.edu": { id: "3", email: "admin@innovasci.edu", fullName: "Admin User", role: "admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
+      "admin@innovasci.edu": { id: "3", email: "admin@innovasci.edu", fullName: "Admin User", role: "system_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
       "super@innovasci.edu": { id: "4", email: "super@innovasci.edu", fullName: "System Owner", role: "super_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
       "webuildandtarinbuilders@gmail.com": { id: "5", email: "webuildandtarinbuilders@gmail.com", fullName: "Super Admin", role: "super_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
     }
