@@ -9,12 +9,12 @@ import { Input } from "@/components/ui/input"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
 const students = [
-  { id: 1, name: "Aisha Mohammed", admission: "IS-24-CS-0001", email: "aisha.m@innovasci.edu", level: "ND 2", status: "active", cgpa: 3.85, payment: "paid" },
-  { id: 2, name: "David Okonkwo", admission: "IS-24-CS-0002", email: "david.o@innovasci.edu", level: "ND 2", status: "active", cgpa: 3.42, payment: "partial" },
-  { id: 3, name: "Fatima Al-Hassan", admission: "IS-24-DS-0001", email: "fatima.h@innovasci.edu", level: "HND 1", status: "active", cgpa: 4.0, payment: "paid" },
-  { id: 4, name: "Emmanuel Eze", admission: "IS-24-IT-0001", email: "emma.e@innovasci.edu", level: "ND 1", status: "active", cgpa: 3.20, payment: "paid" },
-  { id: 5, name: "Blessing Adebayo", admission: "IS-24-AI-0001", email: "blessing.a@innovasci.edu", level: "HND 2", status: "graduated", cgpa: 4.2, payment: "paid" },
-  { id: 6, name: "Chidi Nwachukwu", admission: "IS-24-CS-0003", email: "chidi.n@innovasci.edu", level: "ND 2", status: "suspended", cgpa: 2.8, payment: "unpaid" },
+  { id: 1, name: "Aisha Mohammed", admission: "IS-24-AML-0001", email: "aisha.m@innovasci.edu", level: "ND 2", status: "active", cgpa: 3.85, payment: "paid" },
+  { id: 2, name: "David Okonkwo", admission: "IS-24-NLP-0002", email: "david.o@innovasci.edu", level: "ND 2", status: "active", cgpa: 3.42, payment: "partial" },
+  { id: 3, name: "Fatima Al-Hassan", admission: "IS-24-CGM-0001", email: "fatima.h@innovasci.edu", level: "HND 1", status: "active", cgpa: 4.0, payment: "paid" },
+  { id: 4, name: "Emmanuel Eze", admission: "IS-24-EHP-0001", email: "emma.e@innovasci.edu", level: "ND 1", status: "active", cgpa: 3.20, payment: "paid" },
+  { id: 5, name: "Blessing Adebayo", admission: "IS-24-AML-H001", email: "blessing.a@innovasci.edu", level: "HND 2", status: "graduated", cgpa: 4.2, payment: "paid" },
+  { id: 6, name: "Chidi Nwachukwu", admission: "IS-24-DTS-0003", email: "chidi.n@innovasci.edu", level: "ND 2", status: "suspended", cgpa: 2.8, payment: "unpaid" },
 ]
 
 export default function StudentsPage() {

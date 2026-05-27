@@ -7,20 +7,36 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { cn } from "@/lib/utils"
+import { curriculumData } from "@/lib/curriculum-data"
 
-const courses = [
-  { id: 1, name: "Data Structures & Algorithms", code: "CSC201", instructor: "Dr. Emmanuel Obi", progress: 78, lessons: 24, completed: 19, nextLesson: "Binary Search Trees", status: "active" },
-  { id: 2, name: "Web Development", code: "CSC202", instructor: "Ms. Aisha Bello", progress: 92, lessons: 30, completed: 28, nextLesson: "React Hooks", status: "active" },
-  { id: 3, name: "Database Systems", code: "CSC203", instructor: "Prof. Chidi Okonkwo", progress: 65, lessons: 20, completed: 13, nextLesson: "SQL Joins", status: "active" },
-  { id: 4, name: "Software Engineering", code: "CSC204", instructor: "Mr. Tunde Adeyemi", progress: 45, lessons: 18, completed: 8, nextLesson: "Agile Methodology", status: "active" },
-  { id: 5, name: "Artificial Intelligence Fundamentals", code: "CSC205", instructor: "Dr. Fatima Hassan", progress: 88, lessons: 25, completed: 22, nextLesson: "Neural Networks", status: "active" },
-]
+const sampleProgram = curriculumData[0].departments[0].programs[0]
+const sampleCourses = sampleProgram.levels.flatMap(level =>
+  level.semesters.flatMap(semester =>
+    semester.courses.map(course => ({
+      ...course,
+      level: level.number,
+      semester: semester.number,
+    }))
+  )
+)
+
+const courses = sampleCourses.slice(0, 5).map((course, i) => ({
+  id: i + 1,
+  name: course.title,
+  code: course.code,
+  instructor: ["Dr. Emmanuel Obi", "Ms. Aisha Bello", "Prof. Chidi Okonkwo", "Mr. Tunde Adeyemi", "Dr. Fatima Hassan"][i],
+  progress: [78, 92, 65, 45, 88][i],
+  lessons: [24, 30, 20, 18, 25][i],
+  completed: [19, 28, 13, 8, 22][i],
+  nextLesson: ["Advanced Techniques", "Practical Applications", "Research Methods", "Industry Tools", "Final Review"][i],
+  status: "active",
+}))
 
 const recentActivity = [
-  { type: "lesson", title: "Completed: Introduction to Big O Notation", time: "2 hours ago" },
-  { type: "assignment", title: "Submitted: Database Design Project", time: "Yesterday" },
-  { type: "quiz", title: "Completed: CSS Quiz - Score: 85%", time: "2 days ago" },
-  { type: "video", title: "Watched: React Component Patterns", time: "3 days ago" },
+  { type: "lesson", title: `Completed: ${sampleCourses[0]?.title || "Introduction to AI"}`, time: "2 hours ago" },
+  { type: "assignment", title: `Submitted: ${sampleCourses[1]?.title || "Programming Project"}`, time: "Yesterday" },
+  { type: "quiz", title: `Completed: ${sampleCourses[2]?.title || "Quiz"} - Score: 85%`, time: "2 days ago" },
+  { type: "video", title: `Watched: ${sampleCourses[3]?.title || "Lecture Video"}`, time: "3 days ago" },
 ]
 
 export default function CoursesPage() {

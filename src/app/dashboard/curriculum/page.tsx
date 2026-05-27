@@ -69,7 +69,7 @@ export default function CurriculumPage() {
                     </td>
                     <td className="px-4 py-3 text-center font-semibold">{course.unit}</td>
                     <td className="px-4 py-3 text-center">{semester.number}</td>
-                    <td className="px-4 py-3 text-center">ND {level.number}</td>
+                    <td className="px-4 py-3 text-center">{program.code.endsWith('-HND') ? 'HND' : 'ND'} {level.number}</td>
                   </tr>
                 ))
               ))
@@ -101,7 +101,7 @@ export default function CurriculumPage() {
             <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               Curriculum Management
             </h1>
-            <p className="text-gray-600">InnovaSci AI Labs Polytechnic - ND Programs</p>
+            <p className="text-gray-600">InnovaSci AI Labs Polytechnic - ND & HND Programs</p>
           </div>
         </div>
       </motion.div>

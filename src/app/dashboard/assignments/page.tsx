@@ -5,12 +5,15 @@ import { FileText, Clock, CheckCircle, AlertCircle, Upload, Download } from "luc
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import { curriculumData } from "@/lib/curriculum-data"
+
+const sampleCourses = curriculumData[0].departments[0].programs[0].levels[0].semesters[0].courses
 
 const assignments = [
-  { id: 1, course: "Data Structures", title: "Binary Search Tree Implementation", dueDate: "2024-03-20", status: "pending", maxScore: 100 },
-  { id: 2, course: "Web Development", title: "React Portfolio Project", dueDate: "2024-03-18", status: "submitted", score: 92 },
-  { id: 3, course: "Database Systems", title: "ER Diagram Design", dueDate: "2024-03-25", status: "pending", maxScore: 80 },
-  { id: 4, course: "Software Engineering", title: "Agile Project Report", dueDate: "2024-03-15", status: "graded", score: 85 },
+  { id: 1, course: sampleCourses[0]?.title || "Course 1", title: "Lab Implementation Project", dueDate: "2024-03-20", status: "pending", maxScore: 100 },
+  { id: 2, course: sampleCourses[1]?.title || "Course 2", title: "Research & Analysis Report", dueDate: "2024-03-18", status: "submitted", score: 92 },
+  { id: 3, course: sampleCourses[2]?.title || "Course 3", title: "System Design Document", dueDate: "2024-03-25", status: "pending", maxScore: 80 },
+  { id: 4, course: sampleCourses[3]?.title || "Course 4", title: "Technical Report", dueDate: "2024-03-15", status: "graded", score: 85 },
 ]
 
 export default function AssignmentsPage() {
