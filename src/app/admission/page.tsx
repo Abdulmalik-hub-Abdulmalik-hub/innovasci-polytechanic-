@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { curriculumData, getAllPrograms } from "@/lib/curriculum-data"
 
 const steps = [
   { id: 1, title: "Personal Information", description: "Basic details about you" },
@@ -19,19 +20,19 @@ const steps = [
   { id: 5, title: "Review & Submit", description: "Confirm your application" },
 ]
 
-const faculties = [
-  { id: "cit", name: "Computing & Information Technology", departments: ["Computer Science", "Information Systems", "Software Engineering"] },
-  { id: "et", name: "Engineering Technology", departments: ["Electrical Engineering", "Mechanical Engineering", "Civil Engineering"] },
-  { id: "bm", name: "Business Management", departments: ["Business Administration", "Accounting", "Marketing"] },
-  { id: "as", name: "Applied Sciences", departments: ["Mathematics", "Physics", "Statistics"] },
-]
+const faculties = curriculumData.map(f => ({
+  id: f.id,
+  name: f.name,
+  departments: f.departments.map(d => d.name),
+}))
 
-const programs = [
-  { id: "nd-cs", name: "National Diploma in Computer Science", code: "NDCS", type: "ND", duration: "2 Years" },
-  { id: "nd-it", name: "National Diploma in Information Technology", code: "NDIT", type: "ND", duration: "2 Years" },
-  { id: "hnd-ds", name: "Higher National Diploma in Data Science", code: "HNDDS", type: "HND", duration: "2 Years" },
-  { id: "hnd-ai", name: "Higher National Diploma in Artificial Intelligence", code: "HNDAI", type: "HND", duration: "2 Years" },
-]
+const programs = getAllPrograms().map(p => ({
+  id: p.id,
+  name: p.name,
+  code: p.code,
+  type: p.code.endsWith('-HND') ? 'HND' as const : 'ND' as const,
+  duration: '2 Years',
+}))
 
 export default function AdmissionPage() {
   const router = useRouter()
@@ -75,6 +76,13 @@ export default function AdmissionPage() {
   }
 
   const selectedFaculty = faculties.find(f => f.id === formData.faculty)
+  const selectedFacultyData = curriculumData.find(f => f.id === formData.faculty)
+  const filteredPrograms = programs.filter(p => {
+    const matchesLevel = formData.entryLevel === 'nd' ? p.type === 'ND' : p.type === 'HND'
+    if (!selectedFacultyData) return matchesLevel
+    const facultyProgramCodes = selectedFacultyData.departments.flatMap(d => d.programs.map(prog => prog.code))
+    return matchesLevel && facultyProgramCodes.includes(p.code)
+  })
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
@@ -222,7 +230,7 @@ export default function AdmissionPage() {
                       <Label>Program *</Label>
                       <select className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm" value={formData.program} onChange={(e) => updateFormData("program", e.target.value)}>
                         <option value="">Select Program</option>
-                        {programs.filter(p => formData.entryLevel === 'nd' ? p.type === 'ND' : p.type === 'HND').map(p => (<option key={p.id} value={p.id}>{p.name}</option>))}
+                        {filteredPrograms.map(p => (<option key={p.id} value={p.id}>{p.name}</option>))}
                       </select>
                     </div>
                   </div>

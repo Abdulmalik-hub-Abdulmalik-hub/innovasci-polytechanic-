@@ -25,6 +25,7 @@ import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Progress } from "@/components/ui/progress"
 import { useAuthStore, useAcademicStore, usePaymentStore } from "@/store"
+import { curriculumData } from "@/lib/curriculum-data"
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -46,13 +47,12 @@ const mockData = {
     completedAssignments: 12,
     pendingAssignments: 3,
     upcomingExams: 2,
-    courses: [
-      { name: "Data Structures", progress: 78, totalLessons: 24, completedLessons: 19 },
-      { name: "Web Development", progress: 92, totalLessons: 30, completedLessons: 28 },
-      { name: "Database Systems", progress: 65, totalLessons: 20, completedLessons: 13 },
-      { name: "Software Engineering", progress: 45, totalLessons: 18, completedLessons: 8 },
-      { name: "AI Fundamentals", progress: 88, totalLessons: 25, completedLessons: 22 },
-    ],
+    courses: curriculumData[0].departments[0].programs[0].levels[0].semesters[0].courses.slice(0, 5).map((c, i) => ({
+      name: c.title,
+      progress: [78, 92, 65, 45, 88][i],
+      totalLessons: [24, 30, 20, 18, 25][i],
+      completedLessons: [19, 28, 13, 8, 22][i],
+    })),
     announcements: [
       { title: "Mid-Semester Exams Schedule", date: "2 days ago", type: "info" as const },
       { title: "Assignment Deadline Extended", date: "4 days ago", type: "warning" as const },

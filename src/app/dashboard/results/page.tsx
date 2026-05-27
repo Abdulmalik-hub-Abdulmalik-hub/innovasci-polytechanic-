@@ -6,27 +6,34 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
+import { curriculumData } from "@/lib/curriculum-data"
+
+const prog = curriculumData[0].departments[0].programs[0]
+const sem1Courses = prog.levels[0]?.semesters[0]?.courses || []
+const sem2Courses = prog.levels[0]?.semesters[1]?.courses || []
 
 const semesters = [
   { 
     name: "First Semester", 
     gpa: 3.75, 
-    courses: [
-      { code: "CSC101", name: "Introduction to Computing", score: 85, grade: "A", unit: 3 },
-      { code: "MTH101", name: "Mathematics I", score: 78, grade: "B", unit: 4 },
-      { code: "ENG101", name: "English & Communication", score: 82, grade: "A", unit: 2 },
-      { code: "PHY101", name: "Physics Fundamentals", score: 75, grade: "B", unit: 3 },
-    ]
+    courses: sem1Courses.slice(0, 4).map((c, i) => ({
+      code: c.code,
+      name: c.title,
+      score: [85, 78, 82, 75][i],
+      grade: [85, 78, 82, 75][i] >= 80 ? "A" as const : "B" as const,
+      unit: c.unit,
+    }))
   },
   { 
     name: "Second Semester", 
     gpa: 4.0, 
-    courses: [
-      { code: "CSC201", name: "Data Structures", score: 92, grade: "A", unit: 4 },
-      { code: "MTH201", name: "Mathematics II", score: 88, grade: "A", unit: 3 },
-      { code: "CSC202", name: "Web Development", score: 95, grade: "A", unit: 3 },
-      { code: "STA201", name: "Statistics", score: 85, grade: "A", unit: 3 },
-    ]
+    courses: sem2Courses.slice(0, 4).map((c, i) => ({
+      code: c.code,
+      name: c.title,
+      score: [92, 88, 95, 85][i],
+      grade: "A" as const,
+      unit: c.unit,
+    }))
   },
 ]
 

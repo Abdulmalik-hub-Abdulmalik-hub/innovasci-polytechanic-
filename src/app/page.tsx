@@ -25,6 +25,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
+import { curriculumData, curriculumStats } from "@/lib/curriculum-data"
 
 const fadeInUp = {
   initial: { opacity: 0, y: 20 },
@@ -91,31 +92,30 @@ const features = [
   },
 ]
 
-const faculties = [
-  { name: "Computing & Information Technology", code: "CIT", courses: 24 },
-  { name: "Engineering Technology", code: "ET", courses: 18 },
-  { name: "Business Management", code: "BM", courses: 15 },
-  { name: "Applied Sciences", code: "AS", courses: 12 },
-]
+const faculties = curriculumData.map(f => ({
+  name: f.name,
+  code: f.code,
+  courses: f.departments.reduce((acc, d) => acc + d.programs.length, 0),
+}))
 
 const testimonials = [
   {
     name: "Aisha Mohammed",
-    role: "ND Computer Science Graduate",
+    role: "ND Applied Machine Learning Graduate",
     content: "InnovaSci transformed my career. The AI-focused curriculum prepared me for real industry challenges.",
     rating: 5,
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
   },
   {
     name: "David Okonkwo",
-    role: "HND Data Science Student",
+    role: "HND Cloud Architecture Student",
     content: "The flexibility of online learning combined with rigorous academics makes this program exceptional.",
     rating: 5,
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
   },
   {
     name: "Fatima Al-Hassan",
-    role: "Lecturer, Department of AI",
+    role: "Lecturer, Department of AI & Machine Learning",
     content: "Teaching here is rewarding. Students are engaged and the technology infrastructure is outstanding.",
     rating: 5,
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop",
@@ -430,7 +430,7 @@ export default function HomePage() {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {faculties.map((faculty, i) => (
               <motion.div
                 key={i}
@@ -444,7 +444,7 @@ export default function HomePage() {
                     <span className="text-2xl font-bold text-white">{faculty.code}</span>
                   </div>
                   <h3 className="font-semibold mb-2">{faculty.name}</h3>
-                  <p className="text-sm text-muted-foreground">{faculty.courses} Courses</p>
+                  <p className="text-sm text-muted-foreground">{faculty.courses} Programs</p>
                 </Card>
               </motion.div>
             ))}

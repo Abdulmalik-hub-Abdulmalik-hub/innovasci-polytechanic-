@@ -9,20 +9,25 @@ import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { curriculumData, curriculumStats, getAllPrograms } from "@/lib/curriculum-data"
 
-const faculties = [
-  { id: 1, name: "Computing & Information Technology", code: "CIT", departments: 4, students: 850, courses: 24 },
-  { id: 2, name: "Engineering Technology", code: "ET", departments: 3, students: 420, courses: 18 },
-  { id: 3, name: "Business Management", code: "BM", departments: 3, students: 380, courses: 15 },
-  { id: 4, name: "Applied Sciences", code: "AS", departments: 2, students: 280, courses: 12 },
-]
+const faculties = curriculumData.map((f, i) => ({
+  id: i + 1,
+  name: f.name,
+  code: f.code,
+  departments: f.departments.length,
+  students: [850, 420, 380, 280, 320][i] || 200,
+  courses: f.departments.reduce((acc, d) => acc + d.programs.length, 0),
+}))
 
-const programs = [
-  { id: 1, name: "National Diploma in Computer Science", code: "ND-CS", faculty: "CIT", duration: "2 Years", students: 320 },
-  { id: 2, name: "National Diploma in Information Technology", code: "ND-IT", faculty: "CIT", duration: "2 Years", students: 280 },
-  { id: 3, name: "HND in Data Science", code: "HND-DS", faculty: "CIT", duration: "2 Years", students: 150 },
-  { id: 4, name: "HND in Artificial Intelligence", code: "HND-AI", faculty: "CIT", duration: "2 Years", students: 100 },
-]
+const programs = getAllPrograms().slice(0, 8).map((p, i) => ({
+  id: i + 1,
+  name: p.name,
+  code: p.code,
+  faculty: p.facultyName,
+  duration: '2 Years',
+  students: [320, 280, 150, 100, 200, 180, 140, 120][i] || 100,
+}))
 
 export default function AcademicPage() {
   const [activeTab, setActiveTab] = useState<'faculties' | 'departments' | 'programs' | 'courses'>('faculties')
@@ -43,10 +48,10 @@ export default function AcademicPage() {
       {/* Tabs */}
       <div className="flex gap-2 border-b pb-4">
         {[
-          { id: 'faculties', label: 'Faculties', icon: GraduationCap, count: 4 },
-          { id: 'departments', label: 'Departments', icon: Building, count: 12 },
-          { id: 'programs', label: 'Programs', icon: BookOpen, count: 8 },
-          { id: 'courses', label: 'Courses', icon: Users, count: 69 },
+          { id: 'faculties', label: 'Faculties', icon: GraduationCap, count: curriculumStats.totalFaculties },
+          { id: 'departments', label: 'Departments', icon: Building, count: curriculumStats.totalDepartments },
+          { id: 'programs', label: 'Programs', icon: BookOpen, count: curriculumStats.totalPrograms },
+          { id: 'courses', label: 'Courses', icon: Users, count: curriculumStats.totalCourses },
         ].map((tab) => (
           <Button
             key={tab.id}
