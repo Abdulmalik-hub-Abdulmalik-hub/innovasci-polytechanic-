@@ -34,9 +34,10 @@ export default function LoginPage() {
     const demoUsers = {
       "student@innovasci.edu": { id: "1", email: "student@innovasci.edu", fullName: "Aisha Mohammed", role: "student" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
       "lecturer@innovasci.edu": { id: "2", email: "lecturer@innovasci.edu", fullName: "Dr. Emmanuel Obi", role: "lecturer" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "admin@innovasci.edu": { id: "3", email: "admin@innovasci.edu", fullName: "Admin User", role: "system_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "super@innovasci.edu": { id: "4", email: "super@innovasci.edu", fullName: "System Owner", role: "super_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "webuildandtarinbuilders@gmail.com": { id: "5", email: "webuildandtarinbuilders@gmail.com", fullName: "Super Admin", role: "super_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
+      "rector@innovasci.edu": { id: "3", email: "rector@innovasci.edu", fullName: "Prof. Adeniyi Olamilekan", role: "rector" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
+      "registrar@innovasci.edu": { id: "4", email: "registrar@innovasci.edu", fullName: "Mrs. Folake Adebayo", role: "registrar" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
+      "super@innovasci.edu": { id: "5", email: "super@innovasci.edu", fullName: "System Owner", role: "super_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
+      "webuildandtarinbuilders@gmail.com": { id: "6", email: "webuildandtarinbuilders@gmail.com", fullName: "Super Admin", role: "super_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
     }
 
     const user = demoUsers[formData.email as keyof typeof demoUsers]
@@ -44,7 +45,7 @@ export default function LoginPage() {
       login(user, "demo-token-123")
       router.push("/dashboard")
     } else {
-      setError("Invalid email or password. Try: student@innovasci.edu, lecturer@innovasci.edu, admin@innovasci.edu, or super@innovasci.edu")
+      setError("Invalid email or password. Try: student@innovasci.edu, lecturer@innovasci.edu, rector@innovasci.edu, or super@innovasci.edu")
     }
 
     setIsLoadingLocal(false)
