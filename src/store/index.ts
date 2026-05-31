@@ -1,39 +1,93 @@
+// =====================================================
+// INNOVASCI AI LABS POLYTECHNIC - ZUSTAND STORE
+// Updated for 5-Portal Architecture with RBAC
+// =====================================================
+
 import { create } from 'zustand';
-import { User, UserRole } from '@/types';
+import { User, UserRole, ROLE_DISPLAY_NAMES } from '@/types';
+import { hasPermission, Permission, getPortalForRole, getRolePermissions } from '@/lib/rbac';
+
+// =====================================================
+// PORTAL TYPES
+// =====================================================
+export type PortalId = 'applicant' | 'student' | 'academic' | 'management' | 'admin';
+
+interface PortalState {
+  id: PortalId;
+  name: string;
+  roles: UserRole[];
+}
+
+export const PORTALS: Record<PortalId, PortalState> = {
+  applicant: { id: 'applicant', name: 'Applicant Portal', roles: ['applicant'] },
+  student: { id: 'student', name: 'Student Portal', roles: ['student'] },
+  academic: { id: 'academic', name: 'Academic Staff Portal', roles: ['lecturer', 'program_coordinator', 'hod', 'dean'] },
+  management: { id: 'management', name: 'Management Portal', roles: ['rector', 'deputy_rector_academic', 'deputy_rector_admin', 'registrar', 'bursar', 'librarian', 'director'] },
+  admin: { id: 'admin', name: 'Super Admin Portal', roles: ['super_admin'] },
+};
+
+// Portal to route mapping
+export const PORTAL_ROUTES: Record<PortalId, string> = {
+  applicant: '/portal/applicant',
+  student: '/portal/student',
+  academic: '/portal/academic',
+  management: '/portal/management',
+  admin: '/portal/super-admin', // Super Admin uses super-admin route
+};
+
+// =====================================================
+// AUTH STORE
+// =====================================================
 
 interface AuthState {
   user: User | null;
   token: string | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  portalId: PortalId | null;
   setUser: (user: User | null) => void;
   setToken: (token: string | null) => void;
   login: (user: User, token: string) => void;
   logout: () => void;
   setLoading: (loading: boolean) => void;
+  checkPermission: (permission: Permission) => boolean;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
+export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   token: null,
   isAuthenticated: false,
   isLoading: true,
-  setUser: (user) => set({ user, isAuthenticated: !!user }),
+  portalId: null,
+  setUser: (user) => {
+    const portalId = user ? getPortalForRole(user.role) as PortalId : null;
+    set({ user, isAuthenticated: !!user, portalId });
+  },
   setToken: (token) => set({ token }),
   login: (user, token) => {
-    set({ user, token, isAuthenticated: true, isLoading: false });
+    const portalId = getPortalForRole(user.role) as PortalId;
+    set({ user, token, isAuthenticated: true, isLoading: false, portalId });
     if (typeof window !== 'undefined') {
       localStorage.setItem('token', token);
     }
   },
   logout: () => {
-    set({ user: null, token: null, isAuthenticated: false });
+    set({ user: null, token: null, isAuthenticated: false, portalId: null });
     if (typeof window !== 'undefined') {
       localStorage.removeItem('token');
     }
   },
   setLoading: (isLoading) => set({ isLoading }),
+  checkPermission: (permission: Permission) => {
+    const { user } = get();
+    if (!user) return false;
+    return hasPermission(user.role, permission);
+  },
 }));
+
+// =====================================================
+// APP STORE
+// =====================================================
 
 interface AppState {
   sidebarOpen: boolean;
@@ -130,46 +184,3 @@ export const usePaymentStore = create<PaymentState>((set) => ({
   paymentProgress: 0,
   setPaymentStatus: (status) => set(status),
 }));
-
-// Permission matrix for RBAC
-export const ROLE_PERMISSIONS: Record<UserRole, string[]> = {
-  super_admin: ['*'],
-  system_admin: [
-    'users.view', 'users.create', 'users.edit', 'users.delete',
-    'academic.view', 'academic.edit',
-    'payments.view', 'payments.manage',
-    'exams.view', 'exams.create', 'exams.edit',
-    'settings.view', 'settings.edit',
-  ],
-  admission_officer: [
-    'admission.view', 'admission.create', 'admission.edit', 'admission.approve',
-  ],
-  finance_officer: [
-    'payments.view', 'payments.create', 'payments.verify', 'payments.report',
-  ],
-  exam_officer: [
-    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor',
-  ],
-  student_affairs: [
-    'students.view', 'complaints.view', 'complaints.manage',
-  ],
-  hod: [
-    'department.view', 'department.manage', 'courses.view', 'courses.edit',
-    'results.view', 'results.edit',
-  ],
-  lecturer: [
-    'courses.view', 'materials.create', 'assignments.view', 'assignments.grade',
-    'results.view', 'results.edit',
-  ],
-  student: [
-    'dashboard.view', 'courses.view', 'assignments.view', 'assignments.submit',
-    'exams.view', 'exams.take', 'results.view', 'payments.view',
-  ],
-};
-
-export function hasPermission(role: UserRole, permission: string): boolean {
-  const permissions = ROLE_PERMISSIONS[role];
-  if (!permissions) return false;
-  if (permissions.includes('*')) return true;
-  return permissions.includes(permission);
-}
