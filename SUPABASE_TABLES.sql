@@ -436,6 +436,229 @@ VALUES (
 );
 
 -- ============================================
+-- SECTION 14: ADMISSIONS SYSTEM
+-- ============================================
+
+-- Application Status Enum
+CREATE TYPE application_status AS ENUM (
+    'draft',
+    'submitted',
+    'under_review',
+    'approved',
+    'rejected',
+    'admission_offered'
+);
+
+-- Application Type Enum
+CREATE TYPE application_type AS ENUM (
+    'ND',
+    'HND'
+);
+
+-- Applications Table
+CREATE TABLE applications (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    application_id VARCHAR(50) UNIQUE NOT NULL,
+    full_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL,
+    phone VARCHAR(50) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    gender VARCHAR(10) NOT NULL CHECK (gender IN ('male', 'female')),
+    
+    -- Location
+    nationality VARCHAR(10) NOT NULL,
+    state VARCHAR(255),
+    local_government VARCHAR(255),
+    
+    -- Academic
+    application_type application_type NOT NULL,
+    faculty VARCHAR(255) NOT NULL,
+    department VARCHAR(255) NOT NULL,
+    program VARCHAR(255) NOT NULL,
+    
+    -- Emergency Contact
+    guardian_name VARCHAR(255) NOT NULL,
+    guardian_relationship VARCHAR(50) NOT NULL,
+    guardian_phone VARCHAR(50) NOT NULL,
+    
+    -- Status
+    status application_status DEFAULT 'draft',
+    
+    -- Review Info
+    reviewed_by UUID REFERENCES users(id),
+    reviewed_at TIMESTAMPTZ,
+    review_comments TEXT,
+    
+    -- Timestamps
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW(),
+    submitted_at TIMESTAMPTZ
+);
+
+-- Application Documents Table
+CREATE TABLE application_documents (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
+    document_type VARCHAR(50) NOT NULL CHECK (document_type IN (
+        'passport', 'ssce', 'jamb', 'qualification', 'transcript', 'industrial_training'
+    )),
+    file_name VARCHAR(255) NOT NULL,
+    file_path TEXT NOT NULL,
+    file_size INTEGER,
+    mime_type VARCHAR(100),
+    is_verified BOOLEAN DEFAULT false,
+    verified_by UUID REFERENCES users(id),
+    verified_at TIMESTAMPTZ,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Review Comments Table
+CREATE TABLE application_review_comments (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    application_id UUID NOT NULL REFERENCES applications(id) ON DELETE CASCADE,
+    reviewer_id UUID NOT NULL REFERENCES users(id),
+    reviewer_name VARCHAR(255) NOT NULL,
+    comment TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Indexes for Applications
+CREATE INDEX idx_applications_status ON applications(status);
+CREATE INDEX idx_applications_type ON applications(application_type);
+CREATE INDEX idx_applications_email ON applications(email);
+CREATE INDEX idx_applications_created ON applications(created_at);
+CREATE INDEX idx_application_documents_app ON application_documents(application_id);
+
+-- ============================================
+-- SECTION 15: STORAGE BUCKETS (Run in Supabase Dashboard)
+-- ============================================
+
+-- Run these SQL commands in Supabase Dashboard to create storage buckets:
+-- 
+-- INSERT INTO storage.buckets (id, name, public) VALUES 
+-- ('ssce-documents', 'ssce-documents', false),
+-- ('jamb-documents', 'jamb-documents', false),
+-- ('qualification-documents', 'qualification-documents', false),
+-- ('transcript-documents', 'transcript-documents', false),
+-- ('admission-documents', 'admission-documents', false),
+-- ('passport-photos', 'passport-photos', false);
+--
+-- Storage policies should allow authenticated users to upload their own documents
+-- and super_admin to view all documents.
+
+-- ============================================
+-- SECTION 16: RLS POLICIES FOR ADMISSIONS
+-- ============================================
+
+-- Enable RLS on applications table
+ALTER TABLE applications ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Users can view their own applications
+CREATE POLICY "Users can view own applications" ON applications
+    FOR SELECT USING (auth.uid() = reviewed_by OR status != 'draft');
+
+-- Policy: Users can insert their own applications
+CREATE POLICY "Users can insert own applications" ON applications
+    FOR INSERT WITH CHECK (true);
+
+-- Policy: Users can update their own draft applications
+CREATE POLICY "Users can update own draft applications" ON applications
+    FOR UPDATE USING (status = 'draft');
+
+-- Policy: Super admin can view all applications
+CREATE POLICY "Super admin can view all" ON applications
+    FOR SELECT USING (
+        EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'super_admin')
+    );
+
+-- Enable RLS on application_documents
+ALTER TABLE application_documents ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Users can view documents for their applications
+CREATE POLICY "Users can view own documents" ON application_documents
+    FOR SELECT USING (
+        EXISTS (SELECT 1 FROM applications WHERE id = application_id AND reviewed_by = auth.uid())
+    );
+
+-- Policy: Super admin can manage all documents
+CREATE POLICY "Super admin can manage all documents" ON application_documents
+    FOR ALL USING (
+        EXISTS (SELECT 1 FROM users WHERE id = auth.uid() AND role = 'super_admin')
+    );
+
+-- ============================================
+-- SECTION 17: SEED DATA - SAMPLE APPLICATIONS
+-- ============================================
+
+INSERT INTO applications (
+    id, application_id, full_name, email, phone, date_of_birth, gender,
+    nationality, state, local_government,
+    application_type, faculty, department, program,
+    guardian_name, guardian_relationship, guardian_phone,
+    status, submitted_at
+) VALUES
+(
+    'app-001',
+    'ISA-a1b2c3d4',
+    'Adebayo Johnson',
+    'adebayo.johnson@email.com',
+    '+2348012345678',
+    '2002-05-15',
+    'male',
+    'ng', 'lagos', 'ikeja',
+    'ND', 'School of AI & Computational Intelligence', 
+    'Artificial Intelligence & Machine Learning',
+    'Applied Machine Learning',
+    'Mrs. Adebayo', 'Mother', '+2348012345679',
+    'submitted', NOW() - INTERVAL '5 days'
+),
+(
+    'app-002',
+    'ISA-e5f6g7h8',
+    'Chidinma Okonkwo',
+    'chidinma.okonkwo@email.com',
+    '+2348098765432',
+    '1999-08-22',
+    'female',
+    'ng', 'anambra', 'awka-south',
+    'HND', 'School of Engineering',
+    'Electrical/Electronic Engineering',
+    'Electrical/Electronic Engineering',
+    'Mr. Okonkwo', 'Father', '+2348098765433',
+    'under_review', NOW() - INTERVAL '6 days'
+),
+(
+    'app-003',
+    'ISA-i9j0k1l2',
+    'Emmanuel Mensah',
+    'emmanuel.mensah@email.com',
+    '+233201234567',
+    '2001-03-10',
+    'male',
+    'gh', NULL, NULL,
+    'ND', 'School of Business',
+    'Business Administration',
+    'Business Administration',
+    'Mr. Mensah Sr.', 'Father', '+233201234568',
+    'approved', NOW() - INTERVAL '10 days'
+),
+(
+    'app-004',
+    'ISA-m3n4o5p6',
+    'Fatima Ibrahim',
+    'fatima.ibrahim@email.com',
+    '+2348055551234',
+    '1998-11-30',
+    'female',
+    'ng', 'kano', 'dala',
+    'HND', 'School of Applied Sciences',
+    'Science Laboratory Technology',
+    'Science Laboratory Technology',
+    'Alhaji Ibrahim', 'Father', '+2348055551235',
+    'rejected', NOW() - INTERVAL '8 days'
+);
+
+-- ============================================
 -- END OF SCHEMA
 -- ============================================
 
