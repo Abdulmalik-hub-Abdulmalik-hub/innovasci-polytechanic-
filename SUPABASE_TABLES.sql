@@ -8,19 +8,22 @@
 -- SECTION 1: ENUM TYPES
 -- ============================================
 
--- User Roles
+-- User Roles (NBTE-Compliant)
 CREATE TYPE user_role AS ENUM (
     'super_admin',
-    'system_admin',
-    'admission_officer',
-    'finance_officer',
-    'exam_officer',
-    'student_affairs',
+    'rector',
+    'deputy_rector_academic',
+    'deputy_rector_administration',
+    'registrar',
+    'bursar',
+    'librarian',
+    'director',
     'dean',
     'hod',
+    'programme_coordinator',
     'lecturer',
-    'staff',
-    'student'
+    'student',
+    'applicant'
 );
 
 -- Academic Status
