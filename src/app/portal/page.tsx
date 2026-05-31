@@ -15,7 +15,12 @@ export default function PortalIndexPage() {
     }
     
     if (isAuthenticated && portalId) {
-      router.push(`/portal/${portalId}`)
+      // Redirect to the appropriate portal
+      if (portalId === 'admin') {
+        router.push("/portal/super-admin")
+      } else {
+        router.push(`/portal/${portalId}`)
+      }
     }
   }, [isAuthenticated, isLoading, portalId, router])
 

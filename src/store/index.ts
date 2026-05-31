@@ -26,6 +26,15 @@ export const PORTALS: Record<PortalId, PortalState> = {
   admin: { id: 'admin', name: 'Super Admin Portal', roles: ['super_admin'] },
 };
 
+// Portal to route mapping
+export const PORTAL_ROUTES: Record<PortalId, string> = {
+  applicant: '/portal/applicant',
+  student: '/portal/student',
+  academic: '/portal/academic',
+  management: '/portal/management',
+  admin: '/portal/super-admin', // Super Admin uses super-admin route
+};
+
 // =====================================================
 // AUTH STORE
 // =====================================================

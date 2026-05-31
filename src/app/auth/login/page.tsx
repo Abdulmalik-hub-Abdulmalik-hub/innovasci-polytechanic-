@@ -4,12 +4,13 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import { Eye, EyeOff, Loader2, GraduationCap } from "lucide-react"
+import { Eye, EyeOff, Loader2, GraduationCap, AlertCircle } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { useAuthStore } from "@/store"
+import { supabase, isSupabaseConfigured } from "@/lib/supabase"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -21,31 +22,124 @@ export default function LoginPage() {
     password: "",
   })
   const [error, setError] = useState("")
+  const [isSignUp, setIsSignUp] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
     setIsLoadingLocal(true)
 
-    // Simulate login - in production this would call an API
-    await new Promise(resolve => setTimeout(resolve, 1500))
-
-    // Demo accounts for testing
-    const demoUsers = {
-      "student@innovasci.edu": { id: "1", email: "student@innovasci.edu", fullName: "Aisha Mohammed", role: "student" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "lecturer@innovasci.edu": { id: "2", email: "lecturer@innovasci.edu", fullName: "Dr. Emmanuel Obi", role: "lecturer" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "rector@innovasci.edu": { id: "3", email: "rector@innovasci.edu", fullName: "Prof. Adeniyi Olamilekan", role: "rector" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "registrar@innovasci.edu": { id: "4", email: "registrar@innovasci.edu", fullName: "Mrs. Folake Adebayo", role: "registrar" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "super@innovasci.edu": { id: "5", email: "super@innovasci.edu", fullName: "System Owner", role: "super_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
-      "webuildandtarinbuilders@gmail.com": { id: "6", email: "webuildandtarinbuilders@gmail.com", fullName: "Super Admin", role: "super_admin" as const, isActive: true, isVerified: true, createdAt: "", updatedAt: "" },
+    // Check if Supabase is configured
+    if (!isSupabaseConfigured()) {
+      setError("Authentication system not configured. Please contact system administrator.")
+      setIsLoadingLocal(false)
+      return
     }
 
-    const user = demoUsers[formData.email as keyof typeof demoUsers]
-    if (user) {
-      login(user, "demo-token-123")
-      router.push("/dashboard")
-    } else {
-      setError("Invalid email or password. Try: student@innovasci.edu, lecturer@innovasci.edu, rector@innovasci.edu, or super@innovasci.edu")
+    try {
+      if (isSignUp) {
+        // Sign up flow
+        const { data: authData, error: signUpError } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+        })
+
+        if (signUpError) throw signUpError
+
+        if (authData.user) {
+          // Create user profile in users table
+          const { error: profileError } = await supabase.from('users').insert({
+            id: authData.user.id,
+            email: formData.email,
+            full_name: formData.email.split('@')[0],
+            role: 'applicant', // Default role for new signups
+            is_active: true,
+            is_verified: false,
+          })
+
+          if (profileError) console.error('Profile creation error:', profileError)
+
+          // Redirect to applicant portal for new users
+          login({
+            id: authData.user.id,
+            email: formData.email,
+            fullName: formData.email.split('@')[0],
+            role: 'applicant',
+            isActive: true,
+            isVerified: false,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+          }, 'supabase-auth-token')
+          router.push("/portal/applicant")
+        }
+      } else {
+        // Sign in flow
+        const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        })
+
+        if (signInError) throw signInError
+
+        if (authData.user) {
+          // Fetch user profile from database
+          const { data: profileData, error: profileError } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', authData.user.id)
+            .single()
+
+          if (profileError) {
+            // If profile doesn't exist, use auth data
+            login({
+              id: authData.user.id,
+              email: authData.user.email || formData.email,
+              fullName: authData.user.user_metadata?.full_name || formData.email.split('@')[0],
+              role: 'applicant', // Default role
+              isActive: true,
+              isVerified: authData.user.email_confirmed_at ? true : false,
+              createdAt: authData.user.created_at,
+              updatedAt: authData.user.updated_at || authData.user.created_at,
+            }, authData.session?.access_token || 'supabase-auth-token')
+          } else {
+            // Use profile from database
+            login({
+              id: profileData.id,
+              email: profileData.email,
+              fullName: profileData.full_name,
+              role: profileData.role,
+              isActive: profileData.is_active,
+              isVerified: profileData.is_verified,
+              createdAt: profileData.created_at,
+              updatedAt: profileData.updated_at,
+            }, authData.session?.access_token || 'supabase-auth-token')
+          }
+
+          // Redirect based on role
+          const userRole = profileData?.role || 'applicant'
+          const roleToRoute: Record<string, string> = {
+            applicant: '/portal/applicant',
+            student: '/portal/student',
+            lecturer: '/portal/academic',
+            programme_coordinator: '/portal/academic',
+            hod: '/portal/academic',
+            dean: '/portal/academic',
+            rector: '/portal/management',
+            deputy_rector_academic: '/portal/management',
+            deputy_rector_admin: '/portal/management',
+            registrar: '/portal/management',
+            bursar: '/portal/management',
+            librarian: '/portal/management',
+            director: '/portal/management',
+            super_admin: '/portal/super-admin',
+          }
+          
+          router.push(roleToRoute[userRole] || '/portal/applicant')
+        }
+      }
+    } catch (err: any) {
+      console.error('Auth error:', err)
+      setError(err.message || "Authentication failed. Please try again.")
     }
 
     setIsLoadingLocal(false)
@@ -70,15 +164,22 @@ export default function LoginPage() {
               <span className="text-2xl font-bold text-white">IA</span>
             </div>
           </Link>
-          <h1 className="text-3xl font-bold text-white mb-2">Welcome Back</h1>
-          <p className="text-slate-300">Sign in to your InnovaSci account</p>
+          <h1 className="text-3xl font-bold text-white mb-2">
+            {isSignUp ? 'Create Account' : 'Welcome Back'}
+          </h1>
+          <p className="text-slate-300">
+            {isSignUp 
+              ? 'Sign up to start your application' 
+              : 'Sign in to your InnovaSci account'}
+          </p>
         </div>
 
         <Card className="backdrop-blur-lg bg-white/10 border-white/20 shadow-2xl">
           <CardContent className="p-8">
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400 text-sm">
+                <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-400 text-sm flex items-center gap-2">
+                  <AlertCircle className="h-4 w-4" />
                   {error}
                 </div>
               )}
@@ -107,6 +208,7 @@ export default function LoginPage() {
                     value={formData.password}
                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     required
+                    minLength={6}
                   />
                   <button
                     type="button"
@@ -136,40 +238,34 @@ export default function LoginPage() {
                 {isLoading ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Signing in...
+                    {isSignUp ? 'Creating account...' : 'Signing in...'}
                   </>
                 ) : (
-                  "Sign In"
+                  isSignUp ? 'Create Account' : 'Sign In'
                 )}
               </Button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-slate-300 text-sm">
-                Don't have an account?{" "}
-                <Link href="/admission" className="text-blue-400 hover:text-blue-300 font-medium">
-                  Apply Now
-                </Link>
+                {isSignUp ? 'Already have an account?' : "Don't have an account?"}{" "}
+                <button 
+                  onClick={() => { setIsSignUp(!isSignUp); setError(''); }}
+                  className="text-blue-400 hover:text-blue-300 font-medium"
+                >
+                  {isSignUp ? 'Sign In' : 'Apply Now'}
+                </button>
               </p>
             </div>
 
-            <div className="mt-6 pt-6 border-t border-white/10">
-              <p className="text-xs text-slate-400 text-center mb-3">Demo Accounts (any password works)</p>
-              <div className="grid grid-cols-2 gap-2 text-xs">
-                <button onClick={() => setFormData({ email: "student@innovasci.edu", password: "demo" })} className="p-2 rounded bg-white/5 hover:bg-white/10 text-slate-300">
-                  Student
-                </button>
-                <button onClick={() => setFormData({ email: "lecturer@innovasci.edu", password: "demo" })} className="p-2 rounded bg-white/5 hover:bg-white/10 text-slate-300">
-                  Lecturer
-                </button>
-                <button onClick={() => setFormData({ email: "admin@innovasci.edu", password: "demo" })} className="p-2 rounded bg-white/5 hover:bg-white/10 text-slate-300">
-                  Admin
-                </button>
-                <button onClick={() => setFormData({ email: "super@innovasci.edu", password: "demo" })} className="p-2 rounded bg-white/5 hover:bg-white/10 text-slate-300">
-                  Super Admin
-                </button>
+            {!isSupabaseConfigured() && (
+              <div className="mt-6 pt-6 border-t border-white/10">
+                <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-4 text-amber-400 text-sm">
+                  <p className="font-semibold mb-1">Configuration Required</p>
+                  <p>Supabase authentication is not configured. Please set environment variables.</p>
+                </div>
               </div>
-            </div>
+            )}
           </CardContent>
         </Card>
       </motion.div>
