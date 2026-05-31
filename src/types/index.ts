@@ -1,13 +1,75 @@
+// =====================================================
+// INNOVASCI AI LABS POLYTECHNIC - TYPE DEFINITIONS
+// NBTE-Compliant Online Polytechnic ERP System
+// =====================================================
+
+// =====================================================
+// SECTION 1: USER ROLES & RBAC
+// =====================================================
+
+// Centralized User Roles
 export type UserRole = 
+  // Super Admin
   | 'super_admin'
-  | 'system_admin'
-  | 'admission_officer'
-  | 'finance_officer'
-  | 'exam_officer'
-  | 'student_affairs'
+  // Management Roles
+  | 'rector'
+  | 'deputy_rector_academic'
+  | 'deputy_rector_admin'
+  | 'registrar'
+  | 'bursar'
+  | 'librarian'
+  // Director-level (applies to all directors)
+  | 'director'
+  // Academic Staff Roles
+  | 'dean'
   | 'hod'
+  | 'program_coordinator'
   | 'lecturer'
-  | 'student';
+  // Student & Applicant Roles
+  | 'student'
+  | 'applicant';
+
+// Role display names for UI
+export const ROLE_DISPLAY_NAMES: Record<UserRole, string> = {
+  super_admin: 'Super Administrator',
+  rector: 'Rector',
+  deputy_rector_academic: 'Deputy Rector (Academic)',
+  deputy_rector_admin: 'Deputy Rector (Administration)',
+  registrar: 'Registrar',
+  bursar: 'Bursar',
+  librarian: 'Polytechnic Librarian',
+  director: 'Director',
+  dean: 'Dean',
+  hod: 'Head of Department',
+  program_coordinator: 'Programme Coordinator',
+  lecturer: 'Lecturer',
+  student: 'Student',
+  applicant: 'Applicant'
+};
+
+// Role categories for grouping
+export type RoleCategory = 'management' | 'academic' | 'student' | 'system';
+
+export const ROLE_CATEGORIES: Record<UserRole, RoleCategory> = {
+  super_admin: 'system',
+  rector: 'management',
+  deputy_rector_academic: 'management',
+  deputy_rector_admin: 'management',
+  registrar: 'management',
+  bursar: 'management',
+  librarian: 'management',
+  director: 'management',
+  dean: 'academic',
+  hod: 'academic',
+  program_coordinator: 'academic',
+  lecturer: 'academic',
+  student: 'student',
+  applicant: 'student'
+};
+
+// =====================================================
+// SECTION 2: BASE INTERFACES
+// =====================================================
 
 export interface User {
   id: string;
@@ -20,6 +82,9 @@ export interface User {
   updatedAt: string;
   isActive: boolean;
   isVerified: boolean;
+  departmentId?: string;
+  facultyId?: string;
+  programId?: string;
 }
 
 export interface Student extends User {
