@@ -6,7 +6,7 @@ import { Sidebar } from "@/components/layout/sidebar"
 import { Header } from "@/components/layout/header"
 import { useAppStore, useAuthStore } from "@/store"
 
-export default function DashboardLayout({
+export default function PortalLayout({
   children,
 }: {
   children: React.ReactNode
@@ -26,7 +26,7 @@ export default function DashboardLayout({
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-4">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-600 to-purple-600 animate-pulse" />
-          <p className="text-muted-foreground">Loading...</p>
+          <p className="text-muted-foreground">Loading portal...</p>
         </div>
       </div>
     )
