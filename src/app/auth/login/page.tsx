@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuthStore } from "@/store"
 import { supabase, isSupabaseConfigured } from "@/lib/supabase"
+import { DemoLoginPanel } from "@/components/auth/demo-login-panel"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -29,7 +30,6 @@ export default function LoginPage() {
     setError("")
     setIsLoadingLocal(true)
 
-    // Check if Supabase is configured
     if (!isSupabaseConfigured()) {
       setError("Authentication system not configured. Please contact system administrator.")
       setIsLoadingLocal(false)
@@ -38,7 +38,6 @@ export default function LoginPage() {
 
     try {
       if (isSignUp) {
-        // Sign up flow
         const { data: authData, error: signUpError } = await supabase.auth.signUp({
           email: formData.email,
           password: formData.password,
@@ -47,19 +46,17 @@ export default function LoginPage() {
         if (signUpError) throw signUpError
 
         if (authData.user) {
-          // Create user profile in users table
           const { error: profileError } = await supabase.from('users').insert({
             id: authData.user.id,
             email: formData.email,
             full_name: formData.email.split('@')[0],
-            role: 'applicant', // Default role for new signups
+            role: 'applicant',
             is_active: true,
             is_verified: false,
           })
 
           if (profileError) console.error('Profile creation error:', profileError)
 
-          // Redirect to applicant portal for new users
           login({
             id: authData.user.id,
             email: formData.email,
@@ -73,7 +70,6 @@ export default function LoginPage() {
           router.push("/portal/applicant")
         }
       } else {
-        // Sign in flow
         const { data: authData, error: signInError } = await supabase.auth.signInWithPassword({
           email: formData.email,
           password: formData.password,
@@ -82,7 +78,6 @@ export default function LoginPage() {
         if (signInError) throw signInError
 
         if (authData.user) {
-          // Fetch user profile from database
           const { data: profileData, error: profileError } = await supabase
             .from('users')
             .select('*')
@@ -90,19 +85,17 @@ export default function LoginPage() {
             .single()
 
           if (profileError) {
-            // If profile doesn't exist, use auth data
             login({
               id: authData.user.id,
               email: authData.user.email || formData.email,
               fullName: authData.user.user_metadata?.full_name || formData.email.split('@')[0],
-              role: 'applicant', // Default role
+              role: 'applicant',
               isActive: true,
               isVerified: authData.user.email_confirmed_at ? true : false,
               createdAt: authData.user.created_at,
               updatedAt: authData.user.updated_at || authData.user.created_at,
             }, authData.session?.access_token || 'supabase-auth-token')
           } else {
-            // Use profile from database
             login({
               id: profileData.id,
               email: profileData.email,
@@ -115,7 +108,6 @@ export default function LoginPage() {
             }, authData.session?.access_token || 'supabase-auth-token')
           }
 
-          // Redirect based on role
           const userRole = profileData?.role || 'applicant'
           const roleToRoute: Record<string, string> = {
             applicant: '/portal/applicant',
@@ -266,6 +258,9 @@ export default function LoginPage() {
                 </div>
               </div>
             )}
+            
+            {/* Demo Login Panel */}
+            <DemoLoginPanel />
           </CardContent>
         </Card>
       </motion.div>
