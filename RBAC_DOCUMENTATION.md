@@ -114,23 +114,6 @@ The following roles are **NOT VALID** and must never be used:
 
 ---
 
-## 🧪 DEMO ACCOUNTS (TESTING)
-
-For development/testing, use these demo accounts:
-
-| Email | Role | Name |
-|-------|------|------|
-| `student@innovasci.edu` | `student` | Aisha Mohammed |
-| `lecturer@innovasci.edu` | `lecturer` | Dr. Emmanuel Obi |
-| `rector@innovasci.edu` | `rector` | Prof. Adeniyi Olamilekan |
-| `registrar@innovasci.edu` | `registrar` | Mrs. Folake Adebayo |
-| `super@innovasci.edu` | `super_admin` | System Owner |
-| `webuildandtarinbuilders@gmail.com` | `super_admin` | Super Admin |
-
-**Note:** Any password works for demo accounts.
-
----
-
 ## 🚀 ADDING A NEW ROLE
 
 To add a new role to the system:
