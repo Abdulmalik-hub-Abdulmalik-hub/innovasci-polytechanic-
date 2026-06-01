@@ -37,7 +37,7 @@ export default function AcademicPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">Academic Structure</h1>
-          <p className="text-muted-foreground">Manage your institution's academic hierarchy</p>
+          <p className="text-muted-foreground">Manage your institution&apos;s academic hierarchy</p>
         </div>
         <Button className="bg-gradient-to-r from-blue-600 to-purple-600">
           <Plus className="mr-2 h-4 w-4" />

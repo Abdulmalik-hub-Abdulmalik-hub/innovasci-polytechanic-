@@ -141,7 +141,7 @@ export default function DailyReportPage() {
       {/* Recent Activity */}
       <Card>
         <CardHeader>
-          <CardTitle>Today's Recent Activity</CardTitle>
+          <CardTitle>Today&apos;s Recent Activity</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">

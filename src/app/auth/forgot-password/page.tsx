@@ -90,7 +90,7 @@ export default function ForgotPasswordPage() {
                   you will receive instructions on how to reset your password.
                 </p>
                 <p className="text-slate-400 text-sm">
-                  Please check your spam folder if you don't see the email within a few minutes.
+                  Please check your spam folder if you do&apos;t see the email within a few minutes.
                 </p>
                 <Link href="/auth/login">
                   <Button variant="outline" className="mt-4 border-white/20 text-white hover:bg-white/10">
