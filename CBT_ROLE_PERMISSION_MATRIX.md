@@ -1,6 +1,6 @@
 # CBT ROLE PERMISSION MATRIX
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **CBT Examination Engine**
 
 ---

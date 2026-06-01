@@ -10,7 +10,7 @@
 ```
 NEXT_PUBLIC_APP_URL=https://your-app.vercel.app
 NODE_ENV=production
-NEXT_PUBLIC_APP_NAME=InnovaSci AI Labs Polytechnic
+NEXT_PUBLIC_APP_NAME=InnovaSci Open Polytechnic
 NEXT_PUBLIC_APP_DESCRIPTION=Premier online polytechnic platform
 ```
 

@@ -208,7 +208,7 @@ export default function AdmissionProcessingPage() {
               <GraduationCap className="h-8 w-8 text-orange-600" />
               <div>
                 <h1 className="text-lg font-semibold text-gray-900">Admission Processing</h1>
-                <p className="text-xs text-gray-500">InnovaSci AI Labs Polytechnic</p>
+                <p className="text-xs text-gray-500">InnovaSci Open Polytechnic</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">

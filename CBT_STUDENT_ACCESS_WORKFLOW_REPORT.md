@@ -1,6 +1,6 @@
 # CBT STUDENT ACCESS WORKFLOW RESTRUCTURE REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **CBT Examination Access Engine**
 
 ---

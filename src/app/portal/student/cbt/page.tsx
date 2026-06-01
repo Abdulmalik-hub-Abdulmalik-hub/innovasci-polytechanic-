@@ -157,7 +157,7 @@ export default function StudentCBTDashboard() {
               <GraduationCap className="h-8 w-8 text-blue-600" />
               <div className="ml-3">
                 <h1 className="text-lg font-semibold text-gray-900">Student CBT Portal</h1>
-                <p className="text-xs text-gray-500">InnovaSci AI Labs Polytechnic</p>
+                <p className="text-xs text-gray-500">InnovaSci Open Polytechnic</p>
               </div>
             </div>
             <div className="flex items-center space-x-4">

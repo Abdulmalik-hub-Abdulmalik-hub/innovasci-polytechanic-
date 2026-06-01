@@ -557,7 +557,7 @@ export default function EnhancedAdmissionPage() {
                         <p className="text-sm text-orange-700">
                           {formData.academicInfo.applicationType === 'HND' 
                             ? 'Please upload your SSCE result, previous qualification, and academic transcript.'
-                            : 'Please upload your SSCE result and JAMB result.'}
+                            : 'Please upload your SSCE result and passport photograph.'}
                         </p>
                       </div>
                     </div>
@@ -592,24 +592,6 @@ export default function EnhancedAdmissionPage() {
                       required={true}
                     />
                   </div>
-
-                  {/* JAMB Result - Only for ND */}
-                  {formData.academicInfo.applicationType === 'ND' && (
-                    <div className="border-b pb-6">
-                      <h3 className="text-lg font-medium mb-1">JAMB Result</h3>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        Upload your JAMB UTME result slip
-                      </p>
-                      <FileUploader
-                        documentType="jamb"
-                        applicationId={applicationId}
-                        onUploadComplete={(path, name) => handleDocumentUpload('jamb', path, name)}
-                        onRemove={() => handleDocumentRemove('jamb')}
-                        existingFile={uploadedDocuments['jamb']}
-                        required={true}
-                      />
-                    </div>
-                  )}
 
                   {/* HND-specific documents */}
                   {formData.academicInfo.applicationType === 'HND' && (

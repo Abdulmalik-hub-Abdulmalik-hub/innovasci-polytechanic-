@@ -1,6 +1,6 @@
 # ADMISSION OFFICER PERMISSION MATRIX
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **Online Polytechnic ERP System**
 
 ---

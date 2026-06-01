@@ -82,7 +82,7 @@ export default function ManagementPortalPage() {
         </Avatar>
         <div>
           <h1 className="text-2xl font-bold">Welcome back, {user?.fullName?.split(' ')[0] || 'Management'}!</h1>
-          <p className="text-muted-foreground">{getRoleTitle()} • InnovaSci AI Labs Polytechnic</p>
+          <p className="text-muted-foreground">{getRoleTitle()} • InnovaSci Open Polytechnic</p>
         </div>
         <div className="ml-auto">
           <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">

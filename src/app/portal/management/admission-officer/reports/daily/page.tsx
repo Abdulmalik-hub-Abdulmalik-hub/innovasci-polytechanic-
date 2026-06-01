@@ -170,7 +170,7 @@ export default function DailyReportPage() {
                 <FileText className="h-8 w-8 text-purple-600" />
                 <div>
                   <p className="font-medium">15 Documents Verified</p>
-                  <p className="text-sm text-muted-foreground">WAEC, NECO, JAMB results verified</p>
+                  <p className="text-sm text-muted-foreground">All academic documents verified</p>
                 </div>
               </div>
               <Badge className="bg-purple-100 text-purple-700">11:45 AM</Badge>

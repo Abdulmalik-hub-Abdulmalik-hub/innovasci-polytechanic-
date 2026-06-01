@@ -1,4 +1,4 @@
-# InnovaSci AI Labs Polytechnic
+# InnovaSci Open Polytechnic
 ## RBAC (Role-Based Access Control) Documentation
 ### Version: 2.0 | Last Updated: May 31, 2026
 

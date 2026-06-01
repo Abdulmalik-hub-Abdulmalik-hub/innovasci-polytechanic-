@@ -247,4 +247,4 @@ Draft → Submitted → Under Review → Approved → Admission Offered
 ---
 
 **Prepared by:** OpenHands AI Agent  
-**For:** InnovaSci AI Labs Polytechnic
+**For:** InnovaSci Open Polytechnic

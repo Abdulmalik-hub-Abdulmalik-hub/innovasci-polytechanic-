@@ -1,6 +1,6 @@
 # STUDENT LEARNING WORKFLOW REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **Learning Resource Access Engine**
 
 ---

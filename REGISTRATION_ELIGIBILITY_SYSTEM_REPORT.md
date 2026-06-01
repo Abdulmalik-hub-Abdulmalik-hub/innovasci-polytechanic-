@@ -1,6 +1,6 @@
 # REGISTRATION ELIGIBILITY AND SCHOOL FEES CONTROL SYSTEM REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **Student Registration, Fees Control & Payment Eligibility System**
 
 ---

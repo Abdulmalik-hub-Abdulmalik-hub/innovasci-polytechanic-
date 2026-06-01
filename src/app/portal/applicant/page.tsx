@@ -63,7 +63,7 @@ export default function ApplicantPortalPage() {
         </Avatar>
         <div>
           <h1 className="text-2xl font-bold">Welcome, {user?.fullName?.split(' ')[0] || 'Applicant'}!</h1>
-          <p className="text-muted-foreground">InnovaSci AI Labs Polytechnic Application</p>
+          <p className="text-muted-foreground">InnovaSci Open Polytechnic Application</p>
         </div>
         <div className="ml-auto">
           <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">

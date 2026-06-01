@@ -1,6 +1,6 @@
 # CBT ELIGIBILITY VALIDATION REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **CBT Examination Access Engine**
 
 ---

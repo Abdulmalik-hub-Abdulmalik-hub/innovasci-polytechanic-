@@ -1,6 +1,6 @@
 // =====================================================
 // SUPABASE STORAGE FOR DOCUMENT UPLOADS
-// InnovaSci AI Labs Polytechnic - Admissions System
+// InnovaSci Open Polytechnic - Admissions System
 // =====================================================
 
 import { supabase } from './supabase';
@@ -9,18 +9,16 @@ import { isSupabaseConfigured } from './supabase';
 // Storage bucket names
 export const STORAGE_BUCKETS = {
   SSCE_DOCUMENTS: 'ssce-documents',
-  JAMB_DOCUMENTS: 'jamb-documents',
   QUALIFICATION_DOCUMENTS: 'qualification-documents',
   TRANSCRIPT_DOCUMENTS: 'transcript-documents',
   ADMISSION_DOCUMENTS: 'admission-documents',
   PASSPORT_PHOTOS: 'passport-photos',
 } as const;
 
-// Document types for applications
+// Document types for applications (Direct application model - no JAMB required)
 export type DocumentType = 
   | 'passport'
   | 'ssce'
-  | 'jamb'
   | 'qualification'
   | 'transcript'
   | 'industrial_training';
@@ -40,8 +38,6 @@ export function getBucketForDocumentType(type: DocumentType): string {
       return STORAGE_BUCKETS.PASSPORT_PHOTOS;
     case 'ssce':
       return STORAGE_BUCKETS.SSCE_DOCUMENTS;
-    case 'jamb':
-      return STORAGE_BUCKETS.JAMB_DOCUMENTS;
     case 'qualification':
       return STORAGE_BUCKETS.QUALIFICATION_DOCUMENTS;
     case 'transcript':
@@ -198,7 +194,6 @@ export function getDocumentTypeLabel(type: DocumentType): string {
   const labels: Record<DocumentType, string> = {
     passport: 'Passport Photograph',
     ssce: 'SSCE Result',
-    jamb: 'JAMB Result',
     qualification: 'Previous Qualification',
     transcript: 'Academic Transcript',
     industrial_training: 'Industrial Training Evidence',

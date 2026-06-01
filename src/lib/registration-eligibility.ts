@@ -1,6 +1,6 @@
 // =====================================================
 // REGISTRATION ELIGIBILITY AND SCHOOL FEES CONTROL ENGINE
-// InnovaSci AI Labs Polytechnic
+// InnovaSci Open Polytechnic
 // =====================================================
 
 import { DEMO_STUDENT_PROFILE, StudentProfile } from './learning-resources';

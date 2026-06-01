@@ -31,7 +31,6 @@ export default function NDStatisticsPage() {
     { name: 'NECO', verified: 320, pending: 45, rejected: 20 },
     { name: 'NABTEB', verified: 180, pending: 35, rejected: 10 },
     { name: 'GCE', verified: 85, pending: 20, rejected: 5 },
-    { name: 'JAMB', verified: 480, pending: 30, rejected: 13 },
   ]
 
   const programBreakdown = [

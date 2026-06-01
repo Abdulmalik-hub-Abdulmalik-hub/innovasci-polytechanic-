@@ -1,6 +1,6 @@
 # STUDENT RECORD CREATION REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **Admission Processing Engine**
 
 ---

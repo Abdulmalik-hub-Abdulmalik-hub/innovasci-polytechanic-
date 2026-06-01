@@ -1,6 +1,6 @@
 # ADMISSION WORKFLOW REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **Online Polytechnic ERP System**
 
 ---

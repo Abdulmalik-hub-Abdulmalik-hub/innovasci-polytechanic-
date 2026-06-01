@@ -1,6 +1,6 @@
 # PROGRAMME CODE MAPPING REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **Admission Processing Engine**
 
 ---

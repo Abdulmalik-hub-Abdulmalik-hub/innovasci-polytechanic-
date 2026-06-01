@@ -1,4 +1,4 @@
-# InnovaSci AI Labs Polytechnic Platform
+# InnovaSci Open Polytechnic Platform
 
 A production-ready, scalable, university-grade SaaS platform combining LMS, CBT Examination System, Academic Governance, Payment System, and more.
 
@@ -101,7 +101,7 @@ src/
 
 ## 📝 License
 
-This project is part of InnovaSci AI Labs Polytechnic.
+This project is part of InnovaSci Open Polytechnic.
 
 ---
 

@@ -1,6 +1,6 @@
 # ADMISSION PROCESSING STATISTICS REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **Admission Processing Engine**
 
 ---

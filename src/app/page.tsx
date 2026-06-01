@@ -100,25 +100,22 @@ const faculties = curriculumData.map(f => ({
 
 const testimonials = [
   {
-    name: "Aisha Mohammed",
-    role: "ND Applied Machine Learning Graduate",
-    content: "InnovaSci transformed my career. The AI-focused curriculum prepared me for real industry challenges.",
+    name: "Student Success Story",
+    role: "National Diploma Graduate",
+    content: "The institution provided excellent preparation for my career in technology through comprehensive practical training.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
   },
   {
-    name: "David Okonkwo",
-    role: "HND Cloud Architecture Student",
-    content: "The flexibility of online learning combined with rigorous academics makes this program exceptional.",
+    name: "Academic Excellence",
+    role: "Higher National Diploma Graduate",
+    content: "The rigorous curriculum and hands-on approach prepared me for real industry challenges.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop",
   },
   {
-    name: "Fatima Al-Hassan",
-    role: "Lecturer, Department of AI & Machine Learning",
-    content: "Teaching here is rewarding. Students are engaged and the technology infrastructure is outstanding.",
+    name: "Career Development",
+    role: "Alumni",
+    content: "The skills I developed here opened doors to opportunities I never imagined possible.",
     rating: 5,
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&h=100&fit=crop",
   },
 ]
 
@@ -143,8 +140,8 @@ export default function HomePage() {
                 <span className="text-xl font-bold text-white">IA</span>
               </div>
               <div>
-                <span className="font-bold text-slate-900">InnovaSci</span>
-                <span className="block text-xs text-muted-foreground">AI Labs Polytechnic</span>
+                <span className="font-bold text-slate-900">InnovaSci Open Polytechnic</span>
+                <span className="block text-xs text-muted-foreground">Powered by InnovaSci AI Labs</span>
               </div>
             </Link>
             <div className="hidden md:flex items-center gap-8">
@@ -191,7 +188,7 @@ export default function HomePage() {
                 with AI-Driven Education
               </h1>
               <p className="text-xl text-muted-foreground leading-relaxed">
-                Join InnovaSci AI Labs Polytechnic and gain industry-recognized skills. 
+                Join InnovaSci Open Polytechnic and gain industry-recognized skills. 
                 Our cutting-edge curriculum prepares you for the careers of tomorrow.
               </p>
               <div className="flex flex-wrap gap-4">
@@ -529,13 +526,9 @@ export default function HomePage() {
                     ))}
                   </div>
                   <p className="text-muted-foreground mb-6">&ldquo;{testimonial.content}&rdquo;</p>
-                  <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gray-200 overflow-hidden">
-                      <img
-                        src={testimonial.image}
-                        alt={testimonial.name}
-                        className="w-full h-full object-cover"
-                      />
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center">
+                      <GraduationCap className="h-5 w-5 text-white" />
                     </div>
                     <div>
                       <p className="font-semibold">{testimonial.name}</p>
@@ -559,7 +552,7 @@ export default function HomePage() {
           >
             <h2 className="text-4xl md:text-5xl font-bold mb-6">Ready to Transform Your Career?</h2>
             <p className="text-xl text-white/80 mb-8">
-              Join thousands of students who have launched their careers with InnovaSci AI Labs.
+              Join thousands of students who have launched their careers with InnovaSci Open Polytechnic.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
               <Button size="lg" className="bg-white text-blue-600 hover:bg-slate-100" asChild>
@@ -587,12 +580,12 @@ export default function HomePage() {
                   <span className="text-xl font-bold text-white">IA</span>
                 </div>
                 <div>
-                  <span className="font-bold">InnovaSci</span>
-                  <span className="block text-xs text-slate-400">AI Labs Polytechnic</span>
+                  <span className="font-bold">InnovaSci Open Polytechnic</span>
+                  <span className="block text-xs text-slate-400">Powered by InnovaSci AI Labs</span>
                 </div>
               </div>
               <p className="text-slate-400 text-sm">
-                Transforming education through AI-powered learning experiences.
+                Transforming education through innovative AI-powered learning experiences.
               </p>
             </div>
             <div>
@@ -622,7 +615,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400 text-sm">
-            <p>&copy; 2024 InnovaSci AI Labs Polytechnic. All rights reserved.</p>
+            <p>&copy; 2024 InnovaSci Open Polytechnic. All rights reserved.</p>
           </div>
         </div>
       </footer>

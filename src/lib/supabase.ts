@@ -1,6 +1,6 @@
 // =====================================================
 // SUPABASE CLIENT CONFIGURATION
-// InnovaSci AI Labs Polytechnic - Production Auth
+// InnovaSci Open Polytechnic - Production Auth
 // =====================================================
 
 import { createClient } from '@supabase/supabase-js'

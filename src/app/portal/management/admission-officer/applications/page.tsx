@@ -16,7 +16,7 @@ import { Input } from "@/components/ui/input"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 
-// Sample applications data
+// Sample applications data (Direct Application Model - No JAMB Required)
 const sampleApplications = [
   {
     id: '1',
@@ -28,8 +28,8 @@ const sampleApplications = [
     type: 'ND',
     status: 'under_review',
     appliedDate: '2024-01-15',
-    documents: { waec: 'verified', jamb: 'verified', passport: 'verified' },
-    qualifications: ['WAEC: 5 Credits', 'JAMB: 210'],
+    documents: { waec: 'verified', passport: 'verified' },
+    qualifications: ['WAEC: 5 Credits'],
   },
   {
     id: '2',
@@ -54,8 +54,8 @@ const sampleApplications = [
     type: 'ND',
     status: 'approved',
     appliedDate: '2024-01-13',
-    documents: { waec: 'verified', jamb: 'verified', passport: 'verified' },
-    qualifications: ['WAEC: 6 Credits', 'JAMB: 245'],
+    documents: { waec: 'verified', passport: 'verified' },
+    qualifications: ['WAEC: 6 Credits'],
   },
   {
     id: '4',
@@ -81,7 +81,7 @@ const sampleApplications = [
     type: 'ND',
     status: 'rejected',
     appliedDate: '2024-01-11',
-    documents: { waec: 'rejected', jamb: 'pending', passport: 'verified' },
+    documents: { waec: 'rejected', passport: 'verified' },
     qualifications: ['WAEC: 3 Credits'],
     rejectionReason: 'Insufficient academic qualifications',
   },

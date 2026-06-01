@@ -1,7 +1,7 @@
-# InnovaSci AI Labs Polytechnic - Storage & Database Architecture
+# InnovaSci Open Polytechnic - Storage & Database Architecture
 
 ## Overview
-This document outlines the complete LMS storage and database architecture for InnovaSci AI Labs Polytechnic.
+This document outlines the complete LMS storage and database architecture for InnovaSci Open Polytechnic.
 
 ## Database Schema
 - Complete PostgreSQL schema with all tables

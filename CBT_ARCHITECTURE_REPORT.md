@@ -1,13 +1,13 @@
 # CBT EXAMINATION ENGINE ARCHITECTURE REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **NBTE-Compliant Online Polytechnic ERP System**
 
 ---
 
 ## 1. Executive Summary
 
-This document outlines the comprehensive architecture of the Computer-Based Testing (CBT) Examination Engine integrated into InnovaSci AI Labs Polytechnic's Online ERP System. The CBT Engine supports all ND and HND programmes across all faculties, departments, and levels.
+This document outlines the comprehensive architecture of the Computer-Based Testing (CBT) Examination Engine integrated into InnovaSci Open Polytechnic's Online ERP System. The CBT Engine supports all ND and HND programmes across all faculties, departments, and levels.
 
 ---
 
@@ -16,7 +16,7 @@ This document outlines the comprehensive architecture of the Computer-Based Test
 ### 2.1 System Hierarchy
 
 ```
-InnovaSci AI Labs Polytechnic ERP
+InnovaSci Open Polytechnic ERP
 └── CBT Examination Engine
     ├── Question Bank Management
     ├── Examination Management

@@ -52,7 +52,6 @@ interface Application {
   documents: {
     passport?: string
     ssce?: string
-    jamb?: string
     qualification?: string
     transcript?: string
     industrial_training?: string
@@ -87,7 +86,6 @@ const mockApplications: Application[] = [
     documents: {
       passport: 'passport-1.pdf',
       ssce: 'ssce-1.pdf',
-      jamb: 'jamb-1.pdf',
     },
     personalInfo: {
       dateOfBirth: '2002-05-15',
@@ -152,7 +150,6 @@ const mockApplications: Application[] = [
     documents: {
       passport: 'passport-3.pdf',
       ssce: 'ssce-3.pdf',
-      jamb: 'jamb-3.pdf',
     },
     personalInfo: {
       dateOfBirth: '2001-03-10',

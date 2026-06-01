@@ -1,6 +1,6 @@
 # ADMISSION OFFICER DASHBOARD REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **Online Polytechnic ERP System**
 
 ---

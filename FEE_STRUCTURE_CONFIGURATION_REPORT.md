@@ -1,6 +1,6 @@
 # FEE STRUCTURE & PAYMENT CONFIGURATION REPORT
 
-**InnovaSci AI Labs Polytechnic**
+**InnovaSci Open Polytechnic**
 **School Fees Configuration Details**
 
 ---

@@ -1,6 +1,6 @@
 // =====================================================
 // ADMISSION SYSTEM TYPES
-// InnovaSci AI Labs Polytechnic - Admissions System
+// InnovaSci Open Polytechnic - Admissions System
 // =====================================================
 
 import type { DocumentType } from './storage';
@@ -150,9 +150,9 @@ export const APPLICATION_STATUS_COLORS: Record<ApplicationStatus, string> = {
   admission_offered: 'bg-purple-100 text-purple-800',
 };
 
-// Required documents by application type
+// Required documents by application type (Direct Application Model - No JAMB Required)
 export const REQUIRED_DOCUMENTS: Record<ApplicationType, DocumentType[]> = {
-  ND: ['passport', 'ssce', 'jamb'],
+  ND: ['passport', 'ssce'],
   HND: ['passport', 'ssce', 'qualification', 'transcript', 'industrial_training'],
 };
 

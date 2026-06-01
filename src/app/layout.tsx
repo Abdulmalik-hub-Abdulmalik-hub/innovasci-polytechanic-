@@ -3,7 +3,7 @@ import "./globals.css"
 import { Toaster } from "react-hot-toast"
 
 export const metadata: Metadata = {
-  title: "InnovaSci AI Labs Polytechnic - Future-Ready Education",
+  title: "InnovaSci Open Polytechnic - Future-Ready Education",
   description: "Premier online polytechnic offering cutting-edge AI and technology programs. Transform your career with industry-focused courses and certified diplomas.",
   keywords: ["online education", "polytechnic", "AI training", "technology courses", "online diploma"],
 }

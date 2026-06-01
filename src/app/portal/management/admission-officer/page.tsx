@@ -97,7 +97,7 @@ export default function AdmissionOfficerDashboard() {
         </Avatar>
         <div>
           <h1 className="text-2xl font-bold">Welcome back, {user?.fullName?.split(' ')[0] || 'Officer'}!</h1>
-          <p className="text-muted-foreground">Admission Officer • InnovaSci AI Labs Polytechnic</p>
+          <p className="text-muted-foreground">Admission Officer • InnovaSci Open Polytechnic</p>
         </div>
         <div className="ml-auto flex gap-2">
           <Badge variant="outline" className="bg-orange-50 text-orange-700 border-orange-200">

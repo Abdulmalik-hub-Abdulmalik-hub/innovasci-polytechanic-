@@ -39,7 +39,7 @@ const ndDocuments = [
     id: '3', 
     applicantId: 'APP-2024-003',
     applicantName: 'Emmanuel Okonkwo',
-    document: 'JAMB Result',
+    document: 'WAEC Certificate',
     status: 'verified',
     verifiedAt: '2024-01-13',
     verifiedBy: 'Admin Officer'
@@ -114,7 +114,6 @@ const documentTypes = {
     { name: 'NECO', description: 'National Examinations Council' },
     { name: 'NABTEB', description: 'National Business and Technical Examinations Board' },
     { name: 'GCE', description: 'General Certificate of Education' },
-    { name: 'JAMB Result', description: 'Joint Admissions and Matriculation Board' },
   ],
   hnd: [
     { name: 'WAEC', description: 'West African Examinations Council' },

@@ -1,6 +1,6 @@
 // =====================================================
 // COMPREHENSIVE COUNTRIES DATA - All Countries of the World
-// InnovaSci AI Labs Polytechnic - Admissions System
+// InnovaSci Open Polytechnic - Admissions System
 // =====================================================
 
 export interface Country {

@@ -1,4 +1,4 @@
-// InnovaSci AI Labs Polytechnic - Complete ND & HND Curriculum Structure
+// InnovaSci Open Polytechnic - Complete ND & HND Curriculum Structure
 
 export interface Course {
   code: string;
