@@ -92,6 +92,13 @@ export const PERMISSIONS = {
   'admission.edit': 'Edit Applications',
   'admission.approve': 'Approve Admissions',
   'admission.reject': 'Reject Admissions',
+  'admission.review': 'Review Applications',
+  'admission.verify': 'Verify Documents',
+  'admission.letter': 'Generate Admission Letters',
+  'admission.offer': 'Manage Admission Offers',
+  'admission.revoke': 'Revoke Admission',
+  'admission.reissue': 'Reissue Admission Letters',
+  'admission.communicate': 'Communicate with Applicants',
   
   // Library & E-Resources
   'library.view': 'View Library',
@@ -326,16 +333,6 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   // DIRECTORS - Specialized Unit Management
   // =====================================================
   
-  admission_officer: [
-    'dashboard.view', 'dashboard.analytics',
-    'students.view',
-    'admission.view', 'admission.create', 'admission.edit', 'admission.approve', 'admission.reject',
-    'documents.view', 'documents.create', 'documents.download', 'documents.verify',
-    'reports.view', 'reports.create', 'reports.export',
-    'notifications.view', 'notifications.send',
-    'results.view', // For verification purposes
-  ],
-
   director_ict: [
     'dashboard.view', 'dashboard.analytics',
     'students.view',
@@ -348,6 +345,19 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'api.view', 'api.manage', 'api.keys',
     'notifications.view',
     'labs.view', 'labs.manage', // ICT manages tech infrastructure
+  ],
+
+  // =====================================================
+  // ADMISSION OFFICER - Admission Management
+  // =====================================================
+  admission_officer: [
+    'dashboard.view', 'dashboard.analytics',
+    'admission.view', 'admission.create', 'admission.edit', 'admission.approve', 'admission.reject',
+    'documents.view', 'documents.download', 'documents.verify',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'qa.view', 'qa.accreditation',
+    'notifications.view', 'notifications.send',
+    'certificates.view', 'certificates.generate',
   ],
 
   director_odfel: [
