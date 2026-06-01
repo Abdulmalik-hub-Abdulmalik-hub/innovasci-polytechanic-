@@ -84,10 +84,11 @@ export const PORTAL_CONFIG = {
     id: 'management',
     name: 'Management Portal',
     description: 'Institutional analytics and decision support',
-    roles: ['rector', 'deputy_rector_academic', 'deputy_rector_admin', 'registrar', 'bursar', 'librarian', 'director'],
+    roles: ['rector', 'deputy_rector_academic', 'deputy_rector_admin', 'registrar', 'bursar', 'librarian', 'director', 'admission_officer', 'director_ict', 'director_odfel', 'director_quality_assurance', 'director_cbt_services', 'director_virtual_laboratories', 'director_student_affairs'],
     color: 'orange',
     features: [
       'Institutional Analytics',
+      'Admission Management',
       'Accreditation Monitoring',
       'Student Statistics',
       'Staff Statistics',

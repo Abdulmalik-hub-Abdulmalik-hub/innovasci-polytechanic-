@@ -45,6 +45,7 @@ import {
   BadgeCheck,
   History,
   Webhook,
+  Send,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -281,6 +282,46 @@ const navigationByPortal: Record<string, { sections: NavSection[], roleOverrides
         ],
       },
     ],
+    // Admission Officer role-specific navigation
+    roleOverrides: {
+      admission_officer: [
+        {
+          label: 'Admission',
+          items: [
+            { label: 'Dashboard', href: '/portal/management/admission-officer', icon: LayoutDashboard },
+            { label: 'Applications', href: '/portal/management/admission-officer/applications', icon: FileText },
+            { label: 'Document Verification', href: '/portal/management/admission-officer/verification', icon: ClipboardCheck },
+            { label: 'Admission Letters', href: '/portal/management/admission-officer/letters', icon: FileCheck },
+            { label: 'Communication', href: '/portal/management/admission-officer/communication', icon: Send },
+          ],
+        },
+        {
+          label: 'Reports',
+          items: [
+            { label: 'Daily Reports', href: '/portal/management/admission-officer/reports/daily', icon: BarChart3 },
+            { label: 'Faculty Reports', href: '/portal/management/admission-officer/reports/faculty', icon: Building2 },
+            { label: 'Department Reports', href: '/portal/management/admission-officer/reports/department', icon: Building2 },
+            { label: 'Programme Reports', href: '/portal/management/admission-officer/reports/programme', icon: BookOpen },
+            { label: 'ND Statistics', href: '/portal/management/admission-officer/reports/nd', icon: BarChart },
+            { label: 'HND Statistics', href: '/portal/management/admission-officer/reports/hnd', icon: BarChart },
+          ],
+        },
+        {
+          label: 'Accreditation',
+          items: [
+            { label: 'Archive Records', href: '/portal/management/admission-officer/archive', icon: Database },
+            { label: 'Statistics', href: '/portal/management/admission-officer/statistics', icon: PieChart },
+          ],
+        },
+        {
+          label: 'Account',
+          items: [
+            { label: 'Profile', href: '/portal/management/profile', icon: Users },
+            { label: 'Notifications', href: '/portal/management/notifications', icon: BellRing },
+          ],
+        },
+      ],
+    },
   },
   admin: {
     sections: [
@@ -336,6 +377,11 @@ export function Sidebar({ className }: SidebarProps) {
   // Get role-specific navigation if available
   const getNavSections = () => {
     if (!navConfig) return []
+    // Check for role-specific navigation in management portal (admission_officer)
+    if (portalId === 'management' && user?.role && navConfig.roleOverrides?.[user.role]) {
+      return navConfig.roleOverrides[user.role]
+    }
+    // Check for role-specific navigation in academic portal
     if (portalId === 'academic' && user?.role && navConfig.roleOverrides?.[user.role]) {
       return navConfig.roleOverrides[user.role]
     }
@@ -355,7 +401,9 @@ export function Sidebar({ className }: SidebarProps) {
         if (user?.role === 'hod') return 'HOD Portal'
         if (user?.role === 'program_coordinator') return 'Programme Coordinator'
         return 'Academic Staff'
-      case 'management': return 'Management'
+      case 'management':
+        if (user?.role === 'admission_officer') return 'Admission Officer'
+        return 'Management'
       case 'admin': return 'Super Admin'
       default: return 'Portal'
     }
