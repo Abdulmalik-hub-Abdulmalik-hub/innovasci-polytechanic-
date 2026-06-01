@@ -188,6 +188,52 @@ export const PERMISSIONS = {
   'curriculum.view': 'View Curriculum',
   'curriculum.edit': 'Edit Curriculum',
   'curriculum.approve': 'Approve Curriculum',
+  
+  // CBT Question Bank Management
+  'cbt.questions.view': 'View Question Bank',
+  'cbt.questions.create': 'Create Questions',
+  'cbt.questions.edit': 'Edit Questions',
+  'cbt.questions.delete': 'Delete Questions',
+  'cbt.questions.moderate': 'Moderate Questions',
+  
+  // CBT Examination Management
+  'cbt.exams.view': 'View Examinations',
+  'cbt.exams.create': 'Create Examinations',
+  'cbt.exams.edit': 'Edit Examinations',
+  'cbt.exams.delete': 'Delete Examinations',
+  'cbt.exams.publish': 'Publish Examinations',
+  'cbt.exams.schedule': 'Schedule Examinations',
+  'cbt.exams.approve': 'Approve Examinations',
+  'cbt.exams.monitor': 'Monitor Examinations',
+  'cbt.exams.cancel': 'Cancel Examinations',
+  
+  // CBT Student Management
+  'cbt.students.view': 'View Student Exams',
+  'cbt.students.assign': 'Assign Exams to Students',
+  'cbt.students.track': 'Track Student Progress',
+  
+  // CBT Results & Analytics
+  'cbt.results.view': 'View Exam Results',
+  'cbt.results.grade': 'Grade Exam Results',
+  'cbt.results.publish': 'Publish Results',
+  'cbt.results.export': 'Export Results',
+  'cbt.analytics.view': 'View CBT Analytics',
+  
+  // CBT Security
+  'cbt.security.view': 'View Security Logs',
+  'cbt.security.manage': 'Manage Security',
+  'cbt.incidents.view': 'View Incidents',
+  'cbt.incidents.resolve': 'Resolve Incidents',
+  
+  // CBT Configuration
+  'cbt.configuration.view': 'View CBT Configuration',
+  'cbt.configuration.manage': 'Manage CBT Configuration',
+  'cbt.banks.view': 'View Question Banks',
+  'cbt.banks.approve': 'Approve Question Banks',
+  
+  // ODFeL Examination Support
+  'odfel.exams.view': 'View ODFeL Examinations',
+  'odfel.exams.configure': 'Configure ODFeL Exams',
 } as const;
 
 export type Permission = keyof typeof PERMISSIONS;
@@ -360,6 +406,27 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'certificates.view', 'certificates.generate',
   ],
 
+  // =====================================================
+  // EXAMINATION OFFICER - CBT Examination Management
+  // =====================================================
+  examination_officer: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'cbt.questions.view', 'cbt.questions.moderate',
+    'cbt.exams.view', 'cbt.exams.schedule', 'cbt.exams.approve', 'cbt.exams.monitor', 'cbt.exams.cancel',
+    'cbt.students.view', 'cbt.students.assign', 'cbt.students.track',
+    'cbt.results.view', 'cbt.results.publish', 'cbt.results.export',
+    'cbt.analytics.view',
+    'cbt.security.view',
+    'cbt.incidents.view', 'cbt.incidents.resolve',
+    'cbt.banks.view',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'qa.view', 'qa.accreditation',
+    'notifications.view', 'notifications.send',
+    'settings.view',
+    'audit.view',
+  ],
+
   director_odfel: [
     'dashboard.view', 'dashboard.analytics',
     'students.view',
@@ -389,6 +456,16 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor', 'exams.grade',
     'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
     'cbt.view', 'cbt.configure',
+    'cbt.questions.view', 'cbt.questions.create', 'cbt.questions.edit', 'cbt.questions.delete', 'cbt.questions.moderate',
+    'cbt.exams.view', 'cbt.exams.create', 'cbt.exams.edit', 'cbt.exams.delete', 'cbt.exams.publish', 'cbt.exams.schedule', 'cbt.exams.approve', 'cbt.exams.monitor', 'cbt.exams.cancel',
+    'cbt.students.view', 'cbt.students.assign', 'cbt.students.track',
+    'cbt.results.view', 'cbt.results.grade', 'cbt.results.publish', 'cbt.results.export',
+    'cbt.analytics.view',
+    'cbt.security.view', 'cbt.security.manage',
+    'cbt.incidents.view', 'cbt.incidents.resolve',
+    'cbt.configuration.view', 'cbt.configuration.manage',
+    'cbt.banks.view', 'cbt.banks.approve',
+    'odfel.exams.view', 'odfel.exams.configure',
     'lms.view',
     'settings.view',
     'security.view',
@@ -429,6 +506,10 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'content.view', 'content.create', 'content.edit', 'content.publish',
     'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
     'exams.view', 'exams.create', 'exams.edit', 'exams.publish',
+    'cbt.exams.view', 'cbt.exams.approve', 'cbt.exams.monitor',
+    'cbt.questions.view', 'cbt.questions.moderate',
+    'cbt.analytics.view',
+    'cbt.results.view',
     'results.view', 'results.edit', 'results.approve',
     'attendance.view', 'attendance.mark',
     'reports.view', 'reports.create',
@@ -448,6 +529,11 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'content.view', 'content.create', 'content.edit', 'content.publish',
     'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
     'exams.view', 'exams.create', 'exams.edit', 'exams.publish',
+    'cbt.exams.view', 'cbt.exams.approve', 'cbt.exams.monitor',
+    'cbt.questions.view', 'cbt.questions.moderate',
+    'cbt.analytics.view',
+    'cbt.banks.view', 'cbt.banks.approve',
+    'cbt.results.view',
     'results.view', 'results.edit', 'results.approve',
     'attendance.view', 'attendance.mark', 'attendance.edit',
     'labs.view', 'labs.manage',
@@ -468,6 +554,10 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'content.view', 'content.create', 'content.edit', 'content.publish',
     'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
     'exams.view', 'exams.create', 'exams.edit', 'exams.publish',
+    'cbt.exams.view', 'cbt.exams.approve', 'cbt.exams.monitor',
+    'cbt.questions.view', 'cbt.questions.create', 'cbt.questions.edit',
+    'cbt.analytics.view',
+    'cbt.results.view', 'cbt.results.grade', 'cbt.results.publish',
     'results.view', 'results.edit',
     'attendance.view', 'attendance.mark',
     'labs.view',
@@ -485,6 +575,10 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'content.view', 'content.create', 'content.edit', 'content.publish',
     'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
     'exams.view', 'exams.create', 'exams.edit',
+    'cbt.questions.view', 'cbt.questions.create', 'cbt.questions.edit',
+    'cbt.exams.view', 'cbt.exams.create', 'cbt.exams.edit', 'cbt.exams.publish',
+    'cbt.results.view', 'cbt.results.grade', 'cbt.results.publish',
+    'cbt.analytics.view',
     'results.view', 'results.edit',
     'attendance.view', 'attendance.mark',
     'labs.view', 'labs.access',
@@ -503,6 +597,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'content.view',
     'assignments.view', 'assignments.submit',
     'exams.view', 'exams.take',
+    'cbt.exams.view', 'cbt.students.view', // View and take exams
+    'cbt.results.view', // View results
     'results.view',
     'attendance.view',
     'payments.view',

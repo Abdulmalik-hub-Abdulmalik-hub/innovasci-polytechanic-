@@ -22,6 +22,7 @@ export type UserRole =
   // Directors (Specialized Units)
   | 'director'
   | 'admission_officer'
+  | 'examination_officer'
   | 'director_ict'
   | 'director_odfel'
   | 'director_quality_assurance'
@@ -48,6 +49,7 @@ export const ROLE_DISPLAY_NAMES: Record<UserRole, string> = {
   librarian: 'Polytechnic Librarian',
   director: 'Director',
   admission_officer: 'Admission Officer',
+  examination_officer: 'Examination Officer',
   director_ict: 'Director ICT',
   director_odfel: 'Director ODFeL',
   director_quality_assurance: 'Director Quality Assurance',
@@ -75,6 +77,7 @@ export const ROLE_CATEGORIES: Record<UserRole, RoleCategory> = {
   librarian: 'management',
   director: 'management',
   admission_officer: 'management',
+  examination_officer: 'management',
   director_ict: 'management',
   director_odfel: 'management',
   director_quality_assurance: 'management',
@@ -214,6 +217,10 @@ export interface Payment {
   verifiedAt?: string;
 }
 
+// =====================================================
+// SECTION 7: EXAMINATION TYPES (Unified CBT)
+// =====================================================
+
 export interface Exam {
   id: string;
   title: string;
@@ -228,22 +235,51 @@ export interface Exam {
 
 export interface Question {
   id: string;
-  examId: string;
-  question: string;
-  options: string[];
-  correctAnswer: number;
+  examId?: string;
+  questionBankId?: string;
+  courseId: string;
+  courseCode: string;
+  courseTitle: string;
+  type: QuestionType;
+  difficulty: DifficultyLevel;
+  questionText: string;
+  question?: string;
+  options?: string[];
+  correctAnswer: string | number | string[];
+  explanation?: string;
+  imageUrl?: string;
+  topic?: string;
   marks: number;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  isActive: boolean;
+  moderationStatus: 'pending' | 'approved' | 'rejected';
+  moderatedBy?: string;
+  moderatedAt?: string;
 }
 
 export interface ExamAttempt {
   id: string;
-  examId: string;
+  examId?: string;
+  sessionId: string;
+  examinationId?: string;
   studentId: string;
-  answers: Record<string, number>;
-  startTime: string;
+  attemptNumber: number;
+  answers: Record<string, string | number | string[]>;
+  startTime?: string;
   endTime?: string;
   score?: number;
-  status: 'in_progress' | 'completed' | 'submitted';
+  objectiveScore?: number;
+  subjectiveScore?: number;
+  totalScore?: number;
+  percentage?: number;
+  grade?: string;
+  status: 'in_progress' | 'completed' | 'submitted' | 'graded' | 'published';
+  submittedAt?: string;
+  gradedAt?: string;
+  reviewRequested: boolean;
+  reviewComments?: string;
 }
 
 export interface Assignment {
@@ -350,4 +386,251 @@ export interface AdmissionApplication {
   createdAt: string;
   reviewedAt?: string;
   reviewedBy?: string;
+}
+
+// =====================================================
+// SECTION 8: CBT EXAMINATION TYPES
+// =====================================================
+
+// Question Bank Types
+export type QuestionType = 'multiple_choice' | 'true_false' | 'fill_blank' | 'matching' | 'short_answer' | 'essay' | 'image_based' | 'scenario' | 'practical';
+export type DifficultyLevel = 'easy' | 'medium' | 'hard';
+export type EntryCategory = 'ND' | 'HND';
+export type AcademicStatus = 'regular' | 'carryover' | 'spillover';
+
+// Note: Question interface is defined in Section 7 above
+
+export interface QuestionBank {
+  id: string;
+  name: string;
+  courseId: string;
+  courseCode: string;
+  courseTitle: string;
+  programmeId: string;
+  programmeName: string;
+  departmentId: string;
+  departmentName: string;
+  facultyId: string;
+  facultyName: string;
+  level: number;
+  semester: number;
+  entryCategory: EntryCategory;
+  totalQuestions: number;
+  activeQuestions: number;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Examination Types
+export type ExamStatus = 'draft' | 'pending_approval' | 'approved' | 'published' | 'active' | 'completed' | 'cancelled';
+export type ApprovalStatus = 'pending' | 'approved' | 'rejected';
+
+export interface Examination {
+  id: string;
+  title: string;
+  courseId: string;
+  courseCode: string;
+  courseTitle: string;
+  questionBankId: string;
+  programmeId: string;
+  programmeName: string;
+  departmentId: string;
+  departmentName: string;
+  facultyId: string;
+  facultyName: string;
+  level: number;
+  semester: number;
+  entryCategory: EntryCategory;
+  academicStatus: AcademicStatus[];
+  
+  // Exam Settings
+  duration: number; // minutes
+  totalQuestions: number;
+  passingMarks: number;
+  marksPerQuestion: number;
+  negativeMarking: boolean;
+  negativeMarkingValue: number;
+  
+  // Timing
+  examDate: string;
+  startTime: string;
+  endTime: string;
+  availabilityWindow: number; // minutes before/after
+  
+  // Attempt Configuration
+  maxAttempts: number;
+  allowRetake: boolean;
+  retakeDelay: number; // hours
+  
+  // Status & Approval
+  status: ExamStatus;
+  approvalStatus: ApprovalStatus;
+  createdBy: string;
+  createdAt: string;
+  publishedAt?: string;
+  
+  // Statistics
+  totalAttempts: number;
+  avgScore?: number;
+  passRate?: number;
+}
+
+export interface ExamApproval {
+  id: string;
+  examinationId: string;
+  level: 'lecturer' | 'program_coordinator' | 'hod' | 'examination_officer' | 'director_cbt';
+  status: ApprovalStatus;
+  approvedBy?: string;
+  approvedAt?: string;
+  comments?: string;
+  order: number;
+}
+
+// Exam Session & Attempts
+export interface ExamSession {
+  id: string;
+  examinationId: string;
+  studentId: string;
+  admissionNumber: string;
+  studentName: string;
+  
+  // Session Info
+  startedAt: string;
+  endedAt?: string;
+  remainingTime: number; // seconds
+  status: 'in_progress' | 'paused' | 'completed' | 'submitted' | 'expired';
+  
+  // Security
+  ipAddress?: string;
+  deviceInfo?: string;
+  browserInfo?: string;
+  
+  // Progress
+  currentQuestionIndex: number;
+  answeredQuestions: number[];
+  flaggedQuestions: number[];
+  autoSavedAt?: string;
+}
+
+// Note: ExamAttempt interface is defined in Section 7 above
+
+// Exam Results & Analytics
+export interface ExamResult {
+  id: string;
+  attemptId: string;
+  examinationId: string;
+  studentId: string;
+  admissionNumber: string;
+  studentName: string;
+  
+  score: number;
+  totalMarks: number;
+  percentage: number;
+  grade: string;
+  status: 'pass' | 'fail';
+  
+  // Breakdown
+  correctAnswers: number;
+  wrongAnswers: number;
+  unattempted: number;
+  
+  // Timing
+  timeTaken: number; // minutes
+  submittedAt: string;
+  
+  // Published
+  isPublished: boolean;
+  publishedAt?: string;
+}
+
+export interface ExamStatistics {
+  examinationId: string;
+  totalAttempts: number;
+  completedAttempts: number;
+  avgScore: number;
+  highestScore: number;
+  lowestScore: number;
+  passCount: number;
+  failCount: number;
+  passRate: number;
+  avgTimeTaken: number;
+}
+
+// Exam Security & Logging
+export interface SecurityLog {
+  id: string;
+  sessionId: string;
+  eventType: 'login' | 'logout' | 'tab_switch' | 'browser_close' | 'network_error' | 'suspicious_activity' | 'session_expire';
+  description: string;
+  severity: 'info' | 'warning' | 'critical';
+  ipAddress?: string;
+  deviceInfo?: string;
+  timestamp: string;
+}
+
+export interface ExamIncident {
+  id: string;
+  sessionId: string;
+  studentId: string;
+  examinationId: string;
+  type: 'network_interruption' | 'browser_crash' | 'session_timeout' | 'multiple_login' | 'malpractice';
+  description: string;
+  resolution?: string;
+  resolvedBy?: string;
+  resolvedAt?: string;
+  status: 'open' | 'investigating' | 'resolved';
+}
+
+// Student Exam Eligibility
+export interface ExamEligibility {
+  studentId: string;
+  examinationId: string;
+  isEligible: boolean;
+  reasons: string[];
+  paymentVerified: boolean;
+  registrationVerified: boolean;
+  prerequisiteCompleted: boolean;
+  notAttempted: boolean;
+}
+
+// Exam Verification Form
+export interface ExamVerificationForm {
+  // Personal Information
+  fullName: string;
+  admissionNumber: string;
+  studentEmail: string;
+  phoneNumber: string;
+  
+  // Academic Information
+  entryCategory: EntryCategory;
+  facultyId: string;
+  facultyName: string;
+  departmentId: string;
+  departmentName: string;
+  programmeId: string;
+  programmeName: string;
+  level: number;
+  semester: number;
+  
+  // Academic Status
+  academicStatus: AcademicStatus;
+  
+  // Verification
+  studentPhoto?: string;
+  isVerified: boolean;
+  verifiedAt?: string;
+}
+
+// Question Moderation
+export interface QuestionModeration {
+  id: string;
+  questionId: string;
+  reviewedBy: string;
+  reviewedAt: string;
+  correctness: 'correct' | 'incorrect' | 'needs_revision';
+  curriculumAlignment: 'aligned' | 'misaligned';
+  difficultyLevel: DifficultyLevel;
+  comments?: string;
+  recommendations?: string;
 }
