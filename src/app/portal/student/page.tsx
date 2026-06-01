@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/store"
 import { motion } from "framer-motion"
-import { BookOpen, Video, Library, FlaskConical, ClipboardCheck, TrendingUp, FileText, CheckCircle } from "lucide-react"
+import { BookOpen, Video, Library, FlaskConical, ClipboardCheck, TrendingUp, FileText, CheckCircle, GraduationCap } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
@@ -53,7 +53,7 @@ export default function StudentPortalPage() {
 
       {/* Quick Access */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <Card className="cursor-pointer hover:shadow-lg transition-shadow border-emerald-100">
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow border-emerald-100" onClick={() => router.push('/portal/student/learning')}>
           <CardContent className="p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
               <Video className="h-6 w-6 text-emerald-600" />
@@ -64,7 +64,7 @@ export default function StudentPortalPage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="cursor-pointer hover:shadow-lg transition-shadow border-blue-100">
+        <Card className="cursor-pointer hover:shadow-lg transition-shadow border-blue-100" onClick={() => router.push('/portal/student/learning')}>
           <CardContent className="p-4 flex items-center gap-4">
             <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center">
               <Library className="h-6 w-6 text-blue-600" />
