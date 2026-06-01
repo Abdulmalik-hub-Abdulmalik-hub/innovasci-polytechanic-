@@ -46,6 +46,7 @@ import {
   History,
   Webhook,
   Send,
+  DollarSign,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -128,6 +129,7 @@ const navigationByPortal: Record<string, { sections: NavSection[], roleOverrides
       {
         label: 'Account',
         items: [
+          { label: 'Financial Dashboard', href: '/portal/student/financial', icon: DollarSign },
           { label: 'Payments', href: '/portal/student/payments', icon: CreditCard },
           { label: 'Certificates', href: '/portal/student/certificates', icon: Award },
           { label: 'Profile', href: '/portal/student/profile', icon: Users },
@@ -338,6 +340,7 @@ const navigationByPortal: Record<string, { sections: NavSection[], roleOverrides
         label: 'Configuration',
         items: [
           { label: 'Institution Settings', href: '/portal/super-admin/settings', icon: Settings2 },
+          { label: 'Fees & Payments', href: '/portal/super-admin/fees', icon: DollarSign },
           { label: 'LMS Configuration', href: '/portal/super-admin/lms', icon: BookOpen },
           { label: 'CBT Configuration', href: '/portal/super-admin/cbt', icon: ClipboardCheck },
           { label: 'Accreditation', href: '/portal/super-admin/accreditation', icon: BadgeCheck },
