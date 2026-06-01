@@ -47,6 +47,7 @@ import {
   Webhook,
   Send,
   DollarSign,
+  TrendingUp,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -313,6 +314,41 @@ const navigationByPortal: Record<string, { sections: NavSection[], roleOverrides
           items: [
             { label: 'Archive Records', href: '/portal/management/admission-officer/archive', icon: Database },
             { label: 'Statistics', href: '/portal/management/admission-officer/statistics', icon: PieChart },
+          ],
+        },
+        {
+          label: 'Account',
+          items: [
+            { label: 'Profile', href: '/portal/management/profile', icon: Users },
+            { label: 'Notifications', href: '/portal/management/notifications', icon: BellRing },
+          ],
+        },
+      ],
+      // Virtual Laboratory Director role-specific navigation
+      virtual_lab_director: [
+        {
+          label: 'Virtual Labs',
+          items: [
+            { label: 'Director Dashboard', href: '/portal/management/virtual-laboratory-director', icon: FlaskConical },
+            { label: 'Manage Laboratories', href: '/portal/management/virtual-laboratory-director/labs', icon: Settings },
+            { label: 'Lab Reports', href: '/portal/management/virtual-laboratory-director/reports', icon: FileText },
+            { label: 'Practical Assessments', href: '/portal/management/virtual-laboratory-director/assessments', icon: ClipboardCheck },
+          ],
+        },
+        {
+          label: 'Quality',
+          items: [
+            { label: 'Quality Assurance', href: '/portal/management/virtual-laboratory-director/quality', icon: Scale },
+            { label: 'ODFeL Monitoring', href: '/portal/management/virtual-laboratory-director/odfel', icon: Eye },
+            { label: 'Accreditation', href: '/portal/management/virtual-laboratory-director/accreditation', icon: BadgeCheck },
+          ],
+        },
+        {
+          label: 'Analytics',
+          items: [
+            { label: 'Lab Analytics', href: '/portal/management/virtual-laboratory-director/analytics', icon: BarChart3 },
+            { label: 'Programme Reports', href: '/portal/management/virtual-laboratory-director/programme-reports', icon: BookOpen },
+            { label: 'Student Progress', href: '/portal/management/virtual-laboratory-director/progress', icon: TrendingUp },
           ],
         },
         {
