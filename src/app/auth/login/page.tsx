@@ -3,14 +3,54 @@
 import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { motion } from "framer-motion"
-import { Eye, EyeOff, Loader2, GraduationCap, AlertCircle, Mail, Lock, User } from "lucide-react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Eye, EyeOff, Loader2, GraduationCap, AlertCircle, Mail, Lock, User, ChevronDown, ChevronUp, KeyRound, Users } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuthStore } from "@/store"
 import { supabase, isSupabaseConfigured } from "@/lib/supabase"
+
+// Demo credentials for all system roles
+const DEMO_CREDENTIALS = [
+  // Super Admin
+  { role: 'super_admin', email: 'super_admin@innova-sci.local', password: 'Super@12345', portal: '/portal/super-admin', display: 'Super Admin' },
+  // Senior Management
+  { role: 'rector', email: 'rector@innova-sci.local', password: 'Rector@12345', portal: '/portal/management', display: 'Rector' },
+  { role: 'deputy_rector_academic', email: 'deputy_academic@innova-sci.local', password: 'Deputy@12345', portal: '/portal/management', display: 'Deputy Rector (Academic)' },
+  { role: 'deputy_rector_admin', email: 'deputy_admin@innova-sci.local', password: 'Deputy@12345', portal: '/portal/management', display: 'Deputy Rector (Admin)' },
+  // Administrative Officers
+  { role: 'registrar', email: 'registrar@innova-sci.local', password: 'Registrar@12345', portal: '/portal/management', display: 'Registrar' },
+  { role: 'bursar', email: 'bursar@innova-sci.local', password: 'Bursar@12345', portal: '/portal/management', display: 'Bursar' },
+  { role: 'librarian', email: 'librarian@innova-sci.local', password: 'Librarian@12345', portal: '/portal/management', display: 'Librarian' },
+  // Directors
+  { role: 'director', email: 'director@innova-sci.local', password: 'Director@12345', portal: '/portal/management', display: 'Director' },
+  { role: 'admission_officer', email: 'admission@innova-sci.local', password: 'Admission@12345', portal: '/portal/management', display: 'Admission Officer' },
+  { role: 'examination_officer', email: 'exam@innova-sci.local', password: 'Exam@12345', portal: '/portal/management', display: 'Examination Officer' },
+  { role: 'director_ict', email: 'ict@innova-sci.local', password: 'Ict@12345', portal: '/portal/management', display: 'Director ICT' },
+  { role: 'director_odfel', email: 'odfel@innova-sci.local', password: 'Odfel@12345', portal: '/portal/management', display: 'Director ODFeL' },
+  { role: 'director_quality_assurance', email: 'qa@innova-sci.local', password: 'Qa@12345', portal: '/portal/management', display: 'Director QA' },
+  { role: 'director_cbt_services', email: 'cbt@innova-sci.local', password: 'Cbt@12345', portal: '/portal/management', display: 'Director CBT' },
+  { role: 'director_virtual_laboratories', email: 'vlab@innova-sci.local', password: 'Vlab@12345', portal: '/portal/management', display: 'Director V-Lab' },
+  { role: 'director_student_affairs', email: 'student_affairs@innova-sci.local', password: 'StudentAffairs@12345', portal: '/portal/management', display: 'Dir. Student Affairs' },
+  // Academic Staff
+  { role: 'dean', email: 'dean@innova-sci.local', password: 'Dean@12345', portal: '/portal/academic', display: 'Dean' },
+  { role: 'hod', email: 'hod@innova-sci.local', password: 'Hod@12345', portal: '/portal/academic', display: 'HOD' },
+  { role: 'program_coordinator', email: 'coordinator@innova-sci.local', password: 'Coordinator@12345', portal: '/portal/academic', display: 'Programme Coordinator' },
+  { role: 'lecturer', email: 'lecturer@innova-sci.local', password: 'Lecturer@12345', portal: '/portal/academic', display: 'Lecturer' },
+  // Students
+  { role: 'student', email: 'student@innova-sci.local', password: 'Student@12345', portal: '/portal/student', display: 'Student' },
+  { role: 'applicant', email: 'applicant@innova-sci.local', password: 'Applicant@12345', portal: '/portal/applicant', display: 'Applicant' },
+]
+
+const ROLE_GROUPS = [
+  { name: 'Admin Portal', icon: '🔐', roles: DEMO_CREDENTIALS.filter(c => c.role === 'super_admin') },
+  { name: 'Management Portal', icon: '🏛️', roles: DEMO_CREDENTIALS.filter(c => ['rector', 'deputy_rector_academic', 'deputy_rector_admin', 'registrar', 'bursar', 'librarian', 'director', 'admission_officer', 'examination_officer', 'director_ict', 'director_odfel', 'director_quality_assurance', 'director_cbt_services', 'director_virtual_laboratories', 'director_student_affairs'].includes(c.role)) },
+  { name: 'Academic Portal', icon: '📚', roles: DEMO_CREDENTIALS.filter(c => ['dean', 'hod', 'program_coordinator', 'lecturer'].includes(c.role)) },
+  { name: 'Student Portal', icon: '🎓', roles: DEMO_CREDENTIALS.filter(c => c.role === 'student') },
+  { name: 'Applicant Portal', icon: '📝', roles: DEMO_CREDENTIALS.filter(c => c.role === 'applicant') },
+]
 
 export default function LoginPage() {
   const router = useRouter()
@@ -26,6 +66,13 @@ export default function LoginPage() {
   const [fullName, setFullName] = useState("")
   const [confirmPassword, setConfirmPassword] = useState("")
   const [passwordError, setPasswordError] = useState("")
+  const [showDemoPanel, setShowDemoPanel] = useState(false)
+
+  // Auto-fill credentials when demo button is clicked
+  const fillDemoCredentials = (email: string, password: string) => {
+    setFormData({ email, password })
+    setError("")
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -189,7 +236,7 @@ export default function LoginPage() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md relative z-10"
+        className="w-full max-w-2xl relative z-10"
       >
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-3 mb-6">
@@ -206,6 +253,71 @@ export default function LoginPage() {
               : 'Sign in to access your InnovaSci account'}
           </p>
         </div>
+
+        {/* Demo Credentials Panel */}
+        {mode === 'login' && (
+          <Card className="backdrop-blur-lg bg-emerald-500/10 border-emerald-500/30 shadow-2xl mb-6">
+            <CardContent className="p-4">
+              <button
+                type="button"
+                onClick={() => setShowDemoPanel(!showDemoPanel)}
+                className="w-full flex items-center justify-between text-emerald-400 hover:text-emerald-300"
+              >
+                <div className="flex items-center gap-2">
+                  <KeyRound className="h-5 w-5" />
+                  <span className="font-semibold">🚀 Demo Credentials - Click to Test Any Role</span>
+                </div>
+                {showDemoPanel ? <ChevronUp className="h-5 w-5" /> : <ChevronDown className="h-5 w-5" />}
+              </button>
+              
+              <AnimatePresence>
+                {showDemoPanel && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: 'auto', opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    className="overflow-hidden"
+                  >
+                    <div className="mt-4 space-y-4">
+                      {ROLE_GROUPS.map((group) => (
+                        <div key={group.name}>
+                          <h3 className="text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
+                            <span>{group.icon}</span>
+                            <span>{group.name}</span>
+                          </h3>
+                          <div className="flex flex-wrap gap-2">
+                            {group.roles.map((cred) => (
+                              <button
+                                key={cred.role}
+                                type="button"
+                                onClick={() => fillDemoCredentials(cred.email, cred.password)}
+                                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                  formData.email === cred.email
+                                    ? 'bg-emerald-500 text-white ring-2 ring-emerald-400'
+                                    : 'bg-white/10 text-slate-200 hover:bg-white/20 border border-white/10'
+                                }`}
+                                title={`Dashboard: ${cred.portal}`}
+                              >
+                                {cred.display}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                      
+                      <div className="pt-3 border-t border-white/10">
+                        <p className="text-xs text-slate-400 flex items-center gap-1">
+                          <span className="text-amber-400">⚠️</span>
+                          Development/Testing only - Do not use in production
+                        </p>
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="backdrop-blur-lg bg-white/10 border-white/20 shadow-2xl">
           <CardContent className="p-8">
