@@ -8,7 +8,7 @@ import {
   FileText, Users, CheckCircle, XCircle, Clock, 
   GraduationCap, Globe, BarChart3, TrendingUp, 
   AlertCircle, Eye, Send, FileCheck, Database,
-  PieChart, Building2, BookOpen
+  PieChart, Building2, BookOpen, Hash
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -292,6 +292,9 @@ export default function AdmissionOfficerDashboard() {
               </Button>
               <Button variant="outline" className="w-full justify-start" onClick={() => router.push('/portal/management/admission-officer/letters')}>
                 <FileCheck className="mr-2 h-4 w-4" /> Generate Admission Letters
+              </Button>
+              <Button variant="outline" className="w-full justify-start" onClick={() => router.push('/portal/management/admission-officer/processing')}>
+                <Hash className="mr-2 h-4 w-4" /> Admission Processing
               </Button>
               <Button variant="outline" className="w-full justify-start" onClick={() => router.push('/portal/management/admission-officer/communication')}>
                 <Send className="mr-2 h-4 w-4" /> Send Notifications
