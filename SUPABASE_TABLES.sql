@@ -9,19 +9,34 @@
 -- ============================================
 
 -- User Roles (NBTE-Compliant)
+-- Updated v3: Added specialized director roles for institutional management
 CREATE TYPE user_role AS ENUM (
+    -- Super Admin
     'super_admin',
+    -- Senior Management
     'rector',
     'deputy_rector_academic',
-    'deputy_rector_administration',
+    'deputy_rector_admin',
+    -- Administrative Officers
     'registrar',
     'bursar',
     'librarian',
+    -- Directors (Generic)
     'director',
+    -- Specialized Directors
+    'admission_officer',
+    'director_ict',
+    'director_odfel',
+    'director_quality_assurance',
+    'director_cbt_services',
+    'director_virtual_laboratories',
+    'director_student_affairs',
+    -- Academic Staff
     'dean',
     'hod',
     'programme_coordinator',
     'lecturer',
+    -- Students
     'student',
     'applicant'
 );

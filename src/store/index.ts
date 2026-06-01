@@ -22,7 +22,22 @@ export const PORTALS: Record<PortalId, PortalState> = {
   applicant: { id: 'applicant', name: 'Applicant Portal', roles: ['applicant'] },
   student: { id: 'student', name: 'Student Portal', roles: ['student'] },
   academic: { id: 'academic', name: 'Academic Staff Portal', roles: ['lecturer', 'program_coordinator', 'hod', 'dean'] },
-  management: { id: 'management', name: 'Management Portal', roles: ['rector', 'deputy_rector_academic', 'deputy_rector_admin', 'registrar', 'bursar', 'librarian', 'director'] },
+  management: { id: 'management', name: 'Management Portal', roles: [
+    'rector', 
+    'deputy_rector_academic', 
+    'deputy_rector_admin', 
+    'registrar', 
+    'bursar', 
+    'librarian', 
+    'director',
+    'admission_officer',
+    'director_ict',
+    'director_odfel',
+    'director_quality_assurance',
+    'director_cbt_services',
+    'director_virtual_laboratories',
+    'director_student_affairs'
+  ] },
   admin: { id: 'admin', name: 'Super Admin Portal', roles: ['super_admin'] },
 };
 

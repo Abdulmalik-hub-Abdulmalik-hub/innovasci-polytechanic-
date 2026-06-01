@@ -157,6 +157,13 @@ export default function LoginPage() {
             bursar: '/portal/management',
             librarian: '/portal/management',
             director: '/portal/management',
+            admission_officer: '/portal/management',
+            director_ict: '/portal/management',
+            director_odfel: '/portal/management',
+            director_quality_assurance: '/portal/management',
+            director_cbt_services: '/portal/management',
+            director_virtual_laboratories: '/portal/management',
+            director_student_affairs: '/portal/management',
             super_admin: '/portal/super-admin',
           }
           

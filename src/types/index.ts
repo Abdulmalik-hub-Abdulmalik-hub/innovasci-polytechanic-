@@ -11,15 +11,23 @@
 export type UserRole = 
   // Super Admin
   | 'super_admin'
-  // Management Roles
+  // Senior Management (Top Leadership)
   | 'rector'
   | 'deputy_rector_academic'
   | 'deputy_rector_admin'
+  // Administrative Officers
   | 'registrar'
   | 'bursar'
   | 'librarian'
-  // Director-level (applies to all directors)
+  // Directors (Specialized Units)
   | 'director'
+  | 'admission_officer'
+  | 'director_ict'
+  | 'director_odfel'
+  | 'director_quality_assurance'
+  | 'director_cbt_services'
+  | 'director_virtual_laboratories'
+  | 'director_student_affairs'
   // Academic Staff Roles
   | 'dean'
   | 'hod'
@@ -39,6 +47,13 @@ export const ROLE_DISPLAY_NAMES: Record<UserRole, string> = {
   bursar: 'Bursar',
   librarian: 'Polytechnic Librarian',
   director: 'Director',
+  admission_officer: 'Admission Officer',
+  director_ict: 'Director ICT',
+  director_odfel: 'Director ODFeL',
+  director_quality_assurance: 'Director Quality Assurance',
+  director_cbt_services: 'Director CBT Services',
+  director_virtual_laboratories: 'Director Virtual Laboratories',
+  director_student_affairs: 'Director Student Affairs',
   dean: 'Dean',
   hod: 'Head of Department',
   program_coordinator: 'Programme Coordinator',
@@ -59,6 +74,13 @@ export const ROLE_CATEGORIES: Record<UserRole, RoleCategory> = {
   bursar: 'management',
   librarian: 'management',
   director: 'management',
+  admission_officer: 'management',
+  director_ict: 'management',
+  director_odfel: 'management',
+  director_quality_assurance: 'management',
+  director_cbt_services: 'management',
+  director_virtual_laboratories: 'management',
+  director_student_affairs: 'management',
   dean: 'academic',
   hod: 'academic',
   program_coordinator: 'academic',

@@ -321,6 +321,92 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'department.view',
     'programme.view',
   ],
+
+  // =====================================================
+  // DIRECTORS - Specialized Unit Management
+  // =====================================================
+  
+  admission_officer: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'admission.view', 'admission.create', 'admission.edit', 'admission.approve', 'admission.reject',
+    'documents.view', 'documents.create', 'documents.download', 'documents.verify',
+    'reports.view', 'reports.create', 'reports.export',
+    'notifications.view', 'notifications.send',
+    'results.view', // For verification purposes
+  ],
+
+  director_ict: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'lms.view', 'lms.configure',
+    'cbt.view', 'cbt.configure',
+    'settings.view', 'settings.edit', 'settings.system',
+    'security.view', 'security.manage',
+    'audit.view',
+    'api.view', 'api.manage', 'api.keys',
+    'notifications.view',
+    'labs.view', 'labs.manage', // ICT manages tech infrastructure
+  ],
+
+  director_odfel: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'odfel.view', 'odfel.manage', 'odfel.compliance',
+    'qa.view', 'qa.manage', 'qa.accreditation',
+    'programme.view', 'programme.accreditation',
+    'lms.view', 'lms.configure',
+    'notifications.view', 'notifications.send',
+  ],
+
+  director_quality_assurance: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'qa.view', 'qa.manage', 'qa.accreditation',
+    'odfel.view', 'odfel.manage', 'odfel.compliance',
+    'programme.view', 'programme.manage', 'programme.accreditation',
+    'documents.view', 'documents.create', 'documents.download', 'documents.verify',
+    'settings.view',
+    'notifications.view', 'notifications.send',
+  ],
+
+  director_cbt_services: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor', 'exams.grade',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'cbt.view', 'cbt.configure',
+    'lms.view',
+    'settings.view',
+    'security.view',
+    'notifications.view', 'notifications.send',
+  ],
+
+  director_virtual_laboratories: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'labs.view', 'labs.access', 'labs.manage',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'courses.view',
+    'assignments.view',
+    'exams.view',
+    'notifications.view', 'notifications.send',
+  ],
+
+  director_student_affairs: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view', 'students.create', 'students.edit',
+    'students.enroll',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'notifications.view', 'notifications.send', 'notifications.manage',
+    'documents.view', 'documents.download',
+    'payments.view',
+    'attendance.view',
+    'projects.view',
+  ],
   
   // =====================================================
   // ACADEMIC STAFF ROLES - Teaching & Research
