@@ -66,8 +66,8 @@ interface NavSection {
   items: NavItem[]
 }
 
-// Navigation configuration by portal
-const navigationByPortal: Record<string, { sections: NavSection[] }> = {
+// Navigation configuration by portal and role
+const navigationByPortal: Record<string, { sections: NavSection[], roleOverrides?: Record<string, NavSection[]> }> = {
   applicant: {
     sections: [
       {
@@ -138,9 +138,14 @@ const navigationByPortal: Record<string, { sections: NavSection[] }> = {
   academic: {
     sections: [
       {
-        label: 'Teaching',
+        label: 'Dashboard',
         items: [
           { label: 'Dashboard', href: '/portal/academic', icon: LayoutDashboard },
+        ],
+      },
+      {
+        label: 'Teaching',
+        items: [
           { label: 'My Courses', href: '/portal/academic/courses', icon: BookOpen },
           { label: 'Content Upload', href: '/portal/academic/content', icon: Upload },
           { label: 'Assignments', href: '/portal/academic/assignments', icon: ClipboardList },
@@ -160,8 +165,8 @@ const navigationByPortal: Record<string, { sections: NavSection[] }> = {
         label: 'Management',
         items: [
           { label: 'Academic Reports', href: '/portal/academic/reports', icon: BarChart },
-          { label: 'Department Reports', href: '/portal/academic/department', icon: Building2 },
-          { label: 'Programme Reports', href: '/portal/academic/programme', icon: FileCheck },
+          { label: 'Department', href: '/portal/academic/department', icon: Building2 },
+          { label: 'Programme', href: '/portal/academic/programme', icon: FileCheck },
           { label: 'Curriculum', href: '/portal/academic/curriculum', icon: BookMarked },
         ],
       },
@@ -173,6 +178,66 @@ const navigationByPortal: Record<string, { sections: NavSection[] }> = {
         ],
       },
     ],
+    // Role-specific navigation overrides
+    roleOverrides: {
+      dean: [
+        { label: 'Dashboard', items: [
+          { label: 'Dean Dashboard', href: '/portal/academic/dean', icon: LayoutDashboard },
+          { label: 'Faculty Overview', href: '/portal/academic', icon: Building2 },
+        ]},
+        { label: 'Faculty Management', items: [
+          { label: 'Departments', href: '/portal/academic/dean/departments', icon: Building2 },
+          { label: 'Programmes', href: '/portal/academic/dean/programmes', icon: BookOpen },
+          { label: 'Faculty Reports', href: '/portal/academic/reports', icon: BarChart },
+        ]},
+        { label: 'Academic', items: [
+          { label: 'Curriculum', href: '/portal/academic/curriculum', icon: BookMarked },
+          { label: 'Accreditation', href: '/portal/academic/dean/accreditation', icon: BadgeCheck },
+        ]},
+        { label: 'Account', items: [
+          { label: 'Profile', href: '/portal/academic/profile', icon: Users },
+          { label: 'Notifications', href: '/portal/academic/notifications', icon: Bell },
+        ]},
+      ],
+      hod: [
+        { label: 'Dashboard', items: [
+          { label: 'HOD Dashboard', href: '/portal/academic/hod', icon: LayoutDashboard },
+          { label: 'Department Overview', href: '/portal/academic', icon: Building2 },
+        ]},
+        { label: 'Department', items: [
+          { label: 'Programmes', href: '/portal/academic/hod/programmes', icon: BookOpen },
+          { label: 'Lecturers', href: '/portal/academic/hod/lecturers', icon: Users },
+          { label: 'Course Allocation', href: '/portal/academic/hod/courses', icon: ClipboardList },
+        ]},
+        { label: 'Academic', items: [
+          { label: 'Curriculum', href: '/portal/academic/curriculum', icon: BookMarked },
+          { label: 'Reports', href: '/portal/academic/reports', icon: BarChart },
+        ]},
+        { label: 'Account', items: [
+          { label: 'Profile', href: '/portal/academic/profile', icon: Users },
+          { label: 'Notifications', href: '/portal/academic/notifications', icon: Bell },
+        ]},
+      ],
+      program_coordinator: [
+        { label: 'Dashboard', items: [
+          { label: 'Programme Dashboard', href: '/portal/academic/programme-coordinator', icon: LayoutDashboard },
+          { label: 'Programme Overview', href: '/portal/academic', icon: BookOpen },
+        ]},
+        { label: 'Programme', items: [
+          { label: 'Curriculum', href: '/portal/academic/programme-coordinator/curriculum', icon: BookMarked },
+          { label: 'Students', href: '/portal/academic/programme-coordinator/students', icon: Users },
+          { label: 'Courses', href: '/portal/academic/programme-coordinator/courses', icon: BookOpen },
+        ]},
+        { label: 'Academic', items: [
+          { label: 'Performance', href: '/portal/academic/programme-coordinator/performance', icon: BarChart },
+          { label: 'Reports', href: '/portal/academic/reports', icon: FileText },
+        ]},
+        { label: 'Account', items: [
+          { label: 'Profile', href: '/portal/academic/profile', icon: Users },
+          { label: 'Notifications', href: '/portal/academic/notifications', icon: Bell },
+        ]},
+      ],
+    },
   },
   management: {
     sections: [
@@ -268,13 +333,28 @@ export function Sidebar({ className }: SidebarProps) {
 
   const navConfig = portalId ? navigationByPortal[portalId] : null
 
+  // Get role-specific navigation if available
+  const getNavSections = () => {
+    if (!navConfig) return []
+    if (portalId === 'academic' && user?.role && navConfig.roleOverrides?.[user.role]) {
+      return navConfig.roleOverrides[user.role]
+    }
+    return navConfig.sections
+  }
+
+  const navSections = getNavSections()
+
   // Determine portal display name
   const getPortalName = () => {
     if (!portalId) return 'Portal'
     switch (portalId) {
       case 'applicant': return 'Applicant'
       case 'student': return 'Student'
-      case 'academic': return 'Academic Staff'
+      case 'academic': 
+        if (user?.role === 'dean') return 'Dean Portal'
+        if (user?.role === 'hod') return 'HOD Portal'
+        if (user?.role === 'program_coordinator') return 'Programme Coordinator'
+        return 'Academic Staff'
       case 'management': return 'Management'
       case 'admin': return 'Super Admin'
       default: return 'Portal'
@@ -294,7 +374,7 @@ export function Sidebar({ className }: SidebarProps) {
     }
   }
 
-  if (!navConfig) {
+  if (!navConfig || navSections.length === 0) {
     return null
   }
 
@@ -321,7 +401,7 @@ export function Sidebar({ className }: SidebarProps) {
                 className="flex flex-col"
               >
                 <span className="text-lg font-bold text-white">InnovaSci</span>
-                <span className="text-xs text-white/60">{getPortalName()} Portal</span>
+                <span className="text-xs text-white/60">{getPortalName()}</span>
               </motion.div>
             )}
           </Link>
@@ -337,7 +417,7 @@ export function Sidebar({ className }: SidebarProps) {
 
         {/* Navigation */}
         <nav className="flex-1 space-y-6 p-4 overflow-y-auto">
-          {navConfig.sections.map((section, sectionIndex) => (
+          {navSections.map((section, sectionIndex) => (
             <div key={sectionIndex} className="space-y-1">
               {sidebarOpen && (
                 <h3 className="px-3 text-xs font-semibold uppercase tracking-wider text-white/40 mb-2">
