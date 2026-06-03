@@ -198,6 +198,7 @@ export default function LoginPage() {
             hod: '/portal/academic',
             dean: '/portal/academic',
             rector: '/portal/management',
+            examination_officer: '/portal/management',
             deputy_rector_academic: '/portal/management',
             deputy_rector_admin: '/portal/management',
             registrar: '/portal/management',
