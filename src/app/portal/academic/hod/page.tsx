@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/store"
-import { getHodData, SEEDED_DEPARTMENTS } from "@/lib/academic-data"
+import { getHodData, SEEDED_DEPARTMENTS, getDepartmentById, getFacultyById, getProgrammesByDepartment } from "@/lib/academic-data"
 import { motion } from "framer-motion"
 import { 
   Building2, Users, BookOpen, GraduationCap, BarChart3, 
   FileText, Calendar, Bell, Settings, TrendingUp,
-  Award, ClipboardCheck, Clock, CheckCircle, BookMarked, UserCheck
+  Award, ClipboardCheck, Clock, CheckCircle, BookMarked, UserCheck, ChevronRight
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -20,14 +20,24 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export default function HodDashboard() {
   const router = useRouter()
   const { user, isAuthenticated, isLoading, portalId } = useAuthStore()
+  const [selectedDepartmentId, setSelectedDepartmentId] = useState<string>('')
+  const [activeTab, setActiveTab] = useState('overview')
+
+  // Get department from user assignment or selected demo department
+  const departmentId = user?.departmentId || selectedDepartmentId || SEEDED_DEPARTMENTS[0]?.id
+  const department = getDepartmentById(departmentId)
+  const faculty = department ? getFacultyById(department.facultyId) : null
+  const programmes = getProgrammesByDepartment(departmentId)
+  const ndProgrammes = programmes.filter(p => p.type === 'ND')
+  const hndProgrammes = programmes.filter(p => p.type === 'HND')
 
   useEffect(() => {
-    if (!isLoading && (!isAuthenticated || portalId !== 'academic' || user?.role !== 'hod')) {
+    if (!isLoading && (!isAuthenticated || portalId !== 'academic' || (user?.role !== 'hod' && user?.role !== 'super_admin'))) {
       router.push("/auth/login")
     }
   }, [isAuthenticated, isLoading, portalId, router, user?.role])
 
-  if (isLoading || !isAuthenticated || user?.role !== 'hod') {
+  if (isLoading || !isAuthenticated || (user?.role !== 'hod' && user?.role !== 'super_admin')) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-4">
@@ -38,10 +48,7 @@ export default function HodDashboard() {
     )
   }
 
-  // Get HOD's assigned department (demo: first department)
-  const hodData = getHodData(SEEDED_DEPARTMENTS[0].id)
-
-  if (!hodData) {
+  if (!department) {
     return (
       <div className="p-8 text-center">
         <p className="text-muted-foreground">Department data not available</p>
@@ -49,7 +56,48 @@ export default function HodDashboard() {
     )
   }
 
-  const { department, faculty, programmes, ndProgrammes, hndProgrammes, statistics } = hodData
+  // Calculate statistics
+  const statistics = {
+    totalProgrammes: programmes.length,
+    totalLecturers: department.totalLecturers,
+    totalStudents: department.totalStudents,
+    totalNdStudents: ndProgrammes.reduce((acc, p) => acc + p.totalStudents, 0),
+    totalHndStudents: hndProgrammes.reduce((acc, p) => acc + p.totalStudents, 0),
+  }
+
+  // Sample pending items
+  const pendingItems = [
+    { type: 'Result Approval', item: `${ndProgrammes[0]?.code || 'AML'} Results`, submittedBy: 'Lecturer', date: '2 hours ago' },
+    { type: 'Course Material', item: `${hndProgrammes[0]?.name || 'Course'} Materials`, submittedBy: 'Lecturer', date: '5 hours ago' },
+    { type: 'Attendance', item: 'Attendance Report', submittedBy: 'Coordinator', date: '1 day ago' },
+  ]
+
+  // Department selector for demo mode
+  const DepartmentSelector = () => (
+    <Card className="border-indigo-100 mb-4">
+      <CardContent className="p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Building2 className="h-4 w-4 text-indigo-600" />
+          <span className="text-sm font-medium">Select Department (Demo Mode):</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {SEEDED_DEPARTMENTS.slice(0, 8).map((d) => (
+            <button
+              key={d.id}
+              onClick={() => setSelectedDepartmentId(d.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                departmentId === d.id
+                  ? 'bg-indigo-600 text-white'
+                  : 'bg-indigo-50 text-indigo-700 hover:bg-indigo-100 border border-indigo-200'
+              }`}
+            >
+              {d.code}
+            </button>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
 
   // Sample course allocations
   const courseAllocations = [
@@ -67,13 +115,6 @@ export default function HodDashboard() {
     { name: 'Prof. Emeka Okonkwo', title: 'Professor', courses: 4, students: 198 },
   ]
 
-  // Sample pending items
-  const pendingItems = [
-    { type: 'Result Approval', course: 'AML 111', submittedBy: 'Dr. Fatima Hassan', date: '2 hours ago' },
-    { type: 'Course Material', course: 'AML 211', submittedBy: 'Mr. Chidi Nwachukwu', date: '5 hours ago' },
-    { type: 'Attendance Report', course: 'AML 112', submittedBy: 'Prof. Emeka Okonkwo', date: '1 day ago' },
-  ]
-
   return (
     <div className="space-y-6">
       {/* Welcome Section */}
@@ -85,7 +126,7 @@ export default function HodDashboard() {
         </Avatar>
         <div>
           <h1 className="text-2xl font-bold">HOD Dashboard</h1>
-          <p className="text-muted-foreground">{user?.fullName} • {department.name}</p>
+          <p className="text-muted-foreground">{user?.fullName || 'HOD'} • {department.name}</p>
         </div>
         <div className="ml-auto flex gap-2">
           <Badge variant="outline" className="bg-indigo-50 text-indigo-700 border-indigo-200">
@@ -94,8 +135,14 @@ export default function HodDashboard() {
           <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
             {department.code}
           </Badge>
+          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+            {ndProgrammes.length}ND/{hndProgrammes.length}HND
+          </Badge>
         </div>
       </div>
+
+      {/* Demo Department Selector */}
+      <DepartmentSelector />
 
       {/* Department Overview Banner */}
       <Card className="bg-gradient-to-r from-indigo-600 to-indigo-500 border-0">
@@ -383,7 +430,7 @@ export default function HodDashboard() {
                 <div key={index} className="p-4 bg-amber-50 rounded-lg border border-amber-100">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-medium">{item.type}: {item.course}</p>
+                      <p className="font-medium">{item.type}: {item.item}</p>
                       <p className="text-sm text-muted-foreground">by {item.submittedBy}</p>
                       <p className="text-xs text-amber-600 mt-1">{item.date}</p>
                     </div>

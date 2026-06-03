@@ -1,14 +1,14 @@
 'use client'
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useAuthStore } from "@/store"
-import { getDeanData, SEEDED_FACULTIES } from "@/lib/academic-data"
+import { getDeanData, SEEDED_FACULTIES, getFacultyById, getDepartmentsByFaculty, getProgrammesByFaculty } from "@/lib/academic-data"
 import { motion } from "framer-motion"
 import { 
   Building2, Users, BookOpen, GraduationCap, BarChart3, 
   FileText, Calendar, Bell, Settings, TrendingUp,
-  Award, ClipboardCheck, Clock, CheckCircle
+  Award, ClipboardCheck, Clock, CheckCircle, School, ChevronRight, Layers
 } from "lucide-react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -19,14 +19,24 @@ import { Progress } from "@/components/ui/progress"
 export default function DeanDashboard() {
   const router = useRouter()
   const { user, isAuthenticated, isLoading, portalId } = useAuthStore()
+  const [selectedFacultyId, setSelectedFacultyId] = useState<string>('')
+  const [activeTab, setActiveTab] = useState('overview')
+
+  // Get faculty from user assignment or use selected/demo faculty
+  const facultyId = user?.facultyId || selectedFacultyId || SEEDED_FACULTIES[0]?.id
+  const faculty = getFacultyById(facultyId)
+  const departments = getDepartmentsByFaculty(facultyId)
+  const programmes = getProgrammesByFaculty(facultyId)
+  const ndProgrammes = programmes.filter(p => p.type === 'ND')
+  const hndProgrammes = programmes.filter(p => p.type === 'HND')
 
   useEffect(() => {
-    if (!isLoading && (!isAuthenticated || portalId !== 'academic' || user?.role !== 'dean')) {
+    if (!isLoading && (!isAuthenticated || portalId !== 'academic' || (user?.role !== 'dean' && user?.role !== 'super_admin'))) {
       router.push("/auth/login")
     }
   }, [isAuthenticated, isLoading, portalId, router, user?.role])
 
-  if (isLoading || !isAuthenticated || user?.role !== 'dean') {
+  if (isLoading || !isAuthenticated || (user?.role !== 'dean' && user?.role !== 'super_admin')) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-slate-50">
         <div className="flex flex-col items-center gap-4">
@@ -37,10 +47,7 @@ export default function DeanDashboard() {
     )
   }
 
-  // Get dean's assigned faculty (demo: first faculty)
-  const deanData = getDeanData(SEEDED_FACULTIES[0].id)
-
-  if (!deanData) {
+  if (!faculty) {
     return (
       <div className="p-8 text-center">
         <p className="text-muted-foreground">Faculty data not available</p>
@@ -48,14 +55,57 @@ export default function DeanDashboard() {
     )
   }
 
-  const { faculty, departments, programmes, ndProgrammes, hndProgrammes, statistics } = deanData
+  // Calculate statistics
+  const statistics = {
+    totalDepartments: departments.length,
+    totalProgrammes: programmes.length,
+    totalLecturers: faculty.totalLecturers,
+    totalStudents: faculty.totalStudents,
+    totalNdStudents: ndProgrammes.reduce((acc, p) => acc + p.totalStudents, 0),
+    totalHndStudents: hndProgrammes.reduce((acc, p) => acc + p.totalStudents, 0),
+  }
 
   // Sample pending approvals
   const pendingApprovals = [
-    { type: 'Course Result', course: 'AML 211', submittedBy: 'Dr. Fatima Hassan', date: '2 hours ago' },
-    { type: 'Course Material', course: 'DSC 201', submittedBy: 'Mr. Chidi Nwachukwu', date: '5 hours ago' },
-    { type: 'Project Approval', course: 'ROB 301', submittedBy: 'Prof. Emeka Okonkwo', date: '1 day ago' },
+    { type: 'Curriculum', item: `${ndProgrammes[0]?.code || 'AML'} Semester 2 Updates`, submittedBy: 'HOD', date: '2 hours ago' },
+    { type: 'Course Material', item: `${hndProgrammes[0]?.name || 'Course'} Materials`, submittedBy: 'Lecturer', date: '5 hours ago' },
+    { type: 'Results', item: `${ndProgrammes[0]?.name || 'Programme'} Results`, submittedBy: 'Coordinator', date: '1 day ago' },
   ]
+
+  // Recent activities
+  const recentActivities = [
+    { type: 'approval', message: `${faculty.name} curriculum approved`, time: '2 hours ago', icon: CheckCircle, color: 'green' },
+    { type: 'submission', message: 'New course material submitted for review', time: '4 hours ago', icon: FileText, color: 'blue' },
+    { type: 'student', message: `${statistics.totalStudents} students enrolled`, time: '6 hours ago', icon: Users, color: 'amber' },
+    { type: 'exam', message: 'Semester exams schedule finalized', time: '1 day ago', icon: Calendar, color: 'purple' },
+  ]
+
+  // Faculty selector component for demo mode
+  const FacultySelector = () => (
+    <Card className="border-purple-100 mb-4">
+      <CardContent className="p-4">
+        <div className="flex items-center gap-2 mb-3">
+          <School className="h-4 w-4 text-purple-600" />
+          <span className="text-sm font-medium">Select Faculty (Demo Mode):</span>
+        </div>
+        <div className="flex flex-wrap gap-2">
+          {SEEDED_FACULTIES.map((f) => (
+            <button
+              key={f.id}
+              onClick={() => setSelectedFacultyId(f.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                facultyId === f.id
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-purple-50 text-purple-700 hover:bg-purple-100 border border-purple-200'
+              }`}
+            >
+              {f.code}
+            </button>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
+  )
 
   // Sample announcements
   const announcements = [
@@ -75,17 +125,23 @@ export default function DeanDashboard() {
         </Avatar>
         <div>
           <h1 className="text-2xl font-bold">Dean Dashboard</h1>
-          <p className="text-muted-foreground">{user?.fullName} • {faculty.name}</p>
+          <p className="text-muted-foreground">{user?.fullName || 'Dean'} • {faculty.name}</p>
         </div>
         <div className="ml-auto flex gap-2">
           <Badge variant="outline" className="bg-purple-50 text-purple-700 border-purple-200">
             Dean
           </Badge>
           <Badge variant="outline" className="bg-blue-50 text-blue-700 border-blue-200">
-            Faculty Head
+            {departments.length} Depts
+          </Badge>
+          <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+            {ndProgrammes.length}ND/{hndProgrammes.length}HND
           </Badge>
         </div>
       </div>
+
+      {/* Demo Faculty Selector */}
+      <FacultySelector />
 
       {/* Faculty Overview Banner */}
       <Card className="bg-gradient-to-r from-purple-600 to-purple-500 border-0">
@@ -273,7 +329,7 @@ export default function DeanDashboard() {
             <CardContent className="space-y-3">
               {pendingApprovals.map((item, index) => (
                 <div key={index} className="p-3 bg-amber-50 rounded-lg border border-amber-100">
-                  <p className="font-medium text-sm">{item.type}: {item.course}</p>
+                  <p className="font-medium text-sm">{item.type}: {item.item}</p>
                   <p className="text-xs text-muted-foreground">by {item.submittedBy}</p>
                   <p className="text-xs text-amber-600 mt-1">{item.date}</p>
                   <div className="flex gap-2 mt-2">

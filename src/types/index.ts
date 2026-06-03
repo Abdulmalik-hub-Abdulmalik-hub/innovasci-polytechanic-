@@ -96,6 +96,7 @@ export const ROLE_CATEGORIES: Record<UserRole, RoleCategory> = {
 // SECTION 2: BASE INTERFACES
 // =====================================================
 
+// Base User Interface with Academic Assignments
 export interface User {
   id: string;
   email: string;
@@ -107,9 +108,14 @@ export interface User {
   updatedAt: string;
   isActive: boolean;
   isVerified: boolean;
-  departmentId?: string;
+  // Academic assignment fields (for dean, hod, program_coordinator)
   facultyId?: string;
+  facultyName?: string;
+  departmentId?: string;
+  departmentName?: string;
   programId?: string;
+  programName?: string;
+  programType?: 'ND' | 'HND';
 }
 
 export interface Student extends User {

@@ -4,7 +4,7 @@ import { useState } from "react"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Eye, EyeOff, Loader2, GraduationCap, AlertCircle, Mail, Lock, User, ChevronDown, ChevronUp, KeyRound, Users } from "lucide-react"
+import { Eye, EyeOff, Loader2, GraduationCap, AlertCircle, Mail, Lock, User, ChevronDown, ChevronUp, KeyRound, Users, BookOpen, Building2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -12,45 +12,104 @@ import { Card, CardContent } from "@/components/ui/card"
 import { useAuthStore } from "@/store"
 import { supabase, isSupabaseConfigured } from "@/lib/supabase"
 
-// Demo credentials for all system roles
+// Demo credentials for all system roles with academic entity mappings
 const DEMO_CREDENTIALS = [
   // Super Admin
-  { role: 'super_admin', email: 'super_admin@innova-sci.local', password: 'Super@12345', portal: '/portal/super-admin', display: 'Super Admin' },
+  { role: 'super_admin', email: 'super_admin@innova-sci.local', password: 'Super@12345', portal: '/portal/super-admin', display: 'Super Admin', assignment: null },
+  
+  // ===== ACADEMIC PORTAL - DEANS (5) =====
+  { role: 'dean', email: 'dean_ai@innova-sci.local', password: 'DeanAI@12345', portal: '/portal/academic', display: 'Dean - AI School', assignment: { type: 'faculty', id: 'f1', name: 'School of AI & Computational Intelligence', ndCount: 3, hndCount: 3 } },
+  { role: 'dean', email: 'dean_eng@innova-sci.local', password: 'DeanEng@12345', portal: '/portal/academic', display: 'Dean - Engineering', assignment: { type: 'faculty', id: 'f2', name: 'School of Engineering', ndCount: 4, hndCount: 4 } },
+  { role: 'dean', email: 'dean_bus@innova-sci.local', password: 'DeanBus@12345', portal: '/portal/academic', display: 'Dean - Business', assignment: { type: 'faculty', id: 'f3', name: 'School of Business', ndCount: 3, hndCount: 3 } },
+  { role: 'dean', email: 'dean_sci@innova-sci.local', password: 'DeanSci@12345', portal: '/portal/academic', display: 'Dean - Applied Sciences', assignment: { type: 'faculty', id: 'f4', name: 'School of Applied Sciences', ndCount: 3, hndCount: 3 } },
+  { role: 'dean', email: 'dean_cyber@innova-sci.local', password: 'DeanCyber@12345', portal: '/portal/academic', display: 'Dean - Cybersecurity', assignment: { type: 'faculty', id: 'f5', name: 'School of Cybersecurity & Cloud Computing', ndCount: 2, hndCount: 2 } },
+  
+  // ===== ACADEMIC PORTAL - HODs (15) =====
+  { role: 'hod', email: 'hod_aiml@innova-sci.local', password: 'HodAIML@12345', portal: '/portal/academic', display: 'HOD - AI & ML', assignment: { type: 'department', id: 'd1', name: 'Artificial Intelligence & Machine Learning', faculty: 'School of AI & Computational Intelligence' } },
+  { role: 'hod', email: 'hod_dsa@innova-sci.local', password: 'HodDSA@12345', portal: '/portal/academic', display: 'HOD - Data Science', assignment: { type: 'department', id: 'd2', name: 'Data Science & Analytics', faculty: 'School of AI & Computational Intelligence' } },
+  { role: 'hod', email: 'hod_ris@innova-sci.local', password: 'HodRIS@12345', portal: '/portal/academic', display: 'HOD - Robotics', assignment: { type: 'department', id: 'd3', name: 'Robotics & Intelligent Systems', faculty: 'School of AI & Computational Intelligence' } },
+  { role: 'hod', email: 'hod_eee@innova-sci.local', password: 'HodEEE@12345', portal: '/portal/academic', display: 'HOD - EEE', assignment: { type: 'department', id: 'd4', name: 'Electrical/Electronic Engineering', faculty: 'School of Engineering' } },
+  { role: 'hod', email: 'hod_ce@innova-sci.local', password: 'HodCE@12345', portal: '/portal/academic', display: 'HOD - Computer Eng', assignment: { type: 'department', id: 'd5', name: 'Computer Engineering', faculty: 'School of Engineering' } },
+  { role: 'hod', email: 'hod_tce@innova-sci.local', password: 'HodTCE@12345', portal: '/portal/academic', display: 'HOD - Telecom', assignment: { type: 'department', id: 'd6', name: 'Telecommunications Engineering', faculty: 'School of Engineering' } },
+  { role: 'hod', email: 'hod_mce@innova-sci.local', password: 'HodMCE@12345', portal: '/portal/academic', display: 'HOD - Mechatronics', assignment: { type: 'department', id: 'd7', name: 'Mechatronics Engineering', faculty: 'School of Engineering' } },
+  { role: 'hod', email: 'hod_ba@innova-sci.local', password: 'HodBA@12345', portal: '/portal/academic', display: 'HOD - Business Admin', assignment: { type: 'department', id: 'd8', name: 'Business Administration', faculty: 'School of Business' } },
+  { role: 'hod', email: 'hod_acc@innova-sci.local', password: 'HodACC@12345', portal: '/portal/academic', display: 'HOD - Accounting', assignment: { type: 'department', id: 'd9', name: 'Accounting', faculty: 'School of Business' } },
+  { role: 'hod', email: 'hod_bf@innova-sci.local', password: 'HodBF@12345', portal: '/portal/academic', display: 'HOD - Banking & Finance', assignment: { type: 'department', id: 'd10', name: 'Banking & Finance', faculty: 'School of Business' } },
+  { role: 'hod', email: 'hod_slt@innova-sci.local', password: 'HodSLT@12345', portal: '/portal/academic', display: 'HOD - Science Lab', assignment: { type: 'department', id: 'd11', name: 'Science Laboratory Technology', faculty: 'School of Applied Sciences' } },
+  { role: 'hod', email: 'hod_stat@innova-sci.local', password: 'HodSTAT@12345', portal: '/portal/academic', display: 'HOD - Statistics', assignment: { type: 'department', id: 'd12', name: 'Statistics', faculty: 'School of Applied Sciences' } },
+  { role: 'hod', email: 'hod_bio@innova-sci.local', password: 'HodBIO@12345', portal: '/portal/academic', display: 'HOD - Biotechnology', assignment: { type: 'department', id: 'd13', name: 'Biotechnology', faculty: 'School of Applied Sciences' } },
+  { role: 'hod', email: 'hod_cs@innova-sci.local', password: 'HodCS@12345', portal: '/portal/academic', display: 'HOD - Cyber Security', assignment: { type: 'department', id: 'd14', name: 'Cyber Security', faculty: 'School of Cybersecurity & Cloud Computing' } },
+  { role: 'hod', email: 'hod_cloud@innova-sci.local', password: 'HodCloud@12345', portal: '/portal/academic', display: 'HOD - Cloud Computing', assignment: { type: 'department', id: 'd15', name: 'Cloud Computing', faculty: 'School of Cybersecurity & Cloud Computing' } },
+  
+  // ===== ACADEMIC PORTAL - PROGRAMME COORDINATORS (ND + HND for each) =====
+  { role: 'program_coordinator', email: 'coord_aml_nd@innova-sci.local', password: 'CoordAML@12345', portal: '/portal/academic', display: 'Coord - AML (ND)', assignment: { type: 'programme', id: 'p1', name: 'Applied Machine Learning', level: 'ND', department: 'Artificial Intelligence & Machine Learning', faculty: 'School of AI & Computational Intelligence' } },
+  { role: 'program_coordinator', email: 'coord_aml_hnd@innova-sci.local', password: 'CoordAML@12345', portal: '/portal/academic', display: 'Coord - AML (HND)', assignment: { type: 'programme', id: 'p2', name: 'Applied Machine Learning', level: 'HND', department: 'Artificial Intelligence & Machine Learning', faculty: 'School of AI & Computational Intelligence' } },
+  { role: 'program_coordinator', email: 'coord_dsc_nd@innova-sci.local', password: 'CoordDSC@12345', portal: '/portal/academic', display: 'Coord - Data Science (ND)', assignment: { type: 'programme', id: 'p3', name: 'Data Science', level: 'ND', department: 'Data Science & Analytics', faculty: 'School of AI & Computational Intelligence' } },
+  { role: 'program_coordinator', email: 'coord_dsc_hnd@innova-sci.local', password: 'CoordDSC@12345', portal: '/portal/academic', display: 'Coord - Data Science (HND)', assignment: { type: 'programme', id: 'p4', name: 'Data Science', level: 'HND', department: 'Data Science & Analytics', faculty: 'School of AI & Computational Intelligence' } },
+  { role: 'program_coordinator', email: 'coord_eee_nd@innova-sci.local', password: 'CoordEEE@12345', portal: '/portal/academic', display: 'Coord - EEE (ND)', assignment: { type: 'programme', id: 'p7', name: 'Electrical/Electronic Engineering', level: 'ND', department: 'Electrical/Electronic Engineering', faculty: 'School of Engineering' } },
+  { role: 'program_coordinator', email: 'coord_eee_hnd@innova-sci.local', password: 'CoordEEE@12345', portal: '/portal/academic', display: 'Coord - EEE (HND)', assignment: { type: 'programme', id: 'p8', name: 'Electrical/Electronic Engineering', level: 'HND', department: 'Electrical/Electronic Engineering', faculty: 'School of Engineering' } },
+  { role: 'program_coordinator', email: 'coord_ce_nd@innova-sci.local', password: 'CoordCE@12345', portal: '/portal/academic', display: 'Coord - Comp Eng (ND)', assignment: { type: 'programme', id: 'p9', name: 'Computer Engineering', level: 'ND', department: 'Computer Engineering', faculty: 'School of Engineering' } },
+  { role: 'program_coordinator', email: 'coord_ce_hnd@innova-sci.local', password: 'CoordCE@12345', portal: '/portal/academic', display: 'Coord - Comp Eng (HND)', assignment: { type: 'programme', id: 'p10', name: 'Computer Engineering', level: 'HND', department: 'Computer Engineering', faculty: 'School of Engineering' } },
+  { role: 'program_coordinator', email: 'coord_ba_nd@innova-sci.local', password: 'CoordBA@12345', portal: '/portal/academic', display: 'Coord - Business Admin (ND)', assignment: { type: 'programme', id: 'p15', name: 'Business Administration', level: 'ND', department: 'Business Administration', faculty: 'School of Business' } },
+  { role: 'program_coordinator', email: 'coord_ba_hnd@innova-sci.local', password: 'CoordBA@12345', portal: '/portal/academic', display: 'Coord - Business Admin (HND)', assignment: { type: 'programme', id: 'p16', name: 'Business Administration', level: 'HND', department: 'Business Administration', faculty: 'School of Business' } },
+  { role: 'program_coordinator', email: 'coord_acc_nd@innova-sci.local', password: 'CoordACC@12345', portal: '/portal/academic', display: 'Coord - Accounting (ND)', assignment: { type: 'programme', id: 'p17', name: 'Accounting', level: 'ND', department: 'Accounting', faculty: 'School of Business' } },
+  { role: 'program_coordinator', email: 'coord_acc_hnd@innova-sci.local', password: 'CoordACC@12345', portal: '/portal/academic', display: 'Coord - Accounting (HND)', assignment: { type: 'programme', id: 'p18', name: 'Accounting', level: 'HND', department: 'Accounting', faculty: 'School of Business' } },
+  { role: 'program_coordinator', email: 'coord_cs_nd@innova-sci.local', password: 'CoordCS@12345', portal: '/portal/academic', display: 'Coord - Cyber Sec (ND)', assignment: { type: 'programme', id: 'p27', name: 'Ethical Hacking & Penetration Testing', level: 'ND', department: 'Cyber Security', faculty: 'School of Cybersecurity & Cloud Computing' } },
+  { role: 'program_coordinator', email: 'coord_cs_hnd@innova-sci.local', password: 'CoordCS@12345', portal: '/portal/academic', display: 'Coord - Cyber Sec (HND)', assignment: { type: 'programme', id: 'p28', name: 'Ethical Hacking & Penetration Testing', level: 'HND', department: 'Cyber Security', faculty: 'School of Cybersecurity & Cloud Computing' } },
+  { role: 'program_coordinator', email: 'coord_cloud_nd@innova-sci.local', password: 'CoordCloud@12345', portal: '/portal/academic', display: 'Coord - Cloud (ND)', assignment: { type: 'programme', id: 'p29', name: 'Cloud Computing', level: 'ND', department: 'Cloud Computing', faculty: 'School of Cybersecurity & Cloud Computing' } },
+  { role: 'program_coordinator', email: 'coord_cloud_hnd@innova-sci.local', password: 'CoordCloud@12345', portal: '/portal/academic', display: 'Coord - Cloud (HND)', assignment: { type: 'programme', id: 'p30', name: 'Cloud Computing', level: 'HND', department: 'Cloud Computing', faculty: 'School of Cybersecurity & Cloud Computing' } },
+  
+  // ===== ACADEMIC PORTAL - LECTURER =====
+  { role: 'lecturer', email: 'lecturer@innova-sci.local', password: 'Lecturer@12345', portal: '/portal/academic', display: 'Lecturer', assignment: null },
+  
   // Senior Management
-  { role: 'rector', email: 'rector@innova-sci.local', password: 'Rector@12345', portal: '/portal/management', display: 'Rector' },
-  { role: 'deputy_rector_academic', email: 'deputy_academic@innova-sci.local', password: 'Deputy@12345', portal: '/portal/management', display: 'Deputy Rector (Academic)' },
-  { role: 'deputy_rector_admin', email: 'deputy_admin@innova-sci.local', password: 'Deputy@12345', portal: '/portal/management', display: 'Deputy Rector (Admin)' },
+  { role: 'rector', email: 'rector@innova-sci.local', password: 'Rector@12345', portal: '/portal/management', display: 'Rector', assignment: null },
+  { role: 'deputy_rector_academic', email: 'deputy_academic@innova-sci.local', password: 'Deputy@12345', portal: '/portal/management', display: 'Deputy Rector (Academic)', assignment: null },
+  { role: 'deputy_rector_admin', email: 'deputy_admin@innova-sci.local', password: 'Deputy@12345', portal: '/portal/management', display: 'Deputy Rector (Admin)', assignment: null },
   // Administrative Officers
-  { role: 'registrar', email: 'registrar@innova-sci.local', password: 'Registrar@12345', portal: '/portal/management', display: 'Registrar' },
-  { role: 'bursar', email: 'bursar@innova-sci.local', password: 'Bursar@12345', portal: '/portal/management', display: 'Bursar' },
-  { role: 'librarian', email: 'librarian@innova-sci.local', password: 'Librarian@12345', portal: '/portal/management', display: 'Librarian' },
+  { role: 'registrar', email: 'registrar@innova-sci.local', password: 'Registrar@12345', portal: '/portal/management', display: 'Registrar', assignment: null },
+  { role: 'bursar', email: 'bursar@innova-sci.local', password: 'Bursar@12345', portal: '/portal/management', display: 'Bursar', assignment: null },
+  { role: 'librarian', email: 'librarian@innova-sci.local', password: 'Librarian@12345', portal: '/portal/management', display: 'Librarian', assignment: null },
   // Directors
-  { role: 'director', email: 'director@innova-sci.local', password: 'Director@12345', portal: '/portal/management', display: 'Director' },
-  { role: 'admission_officer', email: 'admission@innova-sci.local', password: 'Admission@12345', portal: '/portal/management', display: 'Admission Officer' },
-  { role: 'examination_officer', email: 'exam@innova-sci.local', password: 'Exam@12345', portal: '/portal/management', display: 'Examination Officer' },
-  { role: 'director_ict', email: 'ict@innova-sci.local', password: 'Ict@12345', portal: '/portal/management', display: 'Director ICT' },
-  { role: 'director_odfel', email: 'odfel@innova-sci.local', password: 'Odfel@12345', portal: '/portal/management', display: 'Director ODFeL' },
-  { role: 'director_quality_assurance', email: 'qa@innova-sci.local', password: 'Qa@12345', portal: '/portal/management', display: 'Director QA' },
-  { role: 'director_cbt_services', email: 'cbt@innova-sci.local', password: 'Cbt@12345', portal: '/portal/management', display: 'Director CBT' },
-  { role: 'director_virtual_laboratories', email: 'vlab@innova-sci.local', password: 'Vlab@12345', portal: '/portal/management', display: 'Director V-Lab' },
-  { role: 'director_student_affairs', email: 'student_affairs@innova-sci.local', password: 'StudentAffairs@12345', portal: '/portal/management', display: 'Dir. Student Affairs' },
-  // Academic Staff
-  { role: 'dean', email: 'dean@innova-sci.local', password: 'Dean@12345', portal: '/portal/academic', display: 'Dean' },
-  { role: 'hod', email: 'hod@innova-sci.local', password: 'Hod@12345', portal: '/portal/academic', display: 'HOD' },
-  { role: 'program_coordinator', email: 'coordinator@innova-sci.local', password: 'Coordinator@12345', portal: '/portal/academic', display: 'Programme Coordinator' },
-  { role: 'lecturer', email: 'lecturer@innova-sci.local', password: 'Lecturer@12345', portal: '/portal/academic', display: 'Lecturer' },
+  { role: 'director', email: 'director@innova-sci.local', password: 'Director@12345', portal: '/portal/management', display: 'Director', assignment: null },
+  { role: 'admission_officer', email: 'admission@innova-sci.local', password: 'Admission@12345', portal: '/portal/management', display: 'Admission Officer', assignment: null },
+  { role: 'examination_officer', email: 'exam@innova-sci.local', password: 'Exam@12345', portal: '/portal/management', display: 'Examination Officer', assignment: null },
+  { role: 'director_ict', email: 'ict@innova-sci.local', password: 'Ict@12345', portal: '/portal/management', display: 'Director ICT', assignment: null },
+  { role: 'director_odfel', email: 'odfel@innova-sci.local', password: 'Odfel@12345', portal: '/portal/management', display: 'Director ODFeL', assignment: null },
+  { role: 'director_quality_assurance', email: 'qa@innova-sci.local', password: 'Qa@12345', portal: '/portal/management', display: 'Director QA', assignment: null },
+  { role: 'director_cbt_services', email: 'cbt@innova-sci.local', password: 'Cbt@12345', portal: '/portal/management', display: 'Director CBT', assignment: null },
+  { role: 'director_virtual_laboratories', email: 'vlab@innova-sci.local', password: 'Vlab@12345', portal: '/portal/management', display: 'Director V-Lab', assignment: null },
+  { role: 'director_student_affairs', email: 'student_affairs@innova-sci.local', password: 'StudentAffairs@12345', portal: '/portal/management', display: 'Dir. Student Affairs', assignment: null },
   // Students
-  { role: 'student', email: 'student@innova-sci.local', password: 'Student@12345', portal: '/portal/student', display: 'Student' },
-  { role: 'applicant', email: 'applicant@innova-sci.local', password: 'Applicant@12345', portal: '/portal/applicant', display: 'Applicant' },
+  { role: 'student', email: 'student@innova-sci.local', password: 'Student@12345', portal: '/portal/student', display: 'Student', assignment: null },
+  { role: 'applicant', email: 'applicant@innova-sci.local', password: 'Applicant@12345', portal: '/portal/applicant', display: 'Applicant', assignment: null },
 ]
 
+// Demo credential type
+type DemoCredential = typeof DEMO_CREDENTIALS[number];
+
+// Group by portal and role category
 const ROLE_GROUPS = [
-  { name: 'Admin Portal', icon: '🔐', roles: DEMO_CREDENTIALS.filter(c => c.role === 'super_admin') },
-  { name: 'Management Portal', icon: '🏛️', roles: DEMO_CREDENTIALS.filter(c => ['rector', 'deputy_rector_academic', 'deputy_rector_admin', 'registrar', 'bursar', 'librarian', 'director', 'admission_officer', 'examination_officer', 'director_ict', 'director_odfel', 'director_quality_assurance', 'director_cbt_services', 'director_virtual_laboratories', 'director_student_affairs'].includes(c.role)) },
-  { name: 'Academic Portal', icon: '📚', roles: DEMO_CREDENTIALS.filter(c => ['dean', 'hod', 'program_coordinator', 'lecturer'].includes(c.role)) },
-  { name: 'Student Portal', icon: '🎓', roles: DEMO_CREDENTIALS.filter(c => c.role === 'student') },
-  { name: 'Applicant Portal', icon: '📝', roles: DEMO_CREDENTIALS.filter(c => c.role === 'applicant') },
+  { name: 'Admin Portal', icon: '🔐', roles: DEMO_CREDENTIALS.filter(c => c.role === 'super_admin'), color: 'emerald' },
+  { 
+    name: 'Academic Portal', 
+    icon: '📚', 
+    roles: DEMO_CREDENTIALS.filter(c => ['dean', 'hod', 'program_coordinator', 'lecturer'].includes(c.role)),
+    color: 'purple',
+    subGroups: [
+      { name: 'Deans (Faculty Heads)', roles: DEMO_CREDENTIALS.filter(c => c.role === 'dean') },
+      { name: 'HODs (Department Heads)', roles: DEMO_CREDENTIALS.filter(c => c.role === 'hod') },
+      { name: 'Programme Coordinators', roles: DEMO_CREDENTIALS.filter(c => c.role === 'program_coordinator') },
+      { name: 'Lecturers', roles: DEMO_CREDENTIALS.filter(c => c.role === 'lecturer') },
+    ]
+  },
+  { name: 'Management Portal', icon: '🏛️', roles: DEMO_CREDENTIALS.filter(c => ['rector', 'deputy_rector_academic', 'deputy_rector_admin', 'registrar', 'bursar', 'librarian', 'director', 'admission_officer', 'examination_officer', 'director_ict', 'director_odfel', 'director_quality_assurance', 'director_cbt_services', 'director_virtual_laboratories', 'director_student_affairs'].includes(c.role)), color: 'blue' },
+  { name: 'Student Portal', icon: '🎓', roles: DEMO_CREDENTIALS.filter(c => c.role === 'student'), color: 'amber' },
+  { name: 'Applicant Portal', icon: '📝', roles: DEMO_CREDENTIALS.filter(c => c.role === 'applicant'), color: 'rose' },
 ]
+
+// Sub-group type
+type SubGroup = { name: string; roles: DemoCredential[] };
 
 export default function LoginPage() {
   const router = useRouter()
@@ -281,28 +340,58 @@ export default function LoginPage() {
                   >
                     <div className="mt-4 space-y-4">
                       {ROLE_GROUPS.map((group) => (
-                        <div key={group.name}>
+                        <div key={group.name} className="space-y-2">
                           <h3 className="text-sm font-medium text-slate-300 mb-2 flex items-center gap-2">
                             <span>{group.icon}</span>
                             <span>{group.name}</span>
+                            <span className="text-xs text-slate-500">({group.roles.length} roles)</span>
                           </h3>
-                          <div className="flex flex-wrap gap-2">
-                            {group.roles.map((cred) => (
-                              <button
-                                key={cred.role}
-                                type="button"
-                                onClick={() => fillDemoCredentials(cred.email, cred.password)}
-                                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                                  formData.email === cred.email
-                                    ? 'bg-emerald-500 text-white ring-2 ring-emerald-400'
-                                    : 'bg-white/10 text-slate-200 hover:bg-white/20 border border-white/10'
-                                }`}
-                                title={`Dashboard: ${cred.portal}`}
-                              >
-                                {cred.display}
-                              </button>
-                            ))}
-                          </div>
+                          
+                          {/* Show sub-groups for Academic Portal */}
+                          {'subGroups' in group && group.subGroups ? (
+                            <div className="pl-4 space-y-3 border-l-2 border-emerald-500/30">
+                              {group.subGroups.map((subGroup: SubGroup) => (
+                                <div key={subGroup.name}>
+                                  <h4 className="text-xs font-medium text-slate-400 mb-2">{subGroup.name}</h4>
+                                  <div className="flex flex-wrap gap-2">
+                                    {subGroup.roles.map((cred) => (
+                                      <button
+                                        key={`${cred.role}-${cred.email}`}
+                                        type="button"
+                                        onClick={() => fillDemoCredentials(cred.email, cred.password)}
+                                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                          formData.email === cred.email
+                                            ? 'bg-purple-500 text-white ring-2 ring-purple-400'
+                                            : 'bg-purple-500/20 text-purple-200 hover:bg-purple-500/30 border border-purple-500/30'
+                                        }`}
+                                        title={cred.assignment ? `${cred.assignment.name}${cred.assignment.type === 'faculty' ? ` (${cred.assignment.ndCount}ND/${cred.assignment.hndCount}HND)` : ''}` : `Dashboard: ${cred.portal}`}
+                                      >
+                                        {cred.display}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="flex flex-wrap gap-2">
+                              {group.roles.map((cred) => (
+                                <button
+                                  key={`${cred.role}-${cred.email}`}
+                                  type="button"
+                                  onClick={() => fillDemoCredentials(cred.email, cred.password)}
+                                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                    formData.email === cred.email
+                                      ? 'bg-emerald-500 text-white ring-2 ring-emerald-400'
+                                      : 'bg-white/10 text-slate-200 hover:bg-white/20 border border-white/10'
+                                  }`}
+                                  title={`Dashboard: ${cred.portal}`}
+                                >
+                                  {cred.display}
+                                </button>
+                              ))}
+                            </div>
+                          )}
                         </div>
                       ))}
                       
