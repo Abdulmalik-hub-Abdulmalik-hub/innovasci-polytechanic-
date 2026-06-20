@@ -195,8 +195,6 @@ export default function LoginPage() {
             fullName: fullName,
             role: 'applicant',
             portal: 'applicant' as any,
-
-
             isActive: true,
             isVerified: false,
             createdAt: new Date().toISOString(),
@@ -233,7 +231,7 @@ export default function LoginPage() {
               email: profileData.email,
               fullName: profileData.full_name,
               role: profileData.role,
-              portal: getPortalForRole(profileData.role as any),
+              portal: getPortalForRole(profileData.role as any) as any,
               isActive: profileData.is_active,
               isVerified: profileData.is_verified,
               createdAt: profileData.created_at,
