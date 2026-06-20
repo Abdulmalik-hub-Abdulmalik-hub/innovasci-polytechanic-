@@ -1,9 +1,9 @@
 // =====================================================
-// INNOVASCI AI LABS POLYTECHNIC - RBAC SYSTEM
-// Role-Based Access Control for 5-Portal Architecture
+// INNOVASCI OPEN UNIVERSITY - RBAC SYSTEM
+// Role-Based Access Control for Management & Academic Portals
 // =====================================================
 
-import { UserRole, ROLE_CATEGORIES } from '@/types';
+import { UserRole, ROLE_TO_PORTAL, ManagementPortalRole, AcademicPortalRole } from '@/types';
 
 // Permission definitions
 export const PERMISSIONS = {
@@ -238,7 +238,7 @@ export const PERMISSIONS = {
 
 export type Permission = keyof typeof PERMISSIONS;
 
-// Role-Permission Matrix
+// Role-Permission Matrix (organized by portal)
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   // =====================================================
   // SUPER ADMIN - Full System Access
@@ -246,26 +246,24 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   super_admin: Object.keys(PERMISSIONS) as Permission[], // All permissions
   
   // =====================================================
-  // MANAGEMENT ROLES - Institutional Administration
+  // MANAGEMENT PORTAL - Institutional Administration
   // =====================================================
-  rector: [
+  vice_chancellor: [
     'dashboard.view', 'dashboard.analytics',
+    'users.view', 'users.create', 'users.edit',
     'students.view', 'students.enroll',
-    'academic.view', 'academic.approve',
+    'academic.view', 'academic.edit', 'academic.approve',
     'courses.view',
     'assignments.view',
     'exams.view', 'exams.monitor',
-    'results.view', 'results.transcript',
+    'results.view', 'results.approve', 'results.transcript',
     'attendance.view',
     'payments.view', 'payments.report',
     'admission.view', 'admission.approve',
-    'library.view',
-    'labs.view',
-    'projects.view',
     'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
     'qa.view', 'qa.manage', 'qa.accreditation',
     'odfel.view', 'odfel.manage', 'odfel.compliance',
-    'settings.view',
+    'settings.view', 'settings.edit',
     'audit.view',
     'documents.view', 'documents.download',
     'certificates.view', 'certificates.verify',
@@ -275,7 +273,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'curriculum.view',
   ],
   
-  deputy_rector_academic: [
+  deputy_vc_academic: [
     'dashboard.view', 'dashboard.analytics',
     'students.view',
     'academic.view', 'academic.edit', 'academic.approve',
@@ -296,17 +294,31 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'curriculum.view', 'curriculum.edit', 'curriculum.approve',
   ],
   
-  deputy_rector_admin: [
+  deputy_vc_admin: [
     'dashboard.view', 'dashboard.analytics',
-    'users.view', 'users.create', 'users.edit',
-    'students.view',
+    'users.view', 'users.create', 'users.edit', 'users.delete',
+    'students.view', 'students.create', 'students.edit',
     'payments.view', 'payments.verify', 'payments.report',
-    'admission.view', 'admission.approve',
+    'admission.view', 'admission.approve', 'admission.reject',
     'reports.view', 'reports.create', 'reports.export',
     'settings.view', 'settings.edit',
     'audit.view',
     'documents.view',
     'notifications.view', 'notifications.send', 'notifications.manage',
+  ],
+  
+  deputy_vc_research: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'academic.view', 'academic.edit', 'academic.approve',
+    'projects.view', 'projects.supervise',
+    'reports.view', 'reports.create', 'reports.analytics',
+    'qa.view', 'qa.manage',
+    'settings.view',
+    'documents.view',
+    'notifications.view', 'notifications.send',
+    'department.view', 'faculty.view',
+    'programme.view', 'programme.manage',
   ],
   
   registrar: [
@@ -315,8 +327,6 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'students.enroll', 'students.graduation',
     'academic.view', 'academic.edit', 'academic.approve',
     'courses.view',
-    'assignments.view',
-    'exams.view',
     'results.view', 'results.approve', 'results.publish', 'results.transcript',
     'attendance.view',
     'admission.view', 'admission.create', 'admission.edit', 'admission.approve', 'admission.reject',
@@ -340,63 +350,12 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'documents.view', 'documents.download',
     'notifications.view',
   ],
-  
-  librarian: [
-    'dashboard.view',
-    'students.view',
-    'library.view', 'library.manage',
-    'library.borrow', 'library.returns',
-    'reports.view',
-    'notifications.view',
-  ],
-  
-  director: [
-    'dashboard.view', 'dashboard.analytics',
-    'students.view',
-    'academic.view',
-    'courses.view',
-    'assignments.view',
-    'exams.view', 'exams.monitor',
-    'results.view',
-    'attendance.view',
-    'payments.view', 'payments.report',
-    'admission.view',
-    'library.view',
-    'labs.view',
-    'projects.view',
-    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
-    'qa.view', 'qa.manage',
-    'odfel.view', 'odfel.manage',
-    'settings.view',
-    'documents.view',
-    'certificates.view',
-    'notifications.view',
-    'department.view',
-    'programme.view',
-  ],
 
   // =====================================================
   // DIRECTORS - Specialized Unit Management
   // =====================================================
   
-  director_ict: [
-    'dashboard.view', 'dashboard.analytics',
-    'students.view',
-    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
-    'lms.view', 'lms.configure',
-    'cbt.view', 'cbt.configure',
-    'settings.view', 'settings.edit', 'settings.system',
-    'security.view', 'security.manage',
-    'audit.view',
-    'api.view', 'api.manage', 'api.keys',
-    'notifications.view',
-    'labs.view', 'labs.manage', // ICT manages tech infrastructure
-  ],
-
-  // =====================================================
-  // ADMISSION OFFICER - Admission Management
-  // =====================================================
-  admission_officer: [
+  director_admission: [
     'dashboard.view', 'dashboard.analytics',
     'admission.view', 'admission.create', 'admission.edit', 'admission.approve', 'admission.reject',
     'documents.view', 'documents.download', 'documents.verify',
@@ -406,25 +365,35 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'certificates.view', 'certificates.generate',
   ],
 
-  // =====================================================
-  // EXAMINATION OFFICER - CBT Examination Management
-  // =====================================================
-  examination_officer: [
+  director_examination: [
     'dashboard.view', 'dashboard.analytics',
     'students.view',
-    'cbt.questions.view', 'cbt.questions.moderate',
-    'cbt.exams.view', 'cbt.exams.schedule', 'cbt.exams.approve', 'cbt.exams.monitor', 'cbt.exams.cancel',
-    'cbt.students.view', 'cbt.students.assign', 'cbt.students.track',
-    'cbt.results.view', 'cbt.results.publish', 'cbt.results.export',
-    'cbt.analytics.view',
-    'cbt.security.view',
-    'cbt.incidents.view', 'cbt.incidents.resolve',
-    'cbt.banks.view',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor', 'exams.grade',
+    'results.view', 'results.edit', 'results.publish',
     'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
     'qa.view', 'qa.accreditation',
     'notifications.view', 'notifications.send',
     'settings.view',
     'audit.view',
+  ],
+
+  director_study_centre: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'qa.view', 'qa.manage', 'qa.accreditation',
+    'programme.view', 'programme.manage', 'programme.accreditation',
+    'documents.view',
+    'notifications.view', 'notifications.send',
+  ],
+
+  director_lss: [
+    'dashboard.view',
+    'students.view',
+    'library.view', 'library.manage',
+    'library.borrow', 'library.returns',
+    'reports.view', 'reports.create',
+    'notifications.view',
   ],
 
   director_odfel: [
@@ -436,6 +405,18 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'programme.view', 'programme.accreditation',
     'lms.view', 'lms.configure',
     'notifications.view', 'notifications.send',
+  ],
+
+  director_ict: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
+    'lms.view', 'lms.configure',
+    'settings.view', 'settings.edit', 'settings.system',
+    'security.view', 'security.manage',
+    'audit.view',
+    'api.view', 'api.manage', 'api.keys',
+    'notifications.view',
   ],
 
   director_quality_assurance: [
@@ -450,40 +431,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'notifications.view', 'notifications.send',
   ],
 
-  director_cbt_services: [
-    'dashboard.view', 'dashboard.analytics',
-    'students.view',
-    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor', 'exams.grade',
-    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
-    'cbt.view', 'cbt.configure',
-    'cbt.questions.view', 'cbt.questions.create', 'cbt.questions.edit', 'cbt.questions.delete', 'cbt.questions.moderate',
-    'cbt.exams.view', 'cbt.exams.create', 'cbt.exams.edit', 'cbt.exams.delete', 'cbt.exams.publish', 'cbt.exams.schedule', 'cbt.exams.approve', 'cbt.exams.monitor', 'cbt.exams.cancel',
-    'cbt.students.view', 'cbt.students.assign', 'cbt.students.track',
-    'cbt.results.view', 'cbt.results.grade', 'cbt.results.publish', 'cbt.results.export',
-    'cbt.analytics.view',
-    'cbt.security.view', 'cbt.security.manage',
-    'cbt.incidents.view', 'cbt.incidents.resolve',
-    'cbt.configuration.view', 'cbt.configuration.manage',
-    'cbt.banks.view', 'cbt.banks.approve',
-    'odfel.exams.view', 'odfel.exams.configure',
-    'lms.view',
-    'settings.view',
-    'security.view',
-    'notifications.view', 'notifications.send',
-  ],
-
-  director_virtual_laboratories: [
-    'dashboard.view', 'dashboard.analytics',
-    'students.view',
-    'labs.view', 'labs.access', 'labs.manage',
-    'reports.view', 'reports.create', 'reports.export', 'reports.analytics',
-    'courses.view',
-    'assignments.view',
-    'exams.view',
-    'notifications.view', 'notifications.send',
-  ],
-
-  director_student_affairs: [
+  director_student_welfare: [
     'dashboard.view', 'dashboard.analytics',
     'students.view', 'students.create', 'students.edit',
     'students.enroll',
@@ -492,53 +440,75 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'documents.view', 'documents.download',
     'payments.view',
     'attendance.view',
-    'projects.view',
+  ],
+
+  director_research: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'academic.view', 'academic.edit', 'academic.approve',
+    'projects.view', 'projects.supervise',
+    'reports.view', 'reports.create', 'reports.analytics',
+    'qa.view', 'qa.manage',
+    'settings.view',
+    'documents.view',
+    'notifications.view', 'notifications.send',
+    'department.view', 'faculty.view',
+    'programme.view', 'programme.manage',
   ],
   
   // =====================================================
-  // ACADEMIC STAFF ROLES - Teaching & Research
+  // ACADEMIC PORTAL - Teaching & Research
   // =====================================================
-  dean: [
+  dean_undergraduate: [
     'dashboard.view', 'dashboard.analytics',
     'students.view',
-    'academic.view', 'academic.edit',
+    'academic.view', 'academic.edit', 'academic.approve',
     'courses.view', 'courses.create', 'courses.edit',
     'content.view', 'content.create', 'content.edit', 'content.publish',
     'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
-    'exams.view', 'exams.create', 'exams.edit', 'exams.publish',
-    'cbt.exams.view', 'cbt.exams.approve', 'cbt.exams.monitor',
-    'cbt.questions.view', 'cbt.questions.moderate',
-    'cbt.analytics.view',
-    'cbt.results.view',
-    'results.view', 'results.edit', 'results.approve',
-    'attendance.view', 'attendance.mark',
-    'reports.view', 'reports.create',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor',
+    'results.view', 'results.edit', 'results.approve', 'results.publish',
+    'attendance.view', 'attendance.mark', 'attendance.edit',
+    'reports.view', 'reports.create', 'reports.analytics',
     'department.view', 'department.manage',
-    'faculty.view',
     'programme.view', 'programme.manage',
-    'curriculum.view', 'curriculum.edit',
+    'curriculum.view', 'curriculum.edit', 'curriculum.approve',
     'documents.view',
     'notifications.view', 'notifications.send',
+    'projects.view', 'projects.supervise',
+  ],
+
+  dean_postgraduate: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'academic.view', 'academic.edit', 'academic.approve',
+    'courses.view', 'courses.create', 'courses.edit',
+    'content.view', 'content.create', 'content.edit', 'content.publish',
+    'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor',
+    'results.view', 'results.edit', 'results.approve', 'results.publish',
+    'attendance.view', 'attendance.mark', 'attendance.edit',
+    'reports.view', 'reports.create', 'reports.analytics',
+    'department.view', 'department.manage',
+    'programme.view', 'programme.manage',
+    'curriculum.view', 'curriculum.edit', 'curriculum.approve',
+    'documents.view',
+    'notifications.view', 'notifications.send',
+    'projects.view', 'projects.supervise',
   ],
   
-  hod: [
-    'dashboard.view',
+  head_of_department: [
+    'dashboard.view', 'dashboard.analytics',
     'students.view',
-    'academic.view', 'academic.edit',
+    'academic.view', 'academic.edit', 'academic.approve',
     'courses.view', 'courses.create', 'courses.edit', 'courses.assign',
     'content.view', 'content.create', 'content.edit', 'content.publish',
     'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
-    'exams.view', 'exams.create', 'exams.edit', 'exams.publish',
-    'cbt.exams.view', 'cbt.exams.approve', 'cbt.exams.monitor',
-    'cbt.questions.view', 'cbt.questions.moderate',
-    'cbt.analytics.view',
-    'cbt.banks.view', 'cbt.banks.approve',
-    'cbt.results.view',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor',
     'results.view', 'results.edit', 'results.approve',
     'attendance.view', 'attendance.mark', 'attendance.edit',
-    'labs.view', 'labs.manage',
     'projects.view', 'projects.supervise',
-    'reports.view', 'reports.create',
+    'reports.view', 'reports.create', 'reports.analytics',
     'qa.view',
     'department.view', 'department.manage',
     'curriculum.view', 'curriculum.edit',
@@ -546,46 +516,125 @@ export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
     'notifications.view', 'notifications.send',
   ],
   
-  program_coordinator: [
-    'dashboard.view',
+  programme_coordinator_bsc: [
+    'dashboard.view', 'dashboard.analytics',
     'students.view',
-    'academic.view',
+    'academic.view', 'academic.edit',
     'courses.view', 'courses.edit',
     'content.view', 'content.create', 'content.edit', 'content.publish',
     'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
-    'exams.view', 'exams.create', 'exams.edit', 'exams.publish',
-    'cbt.exams.view', 'cbt.exams.approve', 'cbt.exams.monitor',
-    'cbt.questions.view', 'cbt.questions.create', 'cbt.questions.edit',
-    'cbt.analytics.view',
-    'cbt.results.view', 'cbt.results.grade', 'cbt.results.publish',
-    'results.view', 'results.edit',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor',
+    'results.view', 'results.edit', 'results.publish',
     'attendance.view', 'attendance.mark',
-    'labs.view',
     'projects.view', 'projects.supervise',
     'programme.view', 'programme.manage',
     'curriculum.view',
     'documents.view',
     'notifications.view', 'notifications.send',
+    'reports.view', 'reports.create',
   ],
-  
-  lecturer: [
+
+  programme_coordinator_pgd: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'academic.view', 'academic.edit',
+    'courses.view', 'courses.edit',
+    'content.view', 'content.create', 'content.edit', 'content.publish',
+    'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor',
+    'results.view', 'results.edit', 'results.publish',
+    'attendance.view', 'attendance.mark',
+    'projects.view', 'projects.supervise',
+    'programme.view', 'programme.manage',
+    'curriculum.view',
+    'documents.view',
+    'notifications.view', 'notifications.send',
+    'reports.view', 'reports.create',
+  ],
+
+  programme_coordinator_msc: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'academic.view', 'academic.edit',
+    'courses.view', 'courses.edit',
+    'content.view', 'content.create', 'content.edit', 'content.publish',
+    'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor',
+    'results.view', 'results.edit', 'results.publish',
+    'attendance.view', 'attendance.mark',
+    'projects.view', 'projects.supervise',
+    'programme.view', 'programme.manage',
+    'curriculum.view',
+    'documents.view',
+    'notifications.view', 'notifications.send',
+    'reports.view', 'reports.create',
+  ],
+
+  programme_coordinator_phd: [
+    'dashboard.view', 'dashboard.analytics',
+    'students.view',
+    'academic.view', 'academic.edit',
+    'courses.view', 'courses.edit',
+    'content.view', 'content.create', 'content.edit', 'content.publish',
+    'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
+    'exams.view', 'exams.create', 'exams.edit', 'exams.publish', 'exams.monitor',
+    'results.view', 'results.edit', 'results.publish',
+    'attendance.view', 'attendance.mark',
+    'projects.view', 'projects.supervise',
+    'programme.view', 'programme.manage',
+    'curriculum.view',
+    'documents.view',
+    'notifications.view', 'notifications.send',
+    'reports.view', 'reports.create',
+  ],
+
+  e_tutor: [
     'dashboard.view',
     'students.view',
     'courses.view',
     'content.view', 'content.create', 'content.edit', 'content.publish',
     'assignments.view', 'assignments.create', 'assignments.edit', 'assignments.grade',
     'exams.view', 'exams.create', 'exams.edit',
-    'cbt.questions.view', 'cbt.questions.create', 'cbt.questions.edit',
-    'cbt.exams.view', 'cbt.exams.create', 'cbt.exams.edit', 'cbt.exams.publish',
-    'cbt.results.view', 'cbt.results.grade', 'cbt.results.publish',
-    'cbt.analytics.view',
     'results.view', 'results.edit',
     'attendance.view', 'attendance.mark',
-    'labs.view', 'labs.access',
     'projects.view', 'projects.supervise',
-    'curriculum.view',
     'documents.view',
     'notifications.view',
+  ],
+
+  instructional_designer: [
+    'dashboard.view',
+    'students.view',
+    'courses.view', 'courses.create', 'courses.edit',
+    'content.view', 'content.create', 'content.edit', 'content.publish',
+    'assignments.view', 'assignments.create', 'assignments.edit',
+    'curriculum.view', 'curriculum.edit',
+    'documents.view',
+    'notifications.view',
+    'reports.view', 'reports.create',
+  ],
+
+  supervisor: [
+    'dashboard.view',
+    'students.view',
+    'academic.view',
+    'projects.view', 'projects.supervise',
+    'results.view',
+    'attendance.view',
+    'documents.view',
+    'notifications.view',
+    'reports.view', 'reports.create',
+  ],
+
+  research_fellow: [
+    'dashboard.view',
+    'students.view',
+    'academic.view',
+    'projects.view', 'projects.supervise',
+    'results.view',
+    'documents.view',
+    'notifications.view',
+    'reports.view', 'reports.create',
   ],
   
   // =====================================================
@@ -671,30 +720,59 @@ export function getPermissionsByCategory(): Record<string, Permission[]> {
 }
 
 /**
- * Check if role belongs to a specific category
+ * Get portal for a role using the new portal mapping
  */
-export function isRoleInCategory(role: UserRole, category: string): boolean {
-  const roleCategory = ROLE_CATEGORIES[role];
-  return roleCategory === category;
+export function getPortalForRole(role: UserRole): string {
+  const portal = ROLE_TO_PORTAL[role];
+  return portal || 'student';
 }
 
 /**
- * Get portal ID for a role
+ * Check if a user role has access to a specific portal
  */
-export function getPortalForRole(role: UserRole): string {
-  switch (role) {
-    case 'super_admin':
-      return 'admin';
-    case 'applicant':
-      return 'applicant';
-    case 'student':
-      return 'student';
-    case 'lecturer':
-    case 'program_coordinator':
-    case 'hod':
-    case 'dean':
-      return 'academic';
-    default:
-      return 'management';
-  }
+export function canAccessPortal(role: UserRole, portal: string): boolean {
+  return getPortalForRole(role) === portal;
+}
+
+/**
+ * Get all management portal roles
+ */
+export function getManagementRoles(): ManagementPortalRole[] {
+  return [
+    'super_admin',
+    'vice_chancellor',
+    'deputy_vc_academic',
+    'deputy_vc_admin',
+    'deputy_vc_research',
+    'registrar',
+    'bursar',
+    'director_admission',
+    'director_examination',
+    'director_study_centre',
+    'director_lss',
+    'director_odfel',
+    'director_ict',
+    'director_quality_assurance',
+    'director_student_welfare',
+    'director_research',
+  ];
+}
+
+/**
+ * Get all academic portal roles
+ */
+export function getAcademicRoles(): AcademicPortalRole[] {
+  return [
+    'dean_undergraduate',
+    'dean_postgraduate',
+    'head_of_department',
+    'programme_coordinator_bsc',
+    'programme_coordinator_pgd',
+    'programme_coordinator_msc',
+    'programme_coordinator_phd',
+    'e_tutor',
+    'instructional_designer',
+    'supervisor',
+    'research_fellow',
+  ];
 }
