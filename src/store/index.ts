@@ -10,7 +10,7 @@ import { hasPermission, Permission, getPortalForRole, getRolePermissions } from 
 // =====================================================
 // PORTAL TYPES
 // =====================================================
-export type PortalId = 'applicant' | 'student' | 'academic' | 'management' | 'admin';
+export type PortalId = 'applicant' | 'student' | 'academic' | 'management';
 
 interface PortalState {
   id: PortalId;
@@ -21,24 +21,37 @@ interface PortalState {
 export const PORTALS: Record<PortalId, PortalState> = {
   applicant: { id: 'applicant', name: 'Applicant Portal', roles: ['applicant'] },
   student: { id: 'student', name: 'Student Portal', roles: ['student'] },
-  academic: { id: 'academic', name: 'Academic Staff Portal', roles: ['lecturer', 'program_coordinator', 'hod', 'dean'] },
-  management: { id: 'management', name: 'Management Portal', roles: [
-    'rector', 
-    'deputy_rector_academic', 
-    'deputy_rector_admin', 
-    'registrar', 
-    'bursar', 
-    'librarian', 
-    'director',
-    'admission_officer',
-    'director_ict',
-    'director_odfel',
-    'director_quality_assurance',
-    'director_cbt_services',
-    'director_virtual_laboratories',
-    'director_student_affairs'
+  academic: { id: 'academic', name: 'Academic Portal', roles: [
+    'dean_undergraduate',
+    'dean_postgraduate',
+    'head_of_department',
+    'programme_coordinator_bsc',
+    'programme_coordinator_pgd',
+    'programme_coordinator_msc',
+    'programme_coordinator_phd',
+    'e_tutor',
+    'instructional_designer',
+    'supervisor',
+    'research_fellow'
   ] },
-  admin: { id: 'admin', name: 'Super Admin Portal', roles: ['super_admin'] },
+  management: { id: 'management', name: 'Management Portal', roles: [
+    'super_admin',
+    'vice_chancellor',
+    'deputy_vc_academic',
+    'deputy_vc_admin',
+    'deputy_vc_research',
+    'registrar',
+    'bursar',
+    'director_admission',
+    'director_examination',
+    'director_study_centre',
+    'director_lss',
+    'director_odfel',
+    'director_ict',
+    'director_quality_assurance',
+    'director_student_welfare',
+    'director_research'
+  ] },
 };
 
 // Portal to route mapping
@@ -47,7 +60,6 @@ export const PORTAL_ROUTES: Record<PortalId, string> = {
   student: '/portal/student',
   academic: '/portal/academic',
   management: '/portal/management',
-  admin: '/portal/super-admin', // Super Admin uses super-admin route
 };
 
 // =====================================================

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Sidebar } from "@/components/layout/sidebar"
 import { Header } from "@/components/layout/header"
@@ -14,6 +14,18 @@ export default function PortalLayout({
   const router = useRouter()
   const { sidebarOpen } = useAppStore()
   const { isAuthenticated, isLoading, portalId } = useAuthStore()
+  const [isMobile, setIsMobile] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -32,16 +44,22 @@ export default function PortalLayout({
     )
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !isMounted) {
     return null
   }
 
   return (
     <div className="min-h-screen bg-slate-50">
       <Sidebar />
-      <div className={`transition-all duration-300 ${sidebarOpen ? "ml-[280px]" : "ml-[80px]"}`}>
+      <div className={`transition-all duration-300 ${
+        isMobile
+          ? 'ml-0 pt-16'
+          : sidebarOpen
+          ? 'ml-72'
+          : 'ml-20'
+      }`}>
         <Header />
-        <main className="p-6">{children}</main>
+        <main className="p-4 md:p-6">{children}</main>
       </div>
     </div>
   )
