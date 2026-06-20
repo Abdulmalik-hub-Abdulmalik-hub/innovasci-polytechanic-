@@ -194,7 +194,8 @@ export default function LoginPage() {
             email: formData.email,
             fullName: fullName,
             role: 'applicant',
-            portal: 'applicant',
+            portal: 'applicant' as any,
+
 
             isActive: true,
             isVerified: false,
