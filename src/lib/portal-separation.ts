@@ -99,6 +99,8 @@ export const PORTAL_PATHS: Record<PortalType, string> = {
   management: '/portal/management/dashboard',
   academic: '/portal/academic/dashboard',
   student: '/portal/student/dashboard',
+  applicant: '/portal/applicant/dashboard',
+  admin: '/portal/super-admin/dashboard',
 };
 
 /**
@@ -127,6 +129,16 @@ export const PORTAL_RESTRICTIONS = {
     allowedRoles: getStudentPortalRoles(),
     basePath: '/portal/student',
     loginPath: '/login/student',
+  },
+  applicant: {
+    allowedRoles: ['applicant'] as UserRole[],
+    basePath: '/portal/applicant',
+    loginPath: '/auth/login',
+  },
+  admin: {
+    allowedRoles: ['super_admin'] as UserRole[],
+    basePath: '/portal/super-admin',
+    loginPath: '/auth/login',
   },
 };
 

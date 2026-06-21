@@ -293,8 +293,47 @@ export const APPLICANT_NAVIGATION: NavSection[] = [
   },
 ];
 
+// =====================================================
+// SUPER ADMIN PORTAL NAVIGATION
+// =====================================================
+
+export const SUPER_ADMIN_NAVIGATION: NavSection[] = [
+  {
+    label: 'Dashboard',
+    items: [
+      { label: 'Overview', href: '/portal/super-admin', icon: LayoutDashboard },
+      { label: 'Analytics', href: '/portal/super-admin/analytics', icon: BarChart3 },
+    ],
+  },
+  {
+    label: 'System',
+    items: [
+      { label: 'User Management', href: '/portal/super-admin/users', icon: Users },
+      { label: 'Role Management', href: '/portal/super-admin/roles', icon: Shield },
+      { label: 'Permission Management', href: '/portal/super-admin/permissions', icon: Key },
+      { label: 'Audit Logs', href: '/portal/super-admin/audit', icon: History },
+    ],
+  },
+  {
+    label: 'Configuration',
+    items: [
+      { label: 'Institution Settings', href: '/portal/super-admin/settings', icon: Settings },
+      { label: 'LMS Configuration', href: '/portal/super-admin/lms', icon: BookOpen },
+      { label: 'CBT Configuration', href: '/portal/super-admin/cbt', icon: ClipboardCheck },
+      { label: 'API Management', href: '/portal/super-admin/api', icon: Webhook },
+    ],
+  },
+  {
+    label: 'Admissions',
+    items: [
+      { label: 'Admissions', href: '/portal/super-admin/admissions', icon: UserCheck },
+      { label: 'Applications', href: '/portal/super-admin/applications', icon: FileText },
+    ],
+  },
+];
+
 // Get navigation by portal type
-export function getNavigationByPortal(portal: 'management' | 'academic' | 'student' | 'applicant'): NavSection[] {
+export function getNavigationByPortal(portal: 'management' | 'academic' | 'student' | 'applicant' | 'admin'): NavSection[] {
   switch (portal) {
     case 'management':
       return MANAGEMENT_NAVIGATION;
@@ -304,6 +343,8 @@ export function getNavigationByPortal(portal: 'management' | 'academic' | 'stude
       return STUDENT_NAVIGATION;
     case 'applicant':
       return APPLICANT_NAVIGATION;
+    case 'admin':
+      return SUPER_ADMIN_NAVIGATION;
     default:
       return STUDENT_NAVIGATION;
   }

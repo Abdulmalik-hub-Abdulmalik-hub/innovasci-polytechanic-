@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuthStore } from "@/store"
 import { supabase, isSupabaseConfigured } from "@/lib/supabase"
+import { getPortalForRole } from "@/lib/rbac"
 
 // Demo credentials for all system roles with academic entity mappings
 const DEMO_CREDENTIALS = [
@@ -193,6 +194,7 @@ export default function LoginPage() {
             email: formData.email,
             fullName: fullName,
             role: 'applicant',
+            portal: 'applicant' as any,
             isActive: true,
             isVerified: false,
             createdAt: new Date().toISOString(),
@@ -229,6 +231,7 @@ export default function LoginPage() {
               email: profileData.email,
               fullName: profileData.full_name,
               role: profileData.role,
+              portal: getPortalForRole(profileData.role as any) as any,
               isActive: profileData.is_active,
               isVerified: profileData.is_verified,
               createdAt: profileData.created_at,
@@ -241,6 +244,7 @@ export default function LoginPage() {
               email: authData.user.email || formData.email,
               fullName: authData.user.user_metadata?.full_name || formData.email.split('@')[0],
               role: 'applicant',
+              portal: '/portal/applicant' as any,
               isActive: true,
               isVerified: authData.user.email_confirmed_at ? true : false,
               createdAt: authData.user.created_at,
