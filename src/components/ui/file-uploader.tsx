@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback } from 'react'
+import Image from 'next/image'
 import { 
   Upload, X, FileText, CheckCircle, AlertCircle, 
   Loader2, Trash2, Eye, Download
@@ -280,12 +281,14 @@ export function DocumentPreview({ fileName, filePath, fileUrl, onRemove }: Docum
 
   return (
     <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg border">
-      <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+      <div className="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center overflow-hidden">
         {isImage ? (
-          <img 
+          <Image 
             src={fileUrl || '/placeholder.png'} 
             alt={fileName}
-            className="w-10 h-10 rounded-lg object-cover"
+            width={40}
+            height={40}
+            className="w-10 h-10 object-cover"
           />
         ) : (
           <FileText className="w-5 h-5 text-blue-600" />

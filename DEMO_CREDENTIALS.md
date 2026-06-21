@@ -1,6 +1,5 @@
-# InnovaSci Open Polytechnic
-## Demo Login Credentials
-### Version: 1.0 | Created: June 1, 2026
+# InnovaSci Open University - Demo Credentials Guide
+## Version: 2.0 (University Edition) | Updated: June 20, 2026
 
 ---
 
@@ -11,211 +10,225 @@
 - Do NOT commit these credentials to version control if your repo is public
 - These demo accounts have intentionally weak passwords for easy testing
 - User metadata and roles are pre-configured for system testing
+- All demo users have password: `Demo@123`
 
 ---
 
-## 📋 DEMO CREDENTIALS TABLE
+## 📋 DEMO CREDENTIALS QUICK REFERENCE
 
-| Role | Email | Password | Dashboard | Display Name |
-|------|-------|----------|----------|--------------|
-| **super_admin** | super_admin@innova-sci.local | Super@12345 | /portal/super-admin | Super Administrator |
-| **rector** | rector@innova-sci.local | Rector@12345 | /portal/management | Rector |
-| **deputy_rector_academic** | deputy_academic@innova-sci.local | Deputy@12345 | /portal/management | Deputy Rector (Academic) |
-| **deputy_rector_admin** | deputy_admin@innova-sci.local | Deputy@12345 | /portal/management | Deputy Rector (Administration) |
-| **registrar** | registrar@innova-sci.local | Registrar@12345 | /portal/management | Registrar |
-| **bursar** | bursar@innova-sci.local | Bursar@12345 | /portal/management | Bursar |
-| **librarian** | librarian@innova-sci.local | Librarian@12345 | /portal/management | Polytechnic Librarian |
-| **director** | director@innova-sci.local | Director@12345 | /portal/management | Director |
-| **admission_officer** | admission@innova-sci.local | Admission@12345 | /portal/management | Admission Officer |
-| **examination_officer** | exam@innova-sci.local | Exam@12345 | /portal/management | Examination Officer |
-| **director_ict** | ict@innova-sci.local | Ict@12345 | /portal/management | Director ICT |
-| **director_odfel** | odfel@innova-sci.local | Odfel@12345 | /portal/management | Director ODFeL |
-| **director_quality_assurance** | qa@innova-sci.local | Qa@12345 | /portal/management | Director Quality Assurance |
-| **director_cbt_services** | cbt@innova-sci.local | Cbt@12345 | /portal/management | Director CBT Services |
-| **director_virtual_laboratories** | vlab@innova-sci.local | Vlab@12345 | /portal/management | Director Virtual Laboratories |
-| **director_student_affairs** | student_affairs@innova-sci.local | StudentAffairs@12345 | /portal/management | Director Student Affairs |
-| **dean** | dean@innova-sci.local | Dean@12345 | /portal/academic | Dean |
-| **hod** | hod@innova-sci.local | Hod@12345 | /portal/academic | Head of Department |
-| **program_coordinator** | coordinator@innova-sci.local | Coordinator@12345 | /portal/academic | Programme Coordinator |
-| **lecturer** | lecturer@innova-sci.local | Lecturer@12345 | /portal/academic | Lecturer |
-| **student** | student@innova-sci.local | Student@12345 | /portal/student | Student |
-| **applicant** | applicant@innova-sci.local | Applicant@12345 | /portal/applicant | Applicant |
+**Universal Demo Password:** `Demo@123`
+
+### Total Demo Users: 35
+- Management Portal: 16 users
+- Academic Portal: 11 users
+- Student Portal: 6 users
+- Applicant Portal: 2 users
 
 ---
 
-## 🔑 QUICK REFERENCE BY PORTAL
+## 📊 MANAGEMENT PORTAL - 16 Users
 
-### Admin Portal (/portal/super-admin)
-- **super_admin@innova-sci.local** / Super@12345
+Access: `/portal/management/dashboard`
 
-### Management Portal (/portal/management)
-- **rector@innova-sci.local** / Rector@12345
-- **deputy_academic@innova-sci.local** / Deputy@12345
-- **deputy_admin@innova-sci.local** / Deputy@12345
-- **registrar@innova-sci.local** / Registrar@12345
-- **bursar@innova-sci.local** / Bursar@12345
-- **librarian@innova-sci.local** / Librarian@12345
-- **director@innova-sci.local** / Director@12345
-- **admission@innova-sci.local** / Admission@12345
-- **exam@innova-sci.local** / Exam@12345
-- **ict@innova-sci.local** / Ict@12345
-- **odfel@innova-sci.local** / Odfel@12345
-- **qa@innova-sci.local** / Qa@12345
-- **cbt@innova-sci.local** / Cbt@12345
-- **vlab@innova-sci.local** / Vlab@12345
-- **student_affairs@innova-sci.local** / StudentAffairs@12345
-
-### Academic Portal (/portal/academic)
-- **dean@innova-sci.local** / Dean@12345
-- **hod@innova-sci.local** / Hod@12345
-- **coordinator@innova-sci.local** / Coordinator@12345
-- **lecturer@innova-sci.local** / Lecturer@12345
-
-### Student Portal (/portal/student)
-- **student@innova-sci.local** / Student@12345
-
-### Applicant Portal (/portal/applicant)
-- **applicant@innova-sci.local** / Applicant@12345
+| # | Email | Full Name | Role | Phone |
+|---|-------|-----------|------|-------|
+| 1 | vc@innovasci.edu.ng | Prof. Adeyemi Oluwaseun | Vice-Chancellor | +234 802 123 4567 |
+| 2 | deputy.vc.academic@innovasci.edu.ng | Dr. Chioma Nnamdi | Deputy VC (Academic) | +234 803 987 6543 |
+| 3 | deputy.vc.admin@innovasci.edu.ng | Mr. Ibrahim Kafar | Deputy VC (Administration) | +234 804 555 1111 |
+| 4 | deputy.vc.research@innovasci.edu.ng | Prof. Ngozi Okonkwo | Deputy VC (Research) | +234 805 222 3333 |
+| 5 | registrar@innovasci.edu.ng | Mrs. Amara Eze | Registrar | +234 806 444 5555 |
+| 6 | bursar@innovasci.edu.ng | Mr. Kunle Adebayo | Bursar | +234 807 666 7777 |
+| 7 | director.admission@innovasci.edu.ng | Dr. Folake Olufunke | Director of Admission | +234 808 888 9999 |
+| 8 | director.examination@innovasci.edu.ng | Mr. Tunde Olayinka | Director of Examination | +234 809 111 2222 |
+| 9 | director.study.centre@innovasci.edu.ng | Mrs. Rita Adekunle | Director of Study Centre | +234 810 333 4444 |
+| 10 | director.lss@innovasci.edu.ng | Dr. Emeka Uche | Director of Library & Student Services | +234 811 555 6666 |
+| 11 | director.odfel@innovasci.edu.ng | Prof. Bola Oyewole | Director of ODFeL | +234 812 777 8888 |
+| 12 | director.ict@innovasci.edu.ng | Mr. Chinedu Okoro | Director of ICT | +234 813 999 0000 |
+| 13 | director.qa@innovasci.edu.ng | Dr. Grace Udeh | Director of Quality Assurance | +234 814 111 2222 |
+| 14 | director.welfare@innovasci.edu.ng | Mrs. Yetunde Adepitan | Director of Student Welfare | +234 815 333 4444 |
+| 15 | director.research@innovasci.edu.ng | Prof. Kwame Boateng | Director of Research | +234 816 555 6666 |
+| 16 | super.admin@innovasci.edu.ng | System Administrator | Super Administrator | +234 817 777 8888 |
 
 ---
 
-## 📊 ROLE CATEGORIES
+## 📚 ACADEMIC PORTAL - 11 Users
 
-### System Administration (1 role)
-| Role | Permissions |
-|------|-------------|
-| super_admin | Full system access |
+Access: `/portal/academic/dashboard`
 
-### Senior Management (3 roles)
-| Role | Purpose |
-|------|---------|
-| rector | Head of institution |
-| deputy_rector_academic | Academic affairs deputy |
-| deputy_rector_admin | Administration deputy |
-
-### Administrative Officers (3 roles)
-| Role | Purpose |
-|------|---------|
-| registrar | Academic records, admissions |
-| bursar | Finance management |
-| librarian | Library services |
-
-### Specialized Directors (9 roles)
-| Role | Purpose |
-|------|---------|
-| director | Generic departmental director |
-| admission_officer | Admissions processing |
-| examination_officer | Examination administration |
-| director_ict | ICT infrastructure |
-| director_odfel | ODFeL compliance |
-| director_quality_assurance | NBTE accreditation |
-| director_cbt_services | CBT administration |
-| director_virtual_laboratories | Virtual labs |
-| director_student_affairs | Student welfare |
-
-### Academic Staff (4 roles)
-| Role | Purpose |
-|------|---------|
-| dean | Faculty/School head |
-| hod | Department head |
-| program_coordinator | Programme management |
-| lecturer | Teaching staff |
-
-### Students (2 roles)
-| Role | Purpose |
-|------|---------|
-| student | Enrolled students |
-| applicant | Prospective students |
+| # | Email | Full Name | Role | Specialization |
+|---|-------|-----------|------|-----------------|
+| 1 | dean.undergraduate@innovasci.edu.ng | Prof. Eniola Rotimi | Dean (Undergraduate) | School of Undergraduate Studies |
+| 2 | dean.postgraduate@innovasci.edu.ng | Prof. Adebayo Olumide | Dean (Postgraduate) | School of Postgraduate Studies |
+| 3 | hod.maths@innovasci.edu.ng | Dr. Hakeem Ibrahim | Head of Department | Department of Mathematics |
+| 4 | coord.bsc.cs@innovasci.edu.ng | Dr. Okafor Chinedu | Programme Coordinator (BSc) | BSc Computer Science |
+| 5 | coord.pgd.biz@innovasci.edu.ng | Dr. Stella Okonkwo | Programme Coordinator (PGD) | PGD Business Administration |
+| 6 | coord.msc.eng@innovasci.edu.ng | Prof. Segun Adeyemo | Programme Coordinator (MSc) | MSc Engineering |
+| 7 | coord.phd.bio@innovasci.edu.ng | Prof. Jumoke Adeyinka | Programme Coordinator (PhD) | PhD Biology |
+| 8 | etutor.cs101@innovasci.edu.ng | Mr. Oluwaseun Olalekan | E-Tutor | Computer Science |
+| 9 | instructional.designer@innovasci.edu.ng | Mrs. Peju Owolabi | Instructional Designer | Educational Technology |
+| 10 | supervisor.phd@innovasci.edu.ng | Prof. Tunde Adejumo | Supervisor | Advanced Research |
+| 11 | research.fellow@innovasci.edu.ng | Dr. Akinbode Femi | Research Fellow | Interdisciplinary Research |
 
 ---
 
-## 🛠️ SETUP INSTRUCTIONS
+## 👥 STUDENT PORTAL - 6 Users
 
-### For Supabase Auth Integration
+Access: `/portal/student/dashboard`
 
-Run the following SQL to create demo users:
+| # | Email | Full Name | Degree | Level | Status |
+|---|-------|-----------|--------|-------|--------|
+| 1 | student.bsc.001@innovasci.edu.ng | Chioma Nwankor | BSc | 200 | Active (Paid) |
+| 2 | student.bsc.002@innovasci.edu.ng | Amara Obiagwu | BSc | 300 | Active (Paid) |
+| 3 | student.bsc.003@innovasci.edu.ng | Oluwatoyin Adebisi | BSc | 400 | Active (Partial) |
+| 4 | student.pgd.001@innovasci.edu.ng | Dr. Kanayo Ejiofor | PGD | 100 | Active (Paid) |
+| 5 | student.msc.001@innovasci.edu.ng | Bolaji Owolabi | MSc | 100 | Active (Paid) |
+| 6 | student.phd.001@innovasci.edu.ng | Prof. Ikechukwu Umeala | PhD | 100 | Active (Unpaid) |
 
-```sql
--- Demo Users Seed Data
--- Run in Supabase SQL Editor
+---
 
--- Super Admin
-INSERT INTO users (id, email, password_hash, full_name, role, is_active, is_verified)
-VALUES (
-    gen_random_uuid(),
-    'super_admin@innova-sci.local',
-    -- Password: Super@12345 (bcrypt hash)
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZRGdjGj/n3.rsA4h/xPJ1O1P9P3P',
-    'Super Administrator Demo',
-    'super_admin',
-    true,
-    true
-) ON CONFLICT (email) DO NOTHING;
+## 📝 APPLICANT PORTAL - 2 Users
 
--- Rector
-INSERT INTO users (id, email, password_hash, full_name, role, is_active, is_verified)
-VALUES (
-    gen_random_uuid(),
-    'rector@innova-sci.local',
-    '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZRGdjGj/n3.rsA4h/xPJ1O1P9P3P',
-    'Rector Demo',
-    'rector',
-    true,
-    true
-) ON CONFLICT (email) DO NOTHING;
+Access: `/portal/student/dashboard` (applicant portal)
 
--- [Continue for all roles...]
+| # | Email | Full Name | Status |
+|---|-------|-----------|--------|
+| 1 | applicant.001@email.com | Akunna Okafor | Pending Verification |
+| 2 | applicant.002@email.com | Samuel Adebowale | Pending Verification |
+
+---
+
+## 🎓 DEGREE TYPES SUPPORTED
+
+- **BSc** - Bachelor of Science (Undergraduate Studies)
+- **PGD** - Postgraduate Diploma
+- **MSc** - Master of Science
+- **PhD** - Doctor of Philosophy (Doctorate)
+
+---
+
+## 📍 ACADEMIC LEVELS
+
+### Undergraduate (BSc)
+- Level 100 (Year 1)
+- Level 200 (Year 2)
+- Level 300 (Year 3)
+- Level 400 (Year 4)
+
+### Postgraduate (PGD/MSc/PhD)
+- Level 100 (Year 1)
+- Level 200 (Year 2) - for PhD only
+
+---
+
+## 🔄 PORTAL SEPARATION
+
+The system implements strict portal isolation:
+
+**Management Portal** - Institutional Operations
+- User Management (create, edit, delete)
+- Financial Management (Bursar)
+- Admission Processing (Director)
+- Examination Oversight (Director)
+- Quality Assurance
+- Cannot access academic or student features
+
+**Academic Portal** - Teaching & Learning
+- Course & Curriculum Management
+- Student Engagement
+- Examination Creation
+- Result Management
+- Cannot access management or student features
+
+**Student Portal** - Learning Experience
+- View Courses & Content
+- Submit Assignments
+- Take Examinations
+- Track Progress
+- Cannot access management or academic admin features
+
+---
+
+## 🔐 SECURITY ARCHITECTURE
+
+### Portal-to-Role Mapping
+Each role is bound to exactly one portal. Cross-portal access is strictly prevented:
+- User attempts to access unauthorized portal → Redirect to authorized portal
+- Session invalidates on portal change
+- Audit logs all access attempts
+
+### Session Management
+- Session timeout: 30 minutes (inactivity)
+- Maximum concurrent sessions: 2 per user
+- Automatic logout on browser close (optional)
+
+### Data Isolation
+- Management data hidden from academic users
+- Academic data hidden from students
+- Student data hidden from applicants
+- All database queries filtered by user role and portal
+
+---
+
+## 💡 TESTING SCENARIOS
+
+### Scenario 1: Executive Review
+1. Login as Vice-Chancellor (vc@innovasci.edu.ng)
+2. View system analytics & reports
+3. Review user management options
+4. Check financial overview
+
+### Scenario 2: Academic Planning
+1. Login as Dean (dean.undergraduate@innovasci.edu.ng)
+2. View curriculum & programmes
+3. Manage courses
+4. Review student engagement
+
+### Scenario 3: Student Learning
+1. Login as Student Level 200 (student.bsc.001@innovasci.edu.ng)
+2. View enrolled courses
+3. Access learning materials
+4. Submit assignment
+
+### Scenario 4: Admission Processing
+1. Login as Director of Admission (director.admission@innovasci.edu.ng)
+2. Review applications
+3. Process admissions
+4. Generate admission letters
+
+---
+
+## 📖 GETTING STARTED
+
+### First Time Login
+1. Go to login page
+2. Enter email from credentials table
+3. Enter password: `Demo@123`
+4. You'll be redirected to your authorized portal
+
+### Demo Credentials Programmatic Access
+```typescript
+import { verifyDemoCredentials } from '@/lib/seed-data';
+
+const user = verifyDemoCredentials('vc@innovasci.edu.ng', 'Demo@123');
+if (user) {
+  console.log(`Logged in as: ${user.fullName} (${user.role})`);
+  console.log(`Portal: ${user.portal}`);
+}
 ```
 
-### Password Hash Generation
+---
 
-All demo passwords should be hashed using bcrypt with 10 rounds:
-- Super@12345
-- Rector@12345
-- Deputy@12345
-- Registrar@12345
-- Bursar@12345
-- Librarian@12345
-- Director@12345
-- Admission@12345
-- Exam@12345
-- Ict@12345
-- Odfel@12345
-- Qa@12345
-- Cbt@12345
-- Vlab@12345
-- StudentAffairs@12345
-- Dean@12345
-- Hod@12345
-- Coordinator@12345
-- Lecturer@12345
-- Student@12345
-- Applicant@12345
+## 📌 SUMMARY STATISTICS
+
+- **Total Demo Users:** 35
+- **Management Portal Roles:** 16
+- **Academic Portal Roles:** 11
+- **Student Accounts:** 6
+- **Applicant Accounts:** 2
+- **University Schools:** 2 (Undergraduate & Postgraduate)
+- **Degree Types:** 4 (BSc, PGD, MSc, PhD)
+- **Universal Password:** `Demo@123`
 
 ---
 
-## 📱 USAGE IN LOGIN PAGE
-
-The login page displays a collapsible "Demo Credentials" section that shows:
-- Quick access buttons for each role category
-- One-click fill for email and password
-- Visual indicators for portal/dashboard target
-
-This allows developers to easily:
-1. Click on a role button
-2. Credentials auto-fill in the form
-3. Click Sign In to access that role's dashboard
-
----
-
-## 🔒 SECURITY NOTES
-
-1. **Development Only**: These credentials must NEVER be used in production
-2. **Weak Passwords**: Passwords are intentionally simple for easy testing
-3. **No 2FA**: Demo accounts skip two-factor authentication
-4. **Open Access**: Demo users have full access to their portal features
-5. **Logging**: All login attempts should be logged in production
-
----
-
-*Document maintained by InnovaSci AI Labs Development Team*
+*Last Updated: June 20, 2026 | InnovaSci Open University Refactoring Complete*

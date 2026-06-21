@@ -1,13 +1,23 @@
-"use client"
+'use client'
 
-import { useState } from "react"
-import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Badge } from "@/components/ui/badge"
-import { Bell, Search, Menu, Moon, Sun } from "lucide-react"
-import { useAppStore, useAuthStore, useNotificationStore } from "@/store"
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
+import { Button } from '@/components/ui/button'
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Badge } from '@/components/ui/badge'
+import {
+  Bell,
+  Search,
+  Moon,
+  Sun,
+  LogOut,
+  Settings,
+  User,
+  MoreVertical,
+} from 'lucide-react'
+import { useAppStore, useAuthStore, useNotificationStore } from '@/store'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,40 +25,61 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { motion, AnimatePresence } from "framer-motion"
+} from '@/components/ui/dropdown-menu'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ROLE_DISPLAY_NAMES } from '@/types'
 
 export function Header() {
   const { toggleSidebar, sidebarOpen } = useAppStore()
-  const { user } = useAuthStore()
+  const { user, logout } = useAuthStore()
   const { notifications, unreadCount, markAsRead, markAllAsRead } = useNotificationStore()
+  const router = useRouter()
   const [showNotifications, setShowNotifications] = useState(false)
   const [isDarkMode, setIsDarkMode] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768)
+    }
+    handleResize()
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
+  const handleLogout = () => {
+    logout()
+    router.push('/auth/login')
+  }
+
+  if (!isMounted || !user) return null
+
+  const userRoleName = ROLE_DISPLAY_NAMES[user.role]
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-white/80 backdrop-blur-lg px-4 md:px-6">
-      <div className="flex items-center gap-4">
-        {!sidebarOpen && (
-          <Button variant="ghost" size="icon" onClick={toggleSidebar}>
-            <Menu className="h-5 w-5" />
-          </Button>
-        )}
-        <div className="relative hidden md:block">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b bg-white/80 backdrop-blur-lg px-4 md:px-6 gap-4">
+      {/* Left Section - Search (Desktop only) */}
+      <div className="flex items-center gap-4 flex-1 min-w-0">
+        <div className="relative hidden sm:block flex-1 max-w-xs">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
             placeholder="Search..."
-            className="h-10 w-64 rounded-lg border bg-muted/50 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
+            className="h-10 w-full rounded-lg border bg-muted/50 pl-10 pr-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
           />
         </div>
       </div>
 
-      <div className="flex items-center gap-2">
+      {/* Right Section - Actions */}
+      <div className="flex items-center gap-2 md:gap-4">
+        {/* Theme Toggle */}
         <Button
           variant="ghost"
           size="icon"
           onClick={() => setIsDarkMode(!isDarkMode)}
-          className="text-muted-foreground"
+          className="text-muted-foreground hover:text-foreground"
         >
           {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
         </Button>
@@ -59,7 +90,7 @@ export function Header() {
             variant="ghost"
             size="icon"
             onClick={() => setShowNotifications(!showNotifications)}
-            className="relative text-muted-foreground"
+            className="relative text-muted-foreground hover:text-foreground"
           >
             <Bell className="h-5 w-5" />
             {unreadCount > 0 && (
@@ -75,48 +106,47 @@ export function Header() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: 10 }}
-                className="absolute right-0 top-12 w-80 rounded-lg border bg-white shadow-xl"
+                className="absolute right-0 top-12 w-96 max-w-[calc(100vw-2rem)] rounded-lg border bg-white shadow-xl z-50"
               >
                 <div className="flex items-center justify-between border-b p-4">
                   <h3 className="font-semibold">Notifications</h3>
-                  <Button variant="ghost" size="sm" onClick={markAllAsRead}>
-                    Mark all read
-                  </Button>
+                  {notifications.length > 0 && (
+                    <Button variant="ghost" size="sm" onClick={markAllAsRead}>
+                      Mark all read
+                    </Button>
+                  )}
                 </div>
-                <div className="max-h-80 overflow-y-auto">
+                <div className="max-h-96 overflow-y-auto">
                   {notifications.length === 0 ? (
                     <p className="p-4 text-center text-sm text-muted-foreground">
                       No notifications
                     </p>
                   ) : (
                     notifications.slice(0, 5).map((notif) => (
-                      <div
+                      <motion.div
                         key={notif.id}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
                         onClick={() => markAsRead(notif.id)}
                         className={cn(
-                          "cursor-pointer border-b p-4 transition-colors hover:bg-muted/50",
-                          !notif.isRead && "bg-blue-50"
+                          'cursor-pointer border-b p-4 transition-colors hover:bg-muted/50',
+                          !notif.isRead && 'bg-blue-50'
                         )}
                       >
-                        <div className="flex items-start gap-3">
-                          <div
-                            className={cn(
-                              "h-2 w-2 mt-2 rounded-full",
-                              notif.type === 'success' && "bg-green-500",
-                              notif.type === 'warning' && "bg-yellow-500",
-                              notif.type === 'error' && "bg-red-500",
-                              notif.type === 'info' && "bg-blue-500"
-                            )}
-                          />
-                          <div>
-                            <p className="text-sm font-medium">{notif.title}</p>
-                            <p className="text-xs text-muted-foreground">{notif.message}</p>
-                          </div>
-                        </div>
-                      </div>
+                        <p className="text-sm font-medium">{notif.title}</p>
+                        <p className="text-xs text-muted-foreground mt-1">{notif.message}</p>
+                      </motion.div>
                     ))
                   )}
                 </div>
+                {notifications.length > 5 && (
+                  <Link
+                    href="/portal/notifications"
+                    className="block border-t p-4 text-center text-sm font-medium text-blue-600 hover:bg-muted/50"
+                  >
+                    View all notifications
+                  </Link>
+                )}
               </motion.div>
             )}
           </AnimatePresence>
@@ -125,41 +155,80 @@ export function Header() {
         {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-              <Avatar className="h-10 w-10 ring-2 ring-primary/20">
-                <AvatarImage src={user?.avatar} />
-                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-600 text-white">
-                  {user?.fullName?.slice(0, 2).toUpperCase() || 'U'}
+            <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0">
+              <Avatar className="h-10 w-10">
+                <AvatarImage src={user.avatar} />
+                <AvatarFallback className="bg-gradient-to-br from-blue-500 to-purple-500 text-white font-semibold">
+                  {user.fullName
+                    .split(' ')
+                    .map((n) => n[0])
+                    .join('')
+                    .toUpperCase()
+                    .slice(0, 2)}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
-              <div>
-                <p>{user?.fullName || 'User'}</p>
-                <p className="text-xs text-muted-foreground">{user?.email}</p>
+              <div className="flex flex-col space-y-1">
+                <p className="text-sm font-medium leading-none">{user.fullName}</p>
+                <p className="text-xs leading-none text-muted-foreground">{userRoleName}</p>
+                {user.email && (
+                  <p className="text-xs leading-none text-muted-foreground">{user.email}</p>
+                )}
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <Link href="/dashboard/profile" className="cursor-pointer">
-                Profile
+              <Link href="/portal/profile" className="cursor-pointer">
+                <User className="mr-2 h-4 w-4" />
+                <span>Profile</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href="/dashboard/settings" className="cursor-pointer">
-                Settings
+              <Link href="/portal/settings" className="cursor-pointer">
+                <Settings className="mr-2 h-4 w-4" />
+                <span>Settings</span>
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-              <Link href="/auth/login" className="cursor-pointer text-red-500">
-                Logout
-              </Link>
+            <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+              <LogOut className="mr-2 h-4 w-4" />
+              <span>Logout</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {/* Mobile Menu (3-dot) */}
+        {isMobile && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical className="h-5 w-5" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem asChild>
+                <Link href="/portal/profile" className="cursor-pointer">
+                  <User className="mr-2 h-4 w-4" />
+                  Profile
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/portal/settings" className="cursor-pointer">
+                  <Settings className="mr-2 h-4 w-4" />
+                  Settings
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer">
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </header>
   )

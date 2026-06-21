@@ -81,8 +81,8 @@ const demoQuestions: Question[] = [
 
 // Demo Question Banks
 const demoQuestionBanks: QuestionBank[] = [
-  { id: 'qb1', name: 'AML 111 - Linear Algebra for AI Question Bank', courseId: 'c1', courseCode: 'AML 111', courseTitle: 'Linear Algebra for AI', programmeId: 'p1', programmeName: 'Applied Machine Learning', departmentId: 'd1', departmentName: 'Artificial Intelligence & Machine Learning', facultyId: 'f1', facultyName: 'School of AI & Computational Intelligence', level: 1, semester: 1, entryCategory: 'ND', totalQuestions: 10, activeQuestions: 10, createdBy: 'l1', createdAt: '2024-01-15', updatedAt: '2024-01-15' },
-  { id: 'qb2', name: 'AML 121 - Machine Learning Fundamentals Question Bank', courseId: 'c6', courseCode: 'AML 121', courseTitle: 'Machine Learning Fundamentals', programmeId: 'p1', programmeName: 'Applied Machine Learning', departmentId: 'd1', departmentName: 'Artificial Intelligence & Machine Learning', facultyId: 'f1', facultyName: 'School of AI & Computational Intelligence', level: 1, semester: 2, entryCategory: 'ND', totalQuestions: 15, activeQuestions: 15, createdBy: 'l2', createdAt: '2024-01-20', updatedAt: '2024-01-20' },
+  { id: 'qb1', name: 'AML 111 - Linear Algebra for AI Question Bank', courseId: 'c1', courseCode: 'AML 111', courseTitle: 'Linear Algebra for AI', programmeId: 'p1', programmeName: 'Applied Machine Learning', departmentId: 'd1', departmentName: 'Artificial Intelligence & Machine Learning', schoolId: 'f1', schoolName: 'School of AI & Computational Intelligence', level: 1, semester: 1, programmeType: 'bsc', totalQuestions: 10, activeQuestions: 10, createdBy: 'l1', createdAt: '2024-01-15', updatedAt: '2024-01-15' },
+  { id: 'qb2', name: 'AML 121 - Machine Learning Fundamentals Question Bank', courseId: 'c6', courseCode: 'AML 121', courseTitle: 'Machine Learning Fundamentals', programmeId: 'p1', programmeName: 'Applied Machine Learning', departmentId: 'd1', departmentName: 'Artificial Intelligence & Machine Learning', schoolId: 'f1', schoolName: 'School of AI & Computational Intelligence', level: 1, semester: 2, programmeType: 'bsc', totalQuestions: 15, activeQuestions: 15, createdBy: 'l2', createdAt: '2024-01-20', updatedAt: '2024-01-20' },
 ];
 
 // Demo Examinations
@@ -98,10 +98,11 @@ const demoExaminations: Examination[] = [
     programmeName: 'Applied Machine Learning',
     departmentId: 'd1',
     departmentName: 'Artificial Intelligence & Machine Learning',
-    facultyId: 'f1',
-    facultyName: 'School of AI & Computational Intelligence',
+    schoolId: 'f1',
+    schoolName: 'School of AI & Computational Intelligence',
     level: 1,
     semester: 1,
+    programmeType: 'bsc',
     entryCategory: 'ND',
     academicStatus: ['regular', 'carryover', 'spillover'],
     duration: 60,
@@ -137,10 +138,11 @@ const demoExaminations: Examination[] = [
     programmeName: 'Applied Machine Learning',
     departmentId: 'd1',
     departmentName: 'Artificial Intelligence & Machine Learning',
-    facultyId: 'f1',
-    facultyName: 'School of AI & Computational Intelligence',
+    schoolId: 'f1',
+    schoolName: 'School of AI & Computational Intelligence',
     level: 1,
     semester: 2,
+    programmeType: 'bsc',
     entryCategory: 'ND',
     academicStatus: ['regular'],
     duration: 90,

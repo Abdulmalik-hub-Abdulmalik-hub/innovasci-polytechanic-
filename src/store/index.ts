@@ -21,22 +21,45 @@ interface PortalState {
 export const PORTALS: Record<PortalId, PortalState> = {
   applicant: { id: 'applicant', name: 'Applicant Portal', roles: ['applicant'] },
   student: { id: 'student', name: 'Student Portal', roles: ['student'] },
-  academic: { id: 'academic', name: 'Academic Staff Portal', roles: ['lecturer', 'program_coordinator', 'hod', 'dean'] },
+  academic: { id: 'academic', name: 'Academic Portal', roles: [
+    'dean',
+    'dean_undergraduate',
+    'dean_postgraduate',
+    'hod',
+    'head_of_department',
+    'program_coordinator',
+    'programme_coordinator_bsc',
+    'programme_coordinator_pgd',
+    'programme_coordinator_msc',
+    'programme_coordinator_phd',
+    'lecturer',
+    'e_tutor',
+    'instructional_designer',
+    'supervisor',
+    'research_fellow'
+  ] },
   management: { id: 'management', name: 'Management Portal', roles: [
-    'rector', 
-    'deputy_rector_academic', 
-    'deputy_rector_admin', 
-    'registrar', 
-    'bursar', 
-    'librarian', 
+    'rector',
+    'deputy_rector_academic',
+    'deputy_rector_admin',
+    'registrar',
+    'bursar',
+    'librarian',
     'director',
-    'admission_officer',
-    'director_ict',
+    'director_admission',
+    'director_examination',
+    'director_study_centre',
+    'director_lss',
     'director_odfel',
+    'director_ict',
     'director_quality_assurance',
+    'director_student_welfare',
+    'director_research',
     'director_cbt_services',
     'director_virtual_laboratories',
-    'director_student_affairs'
+    'director_student_affairs',
+    'admission_officer',
+    'examination_officer'
   ] },
   admin: { id: 'admin', name: 'Super Admin Portal', roles: ['super_admin'] },
 };
@@ -47,7 +70,7 @@ export const PORTAL_ROUTES: Record<PortalId, string> = {
   student: '/portal/student',
   academic: '/portal/academic',
   management: '/portal/management',
-  admin: '/portal/super-admin', // Super Admin uses super-admin route
+  admin: '/portal/super-admin',
 };
 
 // =====================================================

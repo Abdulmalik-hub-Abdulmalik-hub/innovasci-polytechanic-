@@ -1,17 +1,21 @@
 // =====================================================
-// INNOVASCI AI LABS POLYTECHNIC - TYPE DEFINITIONS
-// NBTE-Compliant Online Polytechnic ERP System
+// INNOVASCI OPEN UNIVERSITY - TYPE DEFINITIONS
+// Multi-Portal University Management System
 // =====================================================
 
 // =====================================================
-// SECTION 1: USER ROLES & RBAC
+// SECTION 1: USER ROLES & PORTAL STRUCTURE
 // =====================================================
 
-// Centralized User Roles
-export type UserRole = 
-  // Super Admin
+// Portal-specific roles - strictly separated
+export type ManagementPortalRole = 
+  // System
   | 'super_admin'
-  // Senior Management (Top Leadership)
+  // Executive Leadership
+  | 'vice_chancellor'
+  | 'deputy_vc_academic'
+  | 'deputy_vc_admin'
+  | 'deputy_vc_research'
   | 'rector'
   | 'deputy_rector_academic'
   | 'deputy_rector_admin'
@@ -19,56 +23,60 @@ export type UserRole =
   | 'registrar'
   | 'bursar'
   | 'librarian'
-  // Directors (Specialized Units)
+  // Directors
   | 'director'
-  | 'admission_officer'
-  | 'examination_officer'
-  | 'director_ict'
+  | 'director_admission'
+  | 'director_examination'
+  | 'director_study_centre'
+  | 'director_lss'
   | 'director_odfel'
+  | 'director_ict'
   | 'director_quality_assurance'
+  | 'director_student_welfare'
+  | 'director_research'
   | 'director_cbt_services'
   | 'director_virtual_laboratories'
   | 'director_student_affairs'
-  // Academic Staff Roles
+  // Officers
+  | 'admission_officer'
+  | 'examination_officer';
+
+export type AcademicPortalRole =
+  // School-level Leadership
   | 'dean'
+  | 'dean_undergraduate'
+  | 'dean_postgraduate'
+  // Department Leadership
   | 'hod'
+  | 'head_of_department'
+  // Programme Leadership
   | 'program_coordinator'
+  | 'programme_coordinator_bsc'
+  | 'programme_coordinator_pgd'
+  | 'programme_coordinator_msc'
+  | 'programme_coordinator_phd'
+  // Academic Staff
   | 'lecturer'
-  // Student & Applicant Roles
-  | 'student'
-  | 'applicant';
+  | 'e_tutor'
+  | 'instructional_designer'
+  | 'supervisor'
+  | 'research_fellow';
 
-// Role display names for UI
-export const ROLE_DISPLAY_NAMES: Record<UserRole, string> = {
-  super_admin: 'Super Administrator',
-  rector: 'Rector',
-  deputy_rector_academic: 'Deputy Rector (Academic)',
-  deputy_rector_admin: 'Deputy Rector (Administration)',
-  registrar: 'Registrar',
-  bursar: 'Bursar',
-  librarian: 'Polytechnic Librarian',
-  director: 'Director',
-  admission_officer: 'Admission Officer',
-  examination_officer: 'Examination Officer',
-  director_ict: 'Director ICT',
-  director_odfel: 'Director ODFeL',
-  director_quality_assurance: 'Director Quality Assurance',
-  director_cbt_services: 'Director CBT Services',
-  director_virtual_laboratories: 'Director Virtual Laboratories',
-  director_student_affairs: 'Director Student Affairs',
-  dean: 'Dean',
-  hod: 'Head of Department',
-  program_coordinator: 'Programme Coordinator',
-  lecturer: 'Lecturer',
-  student: 'Student',
-  applicant: 'Applicant'
-};
+// Combined type for all roles
+export type UserRole = ManagementPortalRole | AcademicPortalRole | 'student' | 'applicant';
 
-// Role categories for grouping
-export type RoleCategory = 'management' | 'academic' | 'student' | 'system';
+// Portal classification
+export type PortalType = 'management' | 'academic' | 'student' | 'applicant' | 'admin';
 
-export const ROLE_CATEGORIES: Record<UserRole, RoleCategory> = {
-  super_admin: 'system',
+export const ROLE_TO_PORTAL: Record<UserRole, PortalType> = {
+  // Super Admin Portal
+  super_admin: 'admin',
+  
+  // Management Portal
+  vice_chancellor: 'management',
+  deputy_vc_academic: 'management',
+  deputy_vc_admin: 'management',
+  deputy_vc_research: 'management',
   rector: 'management',
   deputy_rector_academic: 'management',
   deputy_rector_admin: 'management',
@@ -76,18 +84,145 @@ export const ROLE_CATEGORIES: Record<UserRole, RoleCategory> = {
   bursar: 'management',
   librarian: 'management',
   director: 'management',
-  admission_officer: 'management',
-  examination_officer: 'management',
-  director_ict: 'management',
+  director_admission: 'management',
+  director_examination: 'management',
+  director_study_centre: 'management',
+  director_lss: 'management',
   director_odfel: 'management',
+  director_ict: 'management',
   director_quality_assurance: 'management',
+  director_student_welfare: 'management',
+  director_research: 'management',
   director_cbt_services: 'management',
   director_virtual_laboratories: 'management',
   director_student_affairs: 'management',
+  admission_officer: 'management',
+  examination_officer: 'management',
+  
+  // Academic Portal
   dean: 'academic',
+  dean_undergraduate: 'academic',
+  dean_postgraduate: 'academic',
   hod: 'academic',
+  head_of_department: 'academic',
   program_coordinator: 'academic',
+  programme_coordinator_bsc: 'academic',
+  programme_coordinator_pgd: 'academic',
+  programme_coordinator_msc: 'academic',
+  programme_coordinator_phd: 'academic',
   lecturer: 'academic',
+  e_tutor: 'academic',
+  instructional_designer: 'academic',
+  supervisor: 'academic',
+  research_fellow: 'academic',
+  
+  // Student Portal
+  student: 'student',
+  applicant: 'applicant'
+};
+
+// Role display names for UI
+export const ROLE_DISPLAY_NAMES: Record<UserRole, string> = {
+  // Management Portal
+  super_admin: 'Super Administrator',
+  vice_chancellor: 'Vice-Chancellor',
+  deputy_vc_academic: 'Deputy VC (Academic)',
+  deputy_vc_admin: 'Deputy VC (Administration)',
+  deputy_vc_research: 'Deputy VC (Research)',
+  rector: 'Rector',
+  deputy_rector_academic: 'Deputy Rector (Academic)',
+  deputy_rector_admin: 'Deputy Rector (Administration)',
+  registrar: 'Registrar',
+  bursar: 'Bursar',
+  librarian: 'Librarian',
+  director: 'Director',
+  director_admission: 'Director of Admission',
+  director_examination: 'Director of Examination',
+  director_study_centre: 'Director of Study Centre',
+  director_lss: 'Director of Library & Student Services',
+  director_odfel: 'Director of ODFeL',
+  director_ict: 'Director of ICT',
+  director_quality_assurance: 'Director of Quality Assurance',
+  director_student_welfare: 'Director of Student Welfare',
+  director_research: 'Director of Research',
+  director_cbt_services: 'Director of CBT Services',
+  director_virtual_laboratories: 'Director of Virtual Laboratories',
+  director_student_affairs: 'Director of Student Affairs',
+  admission_officer: 'Admission Officer',
+  examination_officer: 'Examination Officer',
+  
+  // Academic Portal
+  dean: 'Dean',
+  dean_undergraduate: 'Dean (Undergraduate Studies)',
+  dean_postgraduate: 'Dean (Postgraduate Studies)',
+  hod: 'Head of Department',
+  head_of_department: 'Head of Department',
+  program_coordinator: 'Programme Coordinator',
+  programme_coordinator_bsc: 'Programme Coordinator (BSc)',
+  programme_coordinator_pgd: 'Programme Coordinator (PGD)',
+  programme_coordinator_msc: 'Programme Coordinator (MSc)',
+  programme_coordinator_phd: 'Programme Coordinator (PhD)',
+  lecturer: 'Lecturer',
+  e_tutor: 'E-Tutor',
+  instructional_designer: 'Instructional Designer',
+  supervisor: 'Supervisor',
+  research_fellow: 'Research Fellow',
+  
+  // Student Portal
+  student: 'Student',
+  applicant: 'Applicant'
+};
+
+// Role hierarchy for permission levels
+export type RoleHierarchy = 'super' | 'executive' | 'director' | 'dean' | 'hod' | 'coordinator' | 'staff' | 'tutor' | 'student';
+
+export const ROLE_HIERARCHY_MAP: Record<UserRole, RoleHierarchy> = {
+  // Management Portal
+  super_admin: 'super',
+  vice_chancellor: 'executive',
+  deputy_vc_academic: 'executive',
+  deputy_vc_admin: 'executive',
+  deputy_vc_research: 'executive',
+  rector: 'executive',
+  deputy_rector_academic: 'executive',
+  deputy_rector_admin: 'executive',
+  registrar: 'executive',
+  bursar: 'executive',
+  librarian: 'director',
+  director: 'director',
+  director_admission: 'director',
+  director_examination: 'director',
+  director_study_centre: 'director',
+  director_lss: 'director',
+  director_odfel: 'director',
+  director_ict: 'director',
+  director_quality_assurance: 'director',
+  director_student_welfare: 'director',
+  director_research: 'director',
+  director_cbt_services: 'director',
+  director_virtual_laboratories: 'director',
+  director_student_affairs: 'director',
+  admission_officer: 'staff',
+  examination_officer: 'staff',
+  
+  // Academic Portal
+  dean: 'dean',
+  dean_undergraduate: 'dean',
+  dean_postgraduate: 'dean',
+  hod: 'hod',
+  head_of_department: 'hod',
+  program_coordinator: 'coordinator',
+  programme_coordinator_bsc: 'coordinator',
+  programme_coordinator_pgd: 'coordinator',
+  programme_coordinator_msc: 'coordinator',
+  programme_coordinator_phd: 'coordinator',
+  lecturer: 'staff',
+  e_tutor: 'tutor',
+  instructional_designer: 'staff',
+  supervisor: 'staff',
+  research_fellow: 'staff',
+  
+  // Student Portal
   student: 'student',
   applicant: 'student'
 };
@@ -108,22 +243,26 @@ export interface User {
   updatedAt: string;
   isActive: boolean;
   isVerified: boolean;
-  // Academic assignment fields (for dean, hod, program_coordinator)
-  facultyId?: string;
-  facultyName?: string;
+  portal: PortalType;
+  // Academic assignment fields (for deans, hods, programme coordinators)
+  schoolId?: string;
+  schoolName?: string;
+  facultyId?: string;  // Alias for schoolId (used interchangeably in the system)
+  facultyName?: string;  // Alias for schoolName (used interchangeably in the system)
   departmentId?: string;
   departmentName?: string;
-  programId?: string;
-  programName?: string;
-  programType?: 'ND' | 'HND';
+  programmeId?: string;
+  programmeName?: string;
+  degreeType?: ProgrammeType;
 }
 
 export interface Student extends User {
   role: 'student';
   admissionNumber?: string;
-  faculty?: string;
+  school?: string;
   department?: string;
-  program?: string;
+  programme?: string;
+  degreeType?: ProgrammeType;
   level?: number;
   semester?: number;
   academicStatus: 'active' | 'graduated' | 'suspended' | 'withdrawn';
@@ -132,20 +271,26 @@ export interface Student extends User {
   cgpa?: number;
 }
 
-export interface Lecturer extends User {
-  role: 'lecturer';
+export interface AcademicStaff extends User {
+  role: AcademicPortalRole;
   employeeId?: string;
-  faculty?: string;
+  school?: string;
   department?: string;
-  assignedCourses?: string[];
+  specialization?: string;
+  qualifications?: string[];
 }
 
-export interface Faculty {
+export type ProgrammeType = 'bsc' | 'pgd' | 'msc' | 'phd';
+export type EntryCategory = 'ND' | 'HND';  // National Diploma and Higher National Diploma
+export type SchoolType = 'undergraduate' | 'postgraduate';
+
+export interface School {
   id: string;
   name: string;
   code: string;
+  type: SchoolType;
+  deanId?: string;
   description?: string;
-  headName?: string;
   createdAt: string;
 }
 
@@ -153,22 +298,23 @@ export interface Department {
   id: string;
   name: string;
   code: string;
-  facultyId: string;
+  schoolId: string;
   description?: string;
   hodId?: string;
   createdAt: string;
 }
 
-export interface Program {
+export interface Programme {
   id: string;
   name: string;
   code: string;
   departmentId: string;
-  type: 'diploma' | 'hnd';
+  type: ProgrammeType;
   duration: number;
   description?: string;
   requirements?: string;
   careerOpportunities?: string[];
+  coordinatorId?: string;
   createdAt: string;
 }
 
@@ -401,8 +547,7 @@ export interface AdmissionApplication {
 // Question Bank Types
 export type QuestionType = 'multiple_choice' | 'true_false' | 'fill_blank' | 'matching' | 'short_answer' | 'essay' | 'image_based' | 'scenario' | 'practical';
 export type DifficultyLevel = 'easy' | 'medium' | 'hard';
-export type EntryCategory = 'ND' | 'HND';
-export type AcademicStatus = 'regular' | 'carryover' | 'spillover';
+export type AcademicStatus = 'regular' | 'carryover' | 'spillover' | 'makeup';
 
 // Note: Question interface is defined in Section 7 above
 
@@ -416,11 +561,11 @@ export interface QuestionBank {
   programmeName: string;
   departmentId: string;
   departmentName: string;
-  facultyId: string;
-  facultyName: string;
+  schoolId: string;
+  schoolName: string;
   level: number;
   semester: number;
-  entryCategory: EntryCategory;
+  programmeType: ProgrammeType;
   totalQuestions: number;
   activeQuestions: number;
   createdBy: string;
@@ -443,12 +588,13 @@ export interface Examination {
   programmeName: string;
   departmentId: string;
   departmentName: string;
-  facultyId: string;
-  facultyName: string;
+  schoolId: string;
+  schoolName: string;
   level: number;
   semester: number;
-  entryCategory: EntryCategory;
+  programmeType: ProgrammeType;
   academicStatus: AcademicStatus[];
+  entryCategory?: EntryCategory;  // Optional: ND or HND
   
   // Exam Settings
   duration: number; // minutes
@@ -609,9 +755,9 @@ export interface ExamVerificationForm {
   phoneNumber: string;
   
   // Academic Information
-  entryCategory: EntryCategory;
-  facultyId: string;
-  facultyName: string;
+  programmeType: ProgrammeType;
+  schoolId: string;
+  schoolName: string;
   departmentId: string;
   departmentName: string;
   programmeId: string;
