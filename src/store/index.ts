@@ -10,7 +10,7 @@ import { hasPermission, Permission, getPortalForRole, getRolePermissions } from 
 // =====================================================
 // PORTAL TYPES
 // =====================================================
-export type PortalId = 'applicant' | 'student' | 'academic' | 'management';
+export type PortalId = 'applicant' | 'student' | 'academic' | 'management' | 'admin';
 
 interface PortalState {
   id: PortalId;
@@ -22,26 +22,30 @@ export const PORTALS: Record<PortalId, PortalState> = {
   applicant: { id: 'applicant', name: 'Applicant Portal', roles: ['applicant'] },
   student: { id: 'student', name: 'Student Portal', roles: ['student'] },
   academic: { id: 'academic', name: 'Academic Portal', roles: [
+    'dean',
     'dean_undergraduate',
     'dean_postgraduate',
+    'hod',
     'head_of_department',
+    'program_coordinator',
     'programme_coordinator_bsc',
     'programme_coordinator_pgd',
     'programme_coordinator_msc',
     'programme_coordinator_phd',
+    'lecturer',
     'e_tutor',
     'instructional_designer',
     'supervisor',
     'research_fellow'
   ] },
   management: { id: 'management', name: 'Management Portal', roles: [
-    'super_admin',
-    'vice_chancellor',
-    'deputy_vc_academic',
-    'deputy_vc_admin',
-    'deputy_vc_research',
+    'rector',
+    'deputy_rector_academic',
+    'deputy_rector_admin',
     'registrar',
     'bursar',
+    'librarian',
+    'director',
     'director_admission',
     'director_examination',
     'director_study_centre',
@@ -50,8 +54,14 @@ export const PORTALS: Record<PortalId, PortalState> = {
     'director_ict',
     'director_quality_assurance',
     'director_student_welfare',
-    'director_research'
+    'director_research',
+    'director_cbt_services',
+    'director_virtual_laboratories',
+    'director_student_affairs',
+    'admission_officer',
+    'examination_officer'
   ] },
+  admin: { id: 'admin', name: 'Super Admin Portal', roles: ['super_admin'] },
 };
 
 // Portal to route mapping
@@ -60,6 +70,7 @@ export const PORTAL_ROUTES: Record<PortalId, string> = {
   student: '/portal/student',
   academic: '/portal/academic',
   management: '/portal/management',
+  admin: '/portal/super-admin',
 };
 
 // =====================================================
